@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Picker, TextInput, Text, View } from "react-native";
-import { ISeat, Nullable } from ".\..\constants\DataTypes";
+import { ISeat, Nullable } from "./../constants/DataTypes";
 
 export class Action extends Component<
   { bigBlind?: number; dealer?: ISeat; seats: ISeat[] },
@@ -15,7 +15,8 @@ export class Action extends Component<
     raiser: this.props.dealer || null,
     callers: [] as ISeat[]
   };
-  handleChange = (name, value) => {
+  handleChange = e => {
+    const { name, value } = e.target;
     let amount: number = 0;
     let raiser: Nullable<ISeat> = null;
     switch (name) {
@@ -27,7 +28,7 @@ export class Action extends Component<
 
         break;
       case "amount":
-        if (!isNaN(value)) return;
+        if (isNaN(value)) return;
         amount = parseInt(value);
         raiser = this.state.raiser;
         this.setState({ amount: amount });
@@ -50,11 +51,12 @@ export class Action extends Component<
     return (
       <View>
         <Picker
-          key="raiser"
+          name="raiser"
           selectedValue={
             (this.state.raiser && this.state.raiser.seatNumber) || "0"
           }
-          onValueChange={itemValue => this.handleChange("raiser", itemValue)}
+          onChange={this.handleChange}
+          style={{ width: "75px" }}
         >
           <Picker.Item key="s1" label="Seat 1" value="1" />
           <Picker.Item key="s2" label="Seat 2" value="2" />
@@ -69,12 +71,13 @@ export class Action extends Component<
         </Picker>
         <Text>Amount:</Text>
         <TextInput
-          key="Amount"
+          name="amount"
           style={{ borderColor: "gray", borderWidth: 1 }}
-          onChangeText={text => this.handleChange("amount", text)}
-          value={this.state.amount}
-          //keyboardType="numeric"
-          //maxLength={4}
+          onChange={this.handleChange}
+          value={this.state.amount === 0 ? "" : this.state.amount}
+          keyboardType="numeric"
+          maxLength={4}
+          style={{ width: "50px" }}
         />
       </View>
     );

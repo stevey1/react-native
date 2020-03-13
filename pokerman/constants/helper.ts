@@ -1,5 +1,5 @@
 import { IPlayer, ISeat, Suit, PlayerType } from "./DataTypes";
-export const getCardNumber = (cardNumber: number) => {
+export const getCardNumberText = (cardNumber: number) => {
   switch (cardNumber) {
     case 14:
       return "A";
@@ -30,6 +30,11 @@ export const getSuitIcon = (suit: Suit) => {
       return "";
   }
 };
+export const setCardColor =(suit: Suit)=> {
+  return suit === Suit.d || suit === Suit.h
+    ? { color: "#FF0000" }
+    : { color: "#000000" };
+}
 const player1 = { id: 1, name: "P1", playerType: PlayerType.TT };
 const player2 = { id: 2, name: "P2", playerType: PlayerType.TT };
 const player3 = { id: 3, name: "P3", playerType: PlayerType.TT };
