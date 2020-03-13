@@ -40,13 +40,17 @@ export default class Play extends Component<
     const action: IAction = {
       raiser: raiser,
       amount: this.props.bigBlind,
-      callers: [] as ISeat[]
+      callers: [] as ISeat[],
+      raises: 1,
+      checkRaise: false
     };
     const actions = this.state.actions;
     actions[Round.Preflop] = action;
     this.setState({ actions: actions });
     const allActions = this.state.allActions;
     allActions.push({ action: action, round: Round.Preflop });
+    // don't need to call this; be carefull when using object or object arry in props and stats, it update them
+    // this.props.seat.seatNumber+1, seatNumber get updated, crazy!!!
     this.setState({ allActions: allActions });
   };
   handleMyHand = (card: ICard, cardId: number) => {
@@ -60,15 +64,37 @@ export default class Play extends Component<
     this.setState({ board: cards });
   };
   handleAction = (action: IAction, round: Round) => {
-    if (action.raiser && action.amount > 0) {
-      let allActions = this.state.allActions;
+    action.raises = 1;
+    action.checkRaise = false;
+    let allActions = this.state.allActions;
+    let actions = this.state.actions;
+    if (action.callers.length > 0 && action.amount === 0) {
+      allActions[allActions.length - 1].action.callers = action.callers;
+      this.setState({ allActions: allActions });
+
+      actions[round].callers = action.callers;
+      this.setState({ actions: actions });
+    } else {
       if (allActions.length > 0) {
-        const lastAction = allActions[allActions.length - 1];
-        if (
-          lastAction.round === round &&
-          lastAction.action.raiser.seatNumber === action.raiser.seatNumber
-        ) {
-          allActions[allActions.length - 1].action.amount = action.amount;
+        if (allActions[allActions.length - 1].round === round) {
+          const lastAction = allActions[allActions.length - 1].action;
+          if (
+            lastAction.raiser.seatNumber === action.raiser.seatNumber ||
+            (round === Round.Preflop &&
+              allActions.length === 1 &&
+              lastAction.amount === this.props.bigBlind)
+          ) {
+            // the same person or overrid big blind
+            allActions[allActions.length - 1].action = action;
+          } else {
+            action.raises = lastAction.raises + 1;
+            action.checkRaise = this.setCheckRaise(
+              lastAction.raiser.seatNumber,
+              action.raiser.seatNumber,
+              round
+            );
+            allActions.push({ action: action, round: round });
+          }
         } else {
           allActions.push({ action: action, round: round });
         }
@@ -76,20 +102,23 @@ export default class Play extends Component<
         allActions.push({ action: action, round: round });
       }
       this.setState({ allActions: allActions });
-      let actions = this.state.actions;
-      actions[round] = action;
-      this.setState({ actions: actions });
-    } else {
-      let allActions = this.state.allActions;
-      allActions[allActions.length - 1].action.callers = action.callers;
-      this.setState({ allActions: allActions });
 
-      let actions = this.state.actions;
-      actions[round].callers = action.callers;
+      actions[round] = action;
       this.setState({ actions: actions });
     }
   };
-
+  setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) =>
+    this.getBetSequence(previousSeat, round) >
+    this.getBetSequence(currentSeat, round);
+  getBetSequence = (seatNumber: number, round: Round) => {
+    const deatSeatNumber =
+      round === Round.Preflop
+        ? this.props.dealer
+        : (this.props.dealer + 2) % this.props.seats.length;
+    return seatNumber < deatSeatNumber
+      ? seatNumber + deatSeatNumber
+      : seatNumber;
+  };
   displayMyHand = (cards: ICard[]) =>
     cards.map(card => (
       <Text key={"c" + card.cardNumber}>{card.cardNumber}</Text>
@@ -97,7 +126,7 @@ export default class Play extends Component<
 
   getBigBlindSeat = () => {
     const bigBlindSeatNumber =
-      (this.props.dealer+2) % (this.props.seats.length + 1);
+      (this.props.dealer + 2) % this.props.seats.length;
 
     const blindSeat = this.props.seats.find(
       seat => (seat.seatNumber = bigBlindSeatNumber)

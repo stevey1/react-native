@@ -60,20 +60,27 @@ export class Action extends Component<
           key="raiser"
           name="raiser"
           selectedValue={
-            (this.state.raiser && this.state.raiser.seatNumber) || "0"
+            this.state.raiser && this.state.raiser.seatNumber >= 0
+              ? this.state.raiser.seatNumber.toString()
+              : "-1"
           }
           onChange={this.handleChange}
           style={{ width: "75px" }}
         >
-          <Picker.Item key="s1" label="Seat 1" value="1" />
-          <Picker.Item key="s2" label="Seat 2" value="2" />
-          <Picker.Item key="s3" label="Seat 3" value="3" />
-          <Picker.Item key="s4" label="Seat 4" value="4" />
+          <Picker.Item key="s1" label="Seat 1" value="0" />
+          <Picker.Item key="s2" label="Seat 2" value="1" />
+          <Picker.Item key="s3" label="Seat 3" value="2" />
+          <Picker.Item key="s4" label="Seat 4" value="3" />
+          <Picker.Item key="s5" label="Seat 5" value="4" />
+          <Picker.Item key="s6" label="Seat 6" value="5" />
+          <Picker.Item key="s7" label="Seat 7" value="6" />
+          <Picker.Item key="s8" label="Seat 8" value="7" />
+          <Picker.Item key="s9" label="Seat 9" value="8" />
           <Picker.Item
             key="s0"
             style={{ display: "none" }}
             label=""
-            value="0"
+            value="-1"
           />
         </Picker>
         <Text

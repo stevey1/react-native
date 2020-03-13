@@ -20,6 +20,8 @@ export interface IAction {
   raiser: Nullable<ISeat>;
   callers: ISeat[];
   amount: number;
+  checkRaise: boolean;
+  raises: number;
 }
 export interface IActionHistory {
   action: IAction;
