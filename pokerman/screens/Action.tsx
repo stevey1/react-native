@@ -5,7 +5,7 @@ import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
 export class Action extends Component<
   {
     bigBlind?: number;
-    dealer?: ISeat;
+    raiser?: ISeat;
     seats: ISeat[];
     handleAction: (action: IAction) => void;
   },
@@ -17,7 +17,7 @@ export class Action extends Component<
 > {
   readonly state = {
     amount: this.props.bigBlind || 0,
-    raiser: this.props.dealer || null,
+    raiser: this.props.raiser || null,
     callers: [] as ISeat[]
   };
   handleChange = e => {

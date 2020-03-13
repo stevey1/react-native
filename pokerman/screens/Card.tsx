@@ -7,8 +7,11 @@ import {
   setCardColor
 } from "../constants/helper";
 
-export default class Card extends Component<{}, { card: ICard }> {
-  state = { card: { cardNumber: 0, suit: Suit.unknow } };
+export default class Card extends Component<
+  {},
+  { cardNumber: number; suit: Suit }
+> {
+  state = { cardNumber: 0, suit: Suit.unknow };
 
   getCardNumbers = () => {
     let cardNumbers = [];
@@ -29,15 +32,17 @@ export default class Card extends Component<{}, { card: ICard }> {
       <View style={{ flexDirection: "row" }}>
         <Picker
           key="suit"
-          selectedValue={this.state.card.suit}
+          selectedValue={this.state.suit}
           onValueChange={itemValue => {
-            const card = this.state.card;
-            card.suit = parseInt(itemValue);
-            this.setState({ card: card });
-            if (card.suit > 0 && this.state.card.cardNumber > 0)
-              this.props.handleCard(card);
+            const suit = parseInt(itemValue);
+            this.setState({ suit: suit });
+            if (suit > 0 && this.state.cardNumber > 0)
+              this.props.handleCard({
+                suit: suit,
+                cardNumber: this.state.cardNumber
+              });
           }}
-          style={[setCardColor(this.state.card.suit), { width: "50px" }]}
+          style={[setCardColor(this.state.suit), { width: "50px" }]}
         >
           <Picker.Item key="s1" label="&clubs;" color="#000000" value="1" />
           <Picker.Item key="s2" label="&diams;" color="#FF0000" value="2" />
@@ -52,15 +57,17 @@ export default class Card extends Component<{}, { card: ICard }> {
         </Picker>
         <Picker
           key="card"
-          selectedValue={this.state.card.cardNumber}
+          selectedValue={this.state.cardNumber}
           onValueChange={itemValue => {
-            const card = this.state.card;
-            card.cardNumber = parseInt(itemValue);
-            this.setState({ card: card });
-            if (card.cardNumber > 0 && this.state.card.suit > 0)
-              this.props.handleCard(card);
+            const cardNumber = parseInt(itemValue);
+            this.setState({ cardNumber: cardNumber });
+            if (cardNumber > 0 && this.state.suit > 0)
+              this.props.handleCard({
+                cardNumber: cardNumber,
+                suit: this.state.suit
+              });
           }}
-          style={[setCardColor(this.state.card.suit), { width: "50px" }]}
+          style={[setCardColor(this.state.suit), { width: "50px" }]}
         >
           {this.getCardNumbers()}
           <Picker.Item

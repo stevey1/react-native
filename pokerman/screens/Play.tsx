@@ -15,7 +15,7 @@ import {
 export default class Play extends Component<
   {
     bigBlind: number;
-    dealer: ISeat;
+    dealer: number;
     seats: ISeat[];
   },
   {
@@ -25,14 +25,30 @@ export default class Play extends Component<
     allActions: IActionHistory[];
   }
 > {
-  //console.log(this.props.bigBlind);
-  readonly state = {
+  state = {
     myHand: [] as ICard[],
     board: [] as ICard[],
     actions: [] as IAction[],
     allActions: [] as IActionHistory[]
   };
+  constructor(props: { bigBlind: number; dealer: ISeat; seats: ISeat[] }) {
+    super(props);
+  }
 
+  componentDidMount = () => {
+    const raiser = this.getBigBlindSeat();
+    const action: IAction = {
+      raiser: raiser,
+      amount: this.props.bigBlind,
+      callers: [] as ISeat[]
+    };
+    const actions = this.state.actions;
+    actions[Round.Preflop] = action;
+    this.setState({ actions: actions });
+    const allActions = this.state.allActions;
+    allActions.push({ action: action, round: Round.Preflop });
+    this.setState({ allActions: allActions });
+  };
   handleMyHand = (card: ICard, cardId: number) => {
     const cards = this.state.myHand || [];
     cards[cardId] = card;
@@ -74,12 +90,20 @@ export default class Play extends Component<
     }
   };
 
-  displayMyHand() {
-    const cards = this.state.myHand || [];
-    return cards.map(card => (
+  displayMyHand = (cards: ICard[]) =>
+    cards.map(card => (
       <Text key={"c" + card.cardNumber}>{card.cardNumber}</Text>
     ));
-  }
+
+  getBigBlindSeat = () => {
+    const bigBlindSeatNumber =
+      (this.props.dealer+2) % (this.props.seats.length + 1);
+
+    const blindSeat = this.props.seats.find(
+      seat => (seat.seatNumber = bigBlindSeatNumber)
+    );
+    return blindSeat;
+  };
   render() {
     return (
       <ScrollView
@@ -100,7 +124,7 @@ export default class Play extends Component<
             handleCard={(c: ICard) => this.handleMyHand(c, 1)}
             style={{ margin: "3px" }}
           ></Card>
-          {this.displayMyHand()}
+          {this.displayMyHand(this.state.myHand)}
         </View>
         <View style={styles.control}>
           <Text key="p" style={styles.label}>
@@ -109,7 +133,7 @@ export default class Play extends Component<
           <Action
             key="pre"
             bigBlind={this.props.bigBlind}
-            dealer={this.props.dealer}
+            raiser={this.getBigBlindSeat()}
             seats={this.props.seats}
             handleAction={a => this.handleAction(a, Round.Preflop)}
           ></Action>
