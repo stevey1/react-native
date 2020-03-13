@@ -47,12 +47,14 @@ export default class Play extends Component<
             My Hands:
           </Text>
           <Card
-            key="myhand1"
+            key="m0"
             handleCard={(c: ICard) => this.handleMyHand(c, 0)}
+            style={{ margin: "3px" }}
           ></Card>
           <Card
-            key="myhand2"
+            key="m1"
             handleCard={(c: ICard) => this.handleMyHand(c, 1)}
+            style={{ margin: "3px" }}
           ></Card>
           {this.displayMyHand()}
         </View>
@@ -72,15 +74,15 @@ export default class Play extends Component<
             Flop:
           </Text>
           <Card
-            key="board1"
+            key="b0"
             handleCard={(c: ICard) => this.handleBoard(c, 0)}
           ></Card>
           <Card
-            key="board2"
+            key="b1"
             handleCard={(c: ICard) => this.handleBoard(c, 1)}
           ></Card>
           <Card
-            key="board3"
+            key="b2"
             handleCard={(c: ICard) => this.handleBoard(c, 2)}
           ></Card>
         </View>
@@ -95,7 +97,7 @@ export default class Play extends Component<
             Turn:
           </Text>
           <Card
-            key="board4"
+            key="b3"
             handleCard={(c: ICard) => this.handleBoard(c, 3)}
           ></Card>
         </View>
@@ -110,7 +112,7 @@ export default class Play extends Component<
             River:
           </Text>
           <Card
-            key="board5"
+            key="b4"
             handleCard={(c: ICard) => this.handleBoard(c, 4)}
           ></Card>
         </View>
@@ -179,6 +181,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginTop: 1
   },
-  label: { width: "100px" },
-  control: { flex: 1, flexDirection: "row" }
+  label: { paddingRight: "7px", textAlign: "right", width: "100px" },
+  control: { flex: 1, flexDirection: "row", margin: "3px" }
 });

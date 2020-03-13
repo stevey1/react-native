@@ -70,7 +70,14 @@ export class Action extends Component<
             value="0"
           />
         </Picker>
-        <Text key="a" style={{ width: "60px" }}>
+        <Text
+          key="a"
+          style={{
+            width: "70px",
+            paddingRight: "5px",
+            textAlign: "right"
+          }}
+        >
           Amount:
         </Text>
         <TextInput
