@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { Picker, View } from "react-native";
-import { Suit, ICard } from "../constants/DataTypes";
+import { Suit } from "../constants/DataTypes";
 import {
   getCardNumberText,
-  getSuitIcon,
   setCardColor
 } from "../constants/helper";
 

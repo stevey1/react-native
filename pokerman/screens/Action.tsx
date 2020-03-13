@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Picker, TextInput, Text, View } from "react-native";
 import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
-
+import MultiSelect from "./MultiSelect";
 export class Action extends Component<
   {
     bigBlind?: number;
@@ -13,13 +13,54 @@ export class Action extends Component<
     amount: number;
     raiser: Nullable<ISeat>;
     callers: ISeat[];
+    selectedItems: [];
   }
 > {
   readonly state = {
     amount: this.props.bigBlind || 0,
     raiser: this.props.raiser || null,
-    callers: [] as ISeat[]
+    callers: [] as ISeat[],
+    selectedItems: []
   };
+
+  private items = [
+    {
+      id: "92iijs7yta",
+      name: "Ondo"
+    },
+    {
+      id: "a0s0a8ssbsd",
+      name: "Ogun"
+    },
+    {
+      id: "16hbajsabsd",
+      name: "Calabar"
+    },
+    {
+      id: "nahs75a5sg",
+      name: "Lagos"
+    },
+    {
+      id: "667atsas",
+      name: "Maiduguri"
+    },
+    {
+      id: "hsyasajs",
+      name: "Anambra"
+    },
+    {
+      id: "djsjudksjd",
+      name: "Benue"
+    },
+    {
+      id: "sdhyaysdj",
+      name: "Kaduna"
+    },
+    {
+      id: "suudydjsjd",
+      name: "Abuja"
+    }
+  ];
   handleChange = e => {
     const { name, value } = e.target;
     let amount: number = 0;
@@ -52,7 +93,9 @@ export class Action extends Component<
       this.props.handleAction({ raiser: raiser, amount: amount, callers: [] });
     }
   };
-
+  onSelectedItemsChange = selectedItems => {
+    this.setState({ selectedItems });
+  };
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
@@ -103,6 +146,7 @@ export class Action extends Component<
           selectTextOnFocus={true}
           style={{ width: "50px", marginLeft: "5px", paddingLeft: "5px" }}
         />
+        <MultiSelect />
       </View>
     );
   }
