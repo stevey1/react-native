@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Picker } from "react-native";
-import { Suit } from "../constants/dataTypes";
+import { Picker, View } from "react-native";
+import { Suit, ICard } from "../constants/DataTypes";
 
-export default class Card extends Component {
-  state = { suit: 0, cardNumber: 0 };
+export default class Card extends Component<{}, { card: ICard }> {
+  state = { card: { cardNumber: 0, suit: Suit.unknow } };
   setCardColor() {
-    return this.state.suit === Suit.d || this.state.suit === Suit.h
+    return this.state.card.suit === Suit.d || this.state.card.suit === Suit.h
       ? { color: "#FF0000" }
       : { color: "#000000" };
   }
@@ -15,7 +15,7 @@ export default class Card extends Component {
       cardNumbers.push(
         <Picker.Item
           key={"c" + i}
-          label={this.getCardNumberText(i)}
+          label={this.getCardNumberText(i).toString()}
           value={i}
         />
       );
@@ -42,18 +42,16 @@ export default class Card extends Component {
   };
   render() {
     return (
-      <view>
+      <View>
         <Picker
           key="suit"
-          selectedValue={this.state.suit}
+          selectedValue={this.state.card.suit}
           onValueChange={itemValue => {
-            const suit = parseInt(itemValue);
-            this.setState({ suit });
-            if (suit > 0 && this.state.cardNumber > 0)
-              this.props.handleCard({
-                cardNumber: this.state.cardNumber,
-                suit: suit
-              });
+            const card = this.state.card;
+            card.suit = parseInt(itemValue);
+            this.setState({ card: card });
+            if (card.suit > 0 && this.state.card.cardNumber > 0)
+              this.props.handleCard(card);
           }}
           style={this.setCardColor()}
         >
@@ -72,13 +70,11 @@ export default class Card extends Component {
           key="card"
           selectedValue={this.state.cardNumber}
           onValueChange={itemValue => {
-            const cardNumber = parseInt(itemValue);
-            this.setState({ cardNumber });
-            if (cardNumber > 0 && this.state.suit > 0)
-              this.props.handleCard({
-                cardNumber: cardNumber,
-                suit: this.state.suit
-              });
+            const card = this.state.card;
+            card.suit = parseInt(itemValue);
+            this.setState({ card: card });
+            if (card.cardNumber > 0 && this.state.card.suit > 0)
+              this.props.handleCard(card);
           }}
           style={this.setCardColor()}
         >
@@ -90,7 +86,7 @@ export default class Card extends Component {
             label=""
           />
         </Picker>
-      </view>
+      </View>
     );
   }
 }

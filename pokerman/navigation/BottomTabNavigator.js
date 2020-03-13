@@ -2,7 +2,7 @@ import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBarIcon from "../components/TabBarIcon";
 import Seat from "../screens/Seat";
-import Play from "../screens/Play";
+import Play2 from "../screens/Play2";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
 
@@ -37,7 +37,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Play"
-        component={Play}
+        component={Play2}
         options={{
           title: "Play",
           tabBarIcon: ({ focused }) => (

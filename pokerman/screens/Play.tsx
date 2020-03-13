@@ -4,27 +4,31 @@ import { Ionicons } from "@expo/vector-icons";
 import { RectButton, ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
+import { ISeat, ICard } from "../constants/DataTypes";
 
-export default class Play extends Component
-/*<
-  {},
+export default class Play extends Component<
   {
-    myHand: { cardNumber: number; suit: number }[];
-    board: { cardNumber: number; suit: number }[];
+    bigBlind: number;
+    dealer: ISeat;
+    seats: ISeat[];
+  },
+  {
+    myHand: ICard[];
+    board: ICard[];
   }
->*/
-{
-  state = { myHand: [], boards: [] };
+> {
+  //console.log(this.props.bigBlind);
+  readonly state = { myHand: [] as ICard[], board: [] as ICard[] };
 
-  handleMyHand = (card, cardId) => {
+  handleMyHand = (card: ICard, cardId: number) => {
     const cards = this.state.myHand || [];
     cards[cardId] = card;
     this.setState({ myHand: cards });
   };
-  handleBoard = (card, cardId) => {
-    let cards = this.state.boards || [];
+  handleBoard = (card: ICard, cardId: number) => {
+    let cards = this.state.board || [];
     cards[cardId] = card;
-    this.setState({ boards: cards });
+    this.setState({ board: cards });
   };
   displayMyHand() {
     const cards = this.state.myHand || [];
@@ -36,45 +40,65 @@ export default class Play extends Component
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <view>
-          My Hands:
+        <View>
+          <Text>My Hands:XXX</Text>
           <Card key="myhand1" handleCard={c => this.handleMyHand(c, 0)}></Card>
           <Card key="myhand2" handleCard={c => this.handleMyHand(c, 1)}></Card>
           {this.displayMyHand()}
-        </view>
-        <view>
-          Preflop Raise:
-          <Action key="pre"></Action>
-        </view>
-        <view>
-          Flop:
+        </View>
+        <View>
+          <Text>Preflop Raise:</Text>
+          <Action
+            key="pre"
+            bigBlind={this.props.bigBlind}
+            dealer={this.props.dealer}
+            seats={this.props.seats}
+          ></Action>
+        </View>
+        <View>
+          <Text>Flop:</Text>
           <Card key="board1" handleCard={c => this.handleBoard(c, 0)}></Card>
           <Card key="board2" handleCard={c => this.handleBoard(c, 1)}></Card>
           <Card key="board3" handleCard={c => this.handleBoard(c, 2)}></Card>
-        </view>
-        <view>
-          Flop Raise:
-          <Action key="pre"></Action>
-        </view>
-        <view>
-          Turn:
+        </View>
+        <View>
+          <Text>Flop Raise:</Text>
+          <Action
+            key="pre"
+            bigBlind={this.props.bigBlind}
+            dealer={this.props.dealer}
+            seats={this.props.seats}
+          ></Action>
+        </View>
+        <View>
+          <Text>Turn:</Text>
           <Card key="board4" handleCard={c => this.handleBoard(c, 3)}></Card>
-        </view>
-        <view>
-          Turn Raise:
-          <Action key="pre"></Action>
-        </view>
-        <view>
-          River:
+        </View>
+        <View>
+          <Text> Turn Raise:</Text>
+          <Action
+            key="pre"
+            bigBlind={this.props.bigBlind}
+            dealer={this.props.dealer}
+            seats={this.props.seats}
+          ></Action>
+        </View>
+        <View>
+          <Text>River:</Text>
           <Card key="board5" handleCard={c => this.handleBoard(c, 4)}></Card>
-        </view>
-        <view>
-          River Raise:
-          <Action key="pre"></Action>
-        </view>
+        </View>
+        <View>
+          <Action
+            key="pre"
+            bigBlind={this.props.bigBlind}
+            dealer={this.props.dealer}
+            seats={this.props.seats}
+          ></Action>
+        </View>
         <OptionButton
           icon="md-school"
           label="Read the Expo documentation"
+          isLastOption={false}
           //onPress={() => WebBrowser.openBrowserAsync("https://docs.expo.io")}
         />
       </ScrollView>
@@ -82,18 +106,21 @@ export default class Play extends Component
   }
 }
 
-function OptionButton({ icon, label, onPress, isLastOption }) {
+function OptionButton(props: {
+  icon: string;
+  label: string;
+  isLastOption: boolean;
+}) {
   return (
     <RectButton
-      style={[styles.option, isLastOption && styles.lastOption]}
-      onPress={onPress}
+      style={[styles.option, props.isLastOption && styles.lastOption]}
     >
       <View style={{ flexDirection: "row" }}>
         <View style={styles.optionIconContainer}>
-          <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
+          <Ionicons name={props.icon} size={22} color="rgba(0,0,0,0.35)" />
         </View>
         <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
+          <Text style={styles.optionText}>{props.label}</Text>
         </View>
       </View>
     </RectButton>

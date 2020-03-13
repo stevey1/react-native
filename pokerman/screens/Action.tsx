@@ -1,21 +1,26 @@
 import React, { Component } from "react";
-import { Picker, TextInput } from "react-native";
+import { Picker, TextInput, Text, View } from "react-native";
+import { ISeat, Nullable } from ".\..\constants\DataTypes";
 
-export class Action extends Component {
-  state = {
-    amount: 0, //this.props.defaultBet ? this.props.defaultBet : 0,
-    raiser: null, //this.props.bigBlind ? this.props.bigBlind : null,
-    callers: []
+export class Action extends Component<
+  { bigBlind?: number; dealer?: ISeat; seats: ISeat[] },
+  {
+    amount: number;
+    raiser: Nullable<ISeat>;
+    callers: ISeat[];
+  }
+> {
+  readonly state = {
+    amount: this.props.bigBlind || 0,
+    raiser: this.props.dealer || null,
+    callers: [] as ISeat[]
   };
   handleChange = (name, value) => {
-    let amount = this.state.amount;
-    let raiser = this.state.raiser;
-    /*
+    let amount: number = 0;
+    let raiser: Nullable<ISeat> = null;
     switch (name) {
       case "raiser":
         raiser = this.props.seats.find(x => x.seatNumber === parseInt(value));
-
-        amount = 0;
         this.setState({ amount: amount });
         this.setState({ raiser: raiser });
         this.setState({ callers: [] });
@@ -23,6 +28,7 @@ export class Action extends Component {
         break;
       case "amount":
         amount = parseInt(value);
+        raiser = this.state.raiser;
         this.setState({ amount: amount });
         break;
       case "callers":
@@ -30,26 +36,24 @@ export class Action extends Component {
           value.includes(x.seatNumber)
         );
         this.setState({ callers: callers });
-        if (amount > 0) {
-          this.props.handleCallers(callers);
-        }
+        //this.props.handleCallers(callers);
         return;
     }
 
     if (raiser && amount > 0) {
-      this.props.handleRaiser(raiser, amount);
-    }*/
+      //this.props.handleRaiser(raiser, amount);
+    }
   };
 
   render() {
     return (
-      <view>
+      <View>
         <Picker
           key="raiser"
-          selectedValue={this.state.suit}
-          onValueChange={itemValue =>
-            handleChange((name = "raiser"), (value = itemValue))
+          selectedValue={
+            (this.state.raiser && this.state.raiser.seatNumber) || ""
           }
+          onValueChange={itemValue => this.handleChange("raiser", itemValue)}
         >
           <Picker.Item key="s1" label="Seat 1" value="1" />
           <Picker.Item key="s2" label="Seat 2" value="2" />
@@ -58,20 +62,20 @@ export class Action extends Component {
           <Picker.Item
             key="s0"
             style={{ display: "none" }}
-            label=""
+            label="dd"
             value="0"
           />
         </Picker>
-        Amount:
+        <Text>Amount:</Text>
         <TextInput
           key="Amount"
           style={{ borderColor: "gray", borderWidth: 1 }}
-          // onChangeText={text => handleChange((name = "amount"), (value = text))}
-          value={this.state.amount || ""}
+          onEndEditing={text => this.handleChange("amount", text)}
+          value={this.state.amount}
           keyboardType="numeric"
           maxLength={4}
         />
-      </view>
+      </View>
     );
   }
 }
