@@ -27,6 +27,7 @@ export class Action extends Component<
 
         break;
       case "amount":
+        if (!isNaN(value)) return;
         amount = parseInt(value);
         raiser = this.state.raiser;
         this.setState({ amount: amount });
@@ -51,7 +52,7 @@ export class Action extends Component<
         <Picker
           key="raiser"
           selectedValue={
-            (this.state.raiser && this.state.raiser.seatNumber) || ""
+            (this.state.raiser && this.state.raiser.seatNumber) || "0"
           }
           onValueChange={itemValue => this.handleChange("raiser", itemValue)}
         >
@@ -62,7 +63,7 @@ export class Action extends Component<
           <Picker.Item
             key="s0"
             style={{ display: "none" }}
-            label="dd"
+            label=""
             value="0"
           />
         </Picker>
@@ -70,10 +71,10 @@ export class Action extends Component<
         <TextInput
           key="Amount"
           style={{ borderColor: "gray", borderWidth: 1 }}
-          onEndEditing={text => this.handleChange("amount", text)}
+          onChangeText={text => this.handleChange("amount", text)}
           value={this.state.amount}
-          keyboardType="numeric"
-          maxLength={4}
+          //keyboardType="numeric"
+          //maxLength={4}
         />
       </View>
     );

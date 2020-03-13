@@ -63,12 +63,7 @@ export default class Play extends Component<
         </View>
         <View>
           <Text>Flop Raise:</Text>
-          <Action
-            key="pre"
-            bigBlind={this.props.bigBlind}
-            dealer={this.props.dealer}
-            seats={this.props.seats}
-          ></Action>
+          <Action key="flop" seats={this.props.seats}></Action>
         </View>
         <View>
           <Text>Turn:</Text>
@@ -76,24 +71,14 @@ export default class Play extends Component<
         </View>
         <View>
           <Text> Turn Raise:</Text>
-          <Action
-            key="pre"
-            bigBlind={this.props.bigBlind}
-            dealer={this.props.dealer}
-            seats={this.props.seats}
-          ></Action>
+          <Action key="turn" seats={this.props.seats}></Action>
         </View>
         <View>
           <Text>River:</Text>
           <Card key="board5" handleCard={c => this.handleBoard(c, 4)}></Card>
         </View>
         <View>
-          <Action
-            key="pre"
-            bigBlind={this.props.bigBlind}
-            dealer={this.props.dealer}
-            seats={this.props.seats}
-          ></Action>
+          <Action key="river" seats={this.props.seats}></Action>
         </View>
         <OptionButton
           icon="md-school"
