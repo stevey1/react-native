@@ -32,7 +32,9 @@ export default class Play extends Component<
   };
   displayMyHand() {
     const cards = this.state.myHand || [];
-    return cards.map(card => <Text>{card.cardNumber}</Text>);
+    return cards.map(card => (
+      <Text key={"c" + card.cardNumber}>{card.cardNumber}</Text>
+    ));
   }
   render() {
     return (
@@ -41,13 +43,17 @@ export default class Play extends Component<
         contentContainerStyle={styles.contentContainer}
       >
         <View>
-          <Text>My Hands:XXX</Text>
+          <Text key="my" style={{ width: "80px" }}>
+            My Hands:
+          </Text>
           <Card key="myhand1" handleCard={c => this.handleMyHand(c, 0)}></Card>
           <Card key="myhand2" handleCard={c => this.handleMyHand(c, 1)}></Card>
           {this.displayMyHand()}
         </View>
         <View>
-          <Text>Preflop Raise:</Text>
+          <Text key="p" style={{ width: "80px" }}>
+            Preflop Raise:
+          </Text>
           <Action
             key="pre"
             bigBlind={this.props.bigBlind}
@@ -56,25 +62,36 @@ export default class Play extends Component<
           ></Action>
         </View>
         <View>
-          <Text>Flop:</Text>
+          <Text key="f" style={{ width: "80px" }}>
+            Flop:
+          </Text>
           <Card key="board1" handleCard={c => this.handleBoard(c, 0)}></Card>
           <Card key="board2" handleCard={c => this.handleBoard(c, 1)}></Card>
           <Card key="board3" handleCard={c => this.handleBoard(c, 2)}></Card>
         </View>
         <View>
-          <Text>Flop Raise:</Text>
+          <Text key="fr" style={{ width: "80px" }}>
+            Flop Raise:
+          </Text>
           <Action key="flop" seats={this.props.seats}></Action>
         </View>
         <View>
-          <Text>Turn:</Text>
+          <Text key="t" style={{ width: "80px" }}>
+            Turn:
+          </Text>
           <Card key="board4" handleCard={c => this.handleBoard(c, 3)}></Card>
         </View>
         <View>
-          <Text> Turn Raise:</Text>
+          <Text key="tr" style={{ width: "80px" }}>
+            {" "}
+            Turn Raise:
+          </Text>
           <Action key="turn" seats={this.props.seats}></Action>
         </View>
         <View>
-          <Text>River:</Text>
+          <Text key="r" style={{ width: "80px" }}>
+            River:
+          </Text>
           <Card key="board5" handleCard={c => this.handleBoard(c, 4)}></Card>
         </View>
         <View>

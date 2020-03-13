@@ -51,6 +51,7 @@ export class Action extends Component<
     return (
       <View>
         <Picker
+          key="raiser"
           name="raiser"
           selectedValue={
             (this.state.raiser && this.state.raiser.seatNumber) || "0"
@@ -69,15 +70,19 @@ export class Action extends Component<
             value="0"
           />
         </Picker>
-        <Text>Amount:</Text>
+        <Text key="a" style={{ width: "60px" }}>
+          Amount:
+        </Text>
         <TextInput
+          key="amount"
           name="amount"
           style={{ borderColor: "gray", borderWidth: 1 }}
           onChange={this.handleChange}
-          value={this.state.amount === 0 ? "" : this.state.amount}
-          keyboardType="numeric"
+          value={this.state.amount === 0 ? "" : this.state.amount.toString()}
+          keyboardType={"numeric"}
           maxLength={4}
-          style={{ width: "50px" }}
+          selectTextOnFocus={true}
+          style={{ width: "50px", textAlign: "right" }}
         />
       </View>
     );
