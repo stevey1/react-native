@@ -22,9 +22,7 @@ export interface IAction {
   amount: number;
 }
 export interface IActionHistory {
-  raiser: Nullable<ISeat>;
-  callers: ISeat[];
-  amount: number;
+  action: IAction;
   round: Round;
 }
 
@@ -51,7 +49,7 @@ export enum Suit {
   s
 }
 export enum Round {
-  Preflop = 1,
+  Preflop = 0,
   Flop,
   Turn,
   River

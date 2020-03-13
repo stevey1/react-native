@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { Picker, TextInput, Text, View } from "react-native";
-import { ISeat, Nullable } from "./../constants/DataTypes";
+import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
 
 export class Action extends Component<
-  { bigBlind?: number; dealer?: ISeat; seats: ISeat[] },
+  {
+    bigBlind?: number;
+    dealer?: ISeat;
+    seats: ISeat[];
+    handleAction: (action: IAction) => void;
+  },
   {
     amount: number;
     raiser: Nullable<ISeat>;
@@ -39,11 +44,12 @@ export class Action extends Component<
         );
         this.setState({ callers: callers });
         //this.props.handleCallers(callers);
+        this.props.handleAction({ raiser: null, amount: 0, callers: callers });
         return;
     }
 
     if (raiser && amount > 0) {
-      //this.props.handleRaiser(raiser, amount);
+      this.props.handleAction({ raiser: raiser, amount: amount, callers: [] });
     }
   };
 
@@ -74,7 +80,6 @@ export class Action extends Component<
           key="a"
           style={{
             width: "70px",
-            paddingRight: "5px",
             textAlign: "right"
           }}
         >
@@ -89,7 +94,7 @@ export class Action extends Component<
           keyboardType={"numeric"}
           maxLength={4}
           selectTextOnFocus={true}
-          style={{ width: "50px", textAlign: "right" }}
+          style={{ width: "50px", marginLeft: "5px", paddingLeft: "5px" }}
         />
       </View>
     );
