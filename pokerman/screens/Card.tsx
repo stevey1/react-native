@@ -26,7 +26,7 @@ export default class Card extends Component<{}, { card: ICard }> {
 
   render() {
     return (
-      <View>
+      <View style={{ flexDirection: "row" }}>
         <Picker
           key="suit"
           selectedValue={this.state.card.suit}
@@ -37,7 +37,7 @@ export default class Card extends Component<{}, { card: ICard }> {
             if (card.suit > 0 && this.state.card.cardNumber > 0)
               this.props.handleCard(card);
           }}
-          style={[setCardColor(this.state.card.suit), {width:"50px"}]}
+          style={[setCardColor(this.state.card.suit), { width: "50px" }]}
         >
           <Picker.Item key="s1" label="&clubs;" color="#000000" value="1" />
           <Picker.Item key="s2" label="&diams;" color="#FF0000" value="2" />
@@ -60,7 +60,7 @@ export default class Card extends Component<{}, { card: ICard }> {
             if (card.cardNumber > 0 && this.state.card.suit > 0)
               this.props.handleCard(card);
           }}
-          style={[setCardColor(this.state.card.suit), {width:"50px"}]}
+          style={[setCardColor(this.state.card.suit), { width: "50px" }]}
         >
           {this.getCardNumbers()}
           <Picker.Item

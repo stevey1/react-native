@@ -42,17 +42,23 @@ export default class Play extends Component<
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <View>
-          <Text key="my" style={{ width: "80px" }}>
+        <View style={styles.control}>
+          <Text key="my" style={styles.label}>
             My Hands:
           </Text>
-          <Card key="myhand1" handleCard={c => this.handleMyHand(c, 0)}></Card>
-          <Card key="myhand2" handleCard={c => this.handleMyHand(c, 1)}></Card>
+          <Card
+            key="myhand1"
+            handleCard={(c: ICard) => this.handleMyHand(c, 0)}
+          ></Card>
+          <Card
+            key="myhand2"
+            handleCard={(c: ICard) => this.handleMyHand(c, 1)}
+          ></Card>
           {this.displayMyHand()}
         </View>
-        <View>
-          <Text key="p" style={{ width: "80px" }}>
-            Preflop Raise:
+        <View style={styles.control}>
+          <Text key="p" style={styles.label}>
+            Preflop Bet:
           </Text>
           <Action
             key="pre"
@@ -61,40 +67,57 @@ export default class Play extends Component<
             seats={this.props.seats}
           ></Action>
         </View>
-        <View>
-          <Text key="f" style={{ width: "80px" }}>
+        <View style={styles.control}>
+          <Text key="f" style={styles.label}>
             Flop:
           </Text>
-          <Card key="board1" handleCard={c => this.handleBoard(c, 0)}></Card>
-          <Card key="board2" handleCard={c => this.handleBoard(c, 1)}></Card>
-          <Card key="board3" handleCard={c => this.handleBoard(c, 2)}></Card>
+          <Card
+            key="board1"
+            handleCard={(c: ICard) => this.handleBoard(c, 0)}
+          ></Card>
+          <Card
+            key="board2"
+            handleCard={(c: ICard) => this.handleBoard(c, 1)}
+          ></Card>
+          <Card
+            key="board3"
+            handleCard={(c: ICard) => this.handleBoard(c, 2)}
+          ></Card>
         </View>
-        <View>
-          <Text key="fr" style={{ width: "80px" }}>
-            Flop Raise:
+        <View style={styles.control}>
+          <Text key="fr" style={styles.label}>
+            Flop Bet:
           </Text>
           <Action key="flop" seats={this.props.seats}></Action>
         </View>
-        <View>
-          <Text key="t" style={{ width: "80px" }}>
+        <View style={styles.control}>
+          <Text key="t" style={styles.label}>
             Turn:
           </Text>
-          <Card key="board4" handleCard={c => this.handleBoard(c, 3)}></Card>
+          <Card
+            key="board4"
+            handleCard={(c: ICard) => this.handleBoard(c, 3)}
+          ></Card>
         </View>
-        <View>
-          <Text key="tr" style={{ width: "80px" }}>
-            {" "}
-            Turn Raise:
+        <View style={styles.control}>
+          <Text key="tr" style={styles.label}>
+            Turn Bet:
           </Text>
           <Action key="turn" seats={this.props.seats}></Action>
         </View>
-        <View>
-          <Text key="r" style={{ width: "80px" }}>
+        <View style={styles.control}>
+          <Text key="r" style={styles.label}>
             River:
           </Text>
-          <Card key="board5" handleCard={c => this.handleBoard(c, 4)}></Card>
+          <Card
+            key="board5"
+            handleCard={(c: ICard) => this.handleBoard(c, 4)}
+          ></Card>
         </View>
-        <View>
+        <View style={styles.control}>
+          <Text key="rb" style={styles.label}>
+            River Bet:
+          </Text>
           <Action key="river" seats={this.props.seats}></Action>
         </View>
         <OptionButton
@@ -155,5 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     alignSelf: "flex-start",
     marginTop: 1
-  }
+  },
+  label: { width: "100px" },
+  control: { flex: 1, flexDirection: "row" }
 });

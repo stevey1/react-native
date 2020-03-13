@@ -49,7 +49,7 @@ export class Action extends Component<
 
   render() {
     return (
-      <View>
+      <View style={{ flexDirection: "row" }}>
         <Picker
           key="raiser"
           name="raiser"
