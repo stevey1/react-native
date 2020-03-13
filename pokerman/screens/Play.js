@@ -5,18 +5,24 @@ import { RectButton, ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
 
-export default class Play extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { myHand: [], boards: [] };
+export default class Play extends Component
+/*<
+  {},
+  {
+    myHand: { cardNumber: number; suit: number }[];
+    board: { cardNumber: number; suit: number }[];
   }
+>*/
+{
+  state = { myHand: [], boards: [] };
+
   handleMyHand = (card, cardId) => {
-    const cards = this.setState.myHand || [];
+    const cards = this.state.myHand || [];
     cards[cardId] = card;
     this.setState({ myHand: cards });
   };
   handleBoard = (card, cardId) => {
-    let cards = this.setState.boards || [];
+    let cards = this.state.boards || [];
     cards[cardId] = card;
     this.setState({ boards: cards });
   };
