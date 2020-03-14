@@ -8,13 +8,10 @@ export class Action extends Component<
     raiser?: ISeat;
     seats: ISeat[];
     handleAction: (action: IAction) => void;
-    handleCallers: (callers: ISeat[]) => void;
   },
   {
     amount: number;
     raiser: Nullable<ISeat>;
-    callers: ISeat[];
-    selectedItems: [];
   }
 > {
   readonly state = {
@@ -42,23 +39,13 @@ export class Action extends Component<
         raiser = this.state.raiser;
         this.setState({ amount: amount });
         break;
-      case "callers":
-        const callers = this.props.seats.filter(x =>
-          value.includes(x.seatNumber)
-        );
-        this.setState({ callers: callers });
-        //this.props.handleCallers(callers);
-        this.props.handleAction({ raiser: null, amount: 0, callers: callers });
-        return;
     }
 
     if (raiser && amount > 0) {
       this.props.handleAction({ raiser: raiser, amount: amount, callers: [] });
     }
   };
-  onSelectedItemsChange = selectedItems => {
-    this.setState({ selectedItems });
-  };
+
   mapToSeatIndex = (seatNumber: number) =>
     this.props.seats.findIndex(seat => seat.seatNumber === seatNumber);
 
@@ -109,11 +96,6 @@ export class Action extends Component<
           maxLength={4}
           selectTextOnFocus={true}
           style={{ width: "50px", marginLeft: "5px", paddingLeft: "5px" }}
-        />
-        <MultiSelect
-          enabled={this.state.raiser && this.state.amount > 0}
-          callers={this.props.seats}
-          handleCallers={this.props.handleCallers}
         />
       </View>
     );

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { RectButton, ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
+import Caller from "./Caller";
+import OptionButton from "./OptionButton";
 import {
   ISeat,
   ICard,
@@ -23,13 +24,15 @@ export default class Play extends Component<
     board: ICard[];
     actions: IAction[];
     allActions: IActionHistory[];
+    showCaller: boolean;
   }
 > {
   state = {
     myHand: [] as ICard[],
     board: [] as ICard[],
     actions: [] as IAction[],
-    allActions: [] as IActionHistory[]
+    allActions: [] as IActionHistory[],
+    showCaller: false
   };
 
   componentDidMount = () => {
@@ -108,12 +111,12 @@ export default class Play extends Component<
 
   setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) => {
     return (
-      this.getBetSequence(currentSeat, round) <
-      this.getBetSequence(previousSeat, round)
+      this.getActionOrder(currentSeat, round) <
+      this.getActionOrder(previousSeat, round)
     );
   };
 
-  getBetSequence = (seatNumber: number, round: Round) => {
+  getActionOrder = (seatNumber: number, round: Round) => {
     const dealerSeatIndex =
       round === Round.Preflop
         ? (this.props.dealerSeatIndex + 2) % this.props.seats.length
@@ -133,6 +136,62 @@ export default class Play extends Component<
       (this.props.dealerSeatIndex + 2) % this.props.seats.length;
 
     return this.props.seats[bigBlindSeatIndex];
+  };
+  private getSeatsInPlay = (round: Round) => {
+    let seats = this.props.seats;
+    if (round === Round.Preflop) return seats;
+
+    let action = this.getLastAction(Round.Preflop);
+    if (action) {
+      seats = [action.raiser as any, ...action.callers];
+    }
+    if (round === Round.Flop) return seats;
+
+    action = this.getLastAction(Round.Flop);
+    if (action) {
+      seats = [action.raiser as any, ...action.callers];
+    }
+
+    if (round === Round.Turn) return seats;
+
+    action = this.getLastAction(Round.Turn);
+    if (action) {
+      seats = [action.raiser as any, ...action.callers];
+    }
+    return seats;
+  };
+  private getLastAction = (round: Round) => this.state.actions[round];
+  private showCallerButton = () => {
+    return this.state.showCaller ? (
+      <View></View>
+    ) : (
+      <View style={styles.control}>
+        <OptionButton
+          icon="md-school"
+          label="Callers"
+          isLastOption={false}
+          onPress={() => {
+            this.setState({ showCaller: true });
+          }}
+        />
+      </View>
+    );
+  };
+  private showCaller = () => {
+    return !this.state.showCaller ? (
+      <View></View>
+    ) : (
+      <View style={styles.control}>
+        <Text key="p" style={styles.label}>
+          Callers:
+        </Text>
+        <Caller
+          key="caller"
+          seats={this.props.seats}
+          handleCallers={c => this.handleCallers(c, Round.River)}
+        ></Caller>
+      </View>
+    );
   };
   render() {
     return (
@@ -192,7 +251,7 @@ export default class Play extends Component<
           </Text>
           <Action
             key="flop"
-            seats={this.props.seats}
+            seats={this.getSeatsInPlay(Round.Flop)}
             handleAction={a => this.handleAction(a, Round.Flop)}
             handleCallers={c => this.handleCallers(c, Round.Flop)}
           ></Action>
@@ -212,7 +271,7 @@ export default class Play extends Component<
           </Text>
           <Action
             key="turn"
-            seats={this.props.seats}
+            seats={this.getSeatsInPlay(Round.Turn)}
             handleAction={a => this.handleAction(a, Round.Turn)}
             handleCallers={c => this.handleCallers(c, Round.Turn)}
           ></Action>
@@ -232,70 +291,20 @@ export default class Play extends Component<
           </Text>
           <Action
             key="river"
-            seats={this.props.seats}
+            seats={this.getSeatsInPlay(Round.River)}
             handleCallers={c => this.handleCallers(c, Round.River)}
             handleAction={a => this.handleAction(a, Round.River)}
           ></Action>
         </View>
-        <OptionButton
-          icon="md-school"
-          label="Read the Expo documentation"
-          isLastOption={false}
-          //onPress={() => WebBrowser.openBrowserAsync("https://docs.expo.io")}
-        />
+        {this.showCallerButton()}
+
+        {this.showCaller()}
       </ScrollView>
     );
   }
 }
 
-function OptionButton(props: {
-  icon: string;
-  label: string;
-  isLastOption: boolean;
-}) {
-  return (
-    <RectButton
-      style={[styles.option, props.isLastOption && styles.lastOption]}
-    >
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.optionIconContainer}>
-          <Ionicons name={props.icon} size={22} color="rgba(0,0,0,0.35)" />
-        </View>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{props.label}</Text>
-        </View>
-      </View>
-    </RectButton>
-  );
-}
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fafafa"
-  },
-  contentContainer: {
-    paddingTop: 15
-  },
-  optionIconContainer: {
-    marginRight: 12
-  },
-  option: {
-    backgroundColor: "#fdfdfd",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: "#ededed"
-  },
-  lastOption: {
-    borderBottomWidth: StyleSheet.hairlineWidth
-  },
-  optionText: {
-    fontSize: 15,
-    alignSelf: "flex-start",
-    marginTop: 1
-  },
   label: { paddingRight: "7px", textAlign: "right", width: "100px" },
   control: { flex: 1, flexDirection: "row", margin: "3px" }
 });

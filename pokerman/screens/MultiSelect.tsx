@@ -1,59 +1,78 @@
 import React, { Component } from "react";
 import { ISeat } from "../constants/DataTypes";
-import {
-  StyleSheet,
-  TouchableHighlight,
-  View,
-  Button,
-  Text,
-  Modal
-} from "react-native";
+import { View, Button } from "react-native";
 import CheckBox from "./CheckBox";
 
 export class MultiSelect extends Component<
-  { callers: ISeat[]; enabled: boolean },
+  { seats: ISeat[]; enabled: boolean },
   {
-    isModalVisible: boolean;
     selectedCallers: boolean[];
     handleCallers: (callers: ISeat[]) => void;
   }
 > {
   state = {
-    isModalVisible: false,
-    selectedCallers: [] as boolean[]
+    selectedCallers: [] as boolean[],
+    buttonEnabled: false
   };
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
-  callerSelected = (id: string) => {
-    const index = parseInt(id);
+
+  onChange = (index: number) => {
     const selectedCallers = this.state.selectedCallers;
-    selectedCallers[index] = !this.state.selectedCallers[index];
-    console.log("selectedCallers", selectedCallers);
+    selectedCallers[index] =
+      this.state.selectedCallers[index] == null
+        ? true
+        : !this.state.selectedCallers[index];
+    if (selectedCallers[index]) this.setState({ buttonEnabled: true });
+    else this.setState({ buttonEnabled: selectedCallers.some(x => x) });
+
     this.setState({ selectedCallers: selectedCallers });
   };
   submitCallers = () => {
-    if (!this.props.enabled) return;
-    const callers = this.props.callers.filter(
-      (caller, index) => this.state.selectedCallers[index]
+    const callers = this.props.seats.filter(
+      (seat, index) => this.state.selectedCallers[index]
     );
     this.props.handleCallers(callers);
-    this.toggleModal();
   };
+
+  showCheckBoxes(count: number) {
+    let control = [];
+    const rows = Math.ceil(this.props.seats.length / count);
+    for (let r = 0; r < rows; r++) {
+      let row = [];
+
+      for (
+        let i = r * count;
+        i < (r + 1) * count && i < this.props.seats.length;
+        i++
+      ) {
+        row.push(
+          <CheckBox
+            key={"c" + i}
+            selected={this.state.selectedCallers[i]}
+            onPress={() => this.onChange(i)}
+            text={"Seat " + this.props.seats[i].seatNumber}
+          />
+        );
+      }
+      control.push(
+        <View
+          key={"m" + r}
+          style={{ flex: 1, flexDirection: "row", margin: "0 15px 0 15px" }}
+        >
+          {row}
+        </View>
+      );
+    }
+    return control;
+  }
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Button title="Submit" onPress={this.submitCallers} />
-
-        {this.props.callers.map((seat, index) => (
-          <CheckBox
-            key={"c" + index}
-            //              color="#fc5185"
-            selected={this.state.selectedCallers[index]}
-            onPress={() => this.callerSelected(index)}
-            text={"Seat " + seat.seatNumber}
-          />
-        ))}
+      <View>
+        {this.showCheckBoxes(4)}
+        <Button
+          disabled={!this.state.buttonEnabled}
+          title="Done"
+          onPress={this.submitCallers}
+        />
       </View>
     );
   }
