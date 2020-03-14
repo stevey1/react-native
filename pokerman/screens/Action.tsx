@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Picker, TextInput, Text, View } from "react-native";
 import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
-import MultiSelect from "./MultiSelect";
+import { getSeatText, getCardNumberText } from "./../constants/helper";
 export class Action extends Component<
   {
     bigBlind?: number;
@@ -61,12 +61,12 @@ export class Action extends Component<
               : "-1"
           }
           onChange={this.handleChange}
-          style={{ width: "75px" }}
+          style={{ width: "90px" }}
         >
           {this.props.seats.map((seat, i) => (
             <Picker.Item
               key={"s" + i}
-              label={"Seat " + seat.seatNumber}
+              label={getSeatText() + " " + getCardNumberText(seat.seatNumber)}
               value={i}
             />
           ))}
@@ -89,13 +89,18 @@ export class Action extends Component<
         <TextInput
           key="amount"
           name="amount"
-          style={{ borderColor: "gray", borderWidth: 1 }}
           onChange={this.handleChange}
           value={this.state.amount === 0 ? "" : this.state.amount.toString()}
           keyboardType={"numeric"}
           maxLength={4}
           selectTextOnFocus={true}
-          style={{ width: "50px", marginLeft: "5px", paddingLeft: "5px" }}
+          style={{
+            width: "50px",
+            marginLeft: "5px",
+            paddingLeft: "5px",
+            backgroundColor: "#FFFFFF",
+            borderWidth: 1
+          }}
         />
       </View>
     );

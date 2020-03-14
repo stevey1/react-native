@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { Picker, View } from "react-native";
 import { Suit } from "../constants/DataTypes";
-import {
-  getCardNumberText,
-  setCardColor
-} from "../constants/helper";
+import { getCardNumberText, setCardColor } from "../constants/helper";
 
 export default class Card extends Component<
   {},
@@ -43,10 +40,10 @@ export default class Card extends Component<
           }}
           style={[setCardColor(this.state.suit), { width: "50px" }]}
         >
-          <Picker.Item key="s1" label="&clubs;" color="#000000" value="1" />
-          <Picker.Item key="s2" label="&diams;" color="#FF0000" value="2" />
-          <Picker.Item key="s3" label="&hearts;" color="#FF0000" value="3" />
-          <Picker.Item key="s4" label="&spades;" color="#000000" value="4" />
+          <Picker.Item key="s1" label="草" color="#000000" value="1" />
+          <Picker.Item key="s2" label="方" color="#FF0000" value="2" />
+          <Picker.Item key="s3" label="红" color="#FF0000" value="3" />
+          <Picker.Item key="s4" label="黑" color="#000000" value="4" />
           <Picker.Item
             key="s0"
             style={{ display: "none" }}

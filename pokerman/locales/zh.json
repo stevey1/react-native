@@ -1,0 +1,12 @@
+{
+  "appName": "扑克",
+  "navigation": {
+    "seat": "座位",
+    "player": "选手",
+    "play": "牌局",
+    "timer": "时间"
+  },
+  "home": {
+    "welcome": "Welcome to %{appName}!"
+  }
+}

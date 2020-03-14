@@ -1,0 +1,12 @@
+{
+  "appName": "Pokerman",
+  "navigation": {
+    "seat": "Seat Setup",
+    "player": "Player Setup",
+    "play": "Play",
+    "timers": "Settings"
+  },
+  "home": {
+    "welcome": "Welcome to %{appName}!"
+  }
+}

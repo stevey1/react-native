@@ -1,34 +1,60 @@
 import { IPlayer, ISeat, Suit, PlayerType } from "./DataTypes";
-export const getCardNumberText = (cardNumber: number) => {
+
+export const getCardNumberText = (cardNumber: number, language: number = 0) => {
   switch (cardNumber) {
     case 14:
-      return "A";
+      return language ? "A" : "a";
     case 13:
-      return "K";
+      return language ? "A" : "k";
     case 12:
-      return "Q";
+      return language ? "A" : "q";
     case 11:
-      return "J";
+      return language ? "J" : "j";
     case 0:
-    case 1:
       return "";
+    case 1:
+      return "一";
+    case 2:
+      return language ? "2" : "二";
+    case 3:
+      return language ? "3" : "三";
+    case 4:
+      return language ? "4" : "四";
+    case 5:
+      return language ? "5" : "五";
+    case 6:
+      return language ? "6" : "六";
+    case 7:
+      return language ? "7" : "七";
+    case 8:
+      return language ? "8" : "八";
+    case 9:
+      return language ? "9" : "九";
+    case 10:
+      return language ? "10" : "十";
     default:
       return cardNumber;
   }
 };
-export const getSuitIcon = (suit: Suit) => {
+export const getSuitText = (suit: Suit, language = 0) => {
   switch (suit) {
     case Suit.c:
-      return "&clubs;";
+      return language ? "&clubs;" : "草";
     case Suit.d:
-      return "&diams;";
+      return language ? "&diams;" : "方";
     case Suit.h:
-      return "&hearts;";
+      return language ? "&hearts;" : "红";
     case Suit.s:
-      return "&spades;";
+      return language ? "&spades;" : "黑";
     default:
       return "";
   }
+};
+export const getSeatText = (language = 0) => {
+  return language ? "Seat" : "座位";
+};
+export const getAmountText = (language = 0) => {
+  return language ? "Amount" : "量";
 };
 export const setCardColor = (suit: Suit) => {
   return suit === Suit.d || suit === Suit.h

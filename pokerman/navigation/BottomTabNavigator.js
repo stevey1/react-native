@@ -5,6 +5,7 @@ import Seat from "../screens/Seat";
 import Play2 from "../screens/Play2";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
+import i18n from "../i18n";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Seat";
@@ -16,40 +17,40 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
-        name="Seat"
+        name={i18n.t("navigation.seat")}
         component={Seat}
         options={{
-          title: "Seat Setup",
+          title: i18n.t("navigation.seat"), //"Seat Setup",
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-person-add" />
           )
         }}
       />
       <BottomTab.Screen
-        name="Player"
+        name={i18n.t("navigation.player")}
         component={Player}
         options={{
-          title: "Player Setup",
+          title: i18n.t("navigation.player"),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-person" />
           )
         }}
       />
       <BottomTab.Screen
-        name="Play"
+        name={i18n.t("navigation.play")}
         component={Play2}
         options={{
-          title: "Play",
+          title: i18n.t("navigation.play"),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-headset" />
           )
         }}
       />
       <BottomTab.Screen
-        name="Timer"
+        name={i18n.t("navigation.timer")}
         component={Timer}
         options={{
-          title: "Timer",
+          title: i18n.t("navigation.timer"),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-clock" />
           )
