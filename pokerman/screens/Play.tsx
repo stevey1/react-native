@@ -104,21 +104,22 @@ export default class Play extends Component<
       this.setState({ actions: actions });
     }
   };
-  setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) =>
-    this.getBetSequence(previousSeat, round) >
-    this.getBetSequence(currentSeat, round);
+  setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) => {
+    return (
+      this.getBetSequence(previousSeat, round) >
+      this.getBetSequence(currentSeat, round)
+    );
+  };
 
   getBetSequence = (seatNumber: number, round: Round) => {
     const dealerSeatIndex =
       round === Round.Preflop
         ? (this.props.dealerSeatIndex + 2) % this.props.seats.length
         : this.props.dealerSeatIndex;
-    const dealerSeatNumber = this.props.seat[dealerSeatIndex].seatNumber;
+    const dealerSeatNumber = this.props.seats[dealerSeatIndex].seatNumber;
     // const seatIndex = this.getSeatIndex(seatNumber);
     return seatNumber > dealerSeatNumber ? seatNumber : seatNumber + 10; //this.props.seats.length;
   };
-  getSeatIndex = (seatNumber: number) =>
-    this.props.seats.findIndex(seat => seat.seatNumber === seatNumber);
 
   displayMyHand = (cards: ICard[]) =>
     cards.map(card => (
@@ -129,7 +130,7 @@ export default class Play extends Component<
     const bigBlindSeatIndex =
       (this.props.dealerSeatIndex + 2) % this.props.seats.length;
 
-    return this.props.seats[bigBlindSeatNumber];
+    return this.props.seats[bigBlindSeatIndex];
   };
   render() {
     return (

@@ -58,6 +58,9 @@ export class Action extends Component<
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
   };
+  mapToSeatIndex = (seatNumber: number) =>
+    this.props.seats.findIndex(seat => seat.seatNumber === seatNumber);
+
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
@@ -66,7 +69,7 @@ export class Action extends Component<
           name="raiser"
           selectedValue={
             this.state.raiser && this.state.raiser.seatNumber >= 0
-              ? this.state.raiser.seatNumber.toString()
+              ? this.mapToSeatIndex(this.state.raiser.seatNumber).toString()
               : "-1"
           }
           onChange={this.handleChange}
