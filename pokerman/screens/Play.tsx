@@ -106,8 +106,8 @@ export default class Play extends Component<
   };
   setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) => {
     return (
-      this.getBetSequence(previousSeat, round) >
-      this.getBetSequence(currentSeat, round)
+      this.getBetSequence(currentSeat, round) <
+      this.getBetSequence(previousSeat, round)
     );
   };
 
