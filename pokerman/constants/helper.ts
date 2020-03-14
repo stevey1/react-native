@@ -62,9 +62,7 @@ export const players: IPlayer[] = [
 ];
 
 export const seats: ISeat[] = [
-  { player: player1, seatNumber: 0 },
-  { player: player2, seatNumber: 1 },
-  { player: player3, seatNumber: 2 },
+  { player: player2, seatNumber: 2 },
   { player: player4, seatNumber: 3 },
   { player: player5, seatNumber: 4 },
   { player: player6, seatNumber: 5 },

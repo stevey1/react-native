@@ -23,51 +23,13 @@ export class Action extends Component<
     selectedItems: []
   };
 
-  private items = [
-    {
-      id: "92iijs7yta",
-      name: "Ondo"
-    },
-    {
-      id: "a0s0a8ssbsd",
-      name: "Ogun"
-    },
-    {
-      id: "16hbajsabsd",
-      name: "Calabar"
-    },
-    {
-      id: "nahs75a5sg",
-      name: "Lagos"
-    },
-    {
-      id: "667atsas",
-      name: "Maiduguri"
-    },
-    {
-      id: "hsyasajs",
-      name: "Anambra"
-    },
-    {
-      id: "djsjudksjd",
-      name: "Benue"
-    },
-    {
-      id: "sdhyaysdj",
-      name: "Kaduna"
-    },
-    {
-      id: "suudydjsjd",
-      name: "Abuja"
-    }
-  ];
   handleChange = e => {
     const { name, value } = e.target;
     let amount: number = 0;
     let raiser: Nullable<ISeat> = null;
     switch (name) {
       case "raiser":
-        raiser = this.props.seats.find(x => x.seatNumber === parseInt(value));
+        raiser = this.props.seats[parseInt(value)];
         this.setState({ amount: amount });
         this.setState({ raiser: raiser });
         this.setState({ callers: [] });
@@ -110,15 +72,13 @@ export class Action extends Component<
           onChange={this.handleChange}
           style={{ width: "75px" }}
         >
-          <Picker.Item key="s1" label="Seat 1" value="0" />
-          <Picker.Item key="s2" label="Seat 2" value="1" />
-          <Picker.Item key="s3" label="Seat 3" value="2" />
-          <Picker.Item key="s4" label="Seat 4" value="3" />
-          <Picker.Item key="s5" label="Seat 5" value="4" />
-          <Picker.Item key="s6" label="Seat 6" value="5" />
-          <Picker.Item key="s7" label="Seat 7" value="6" />
-          <Picker.Item key="s8" label="Seat 8" value="7" />
-          <Picker.Item key="s9" label="Seat 9" value="8" />
+          {this.props.seats.map((seat, i) => (
+            <Picker.Item
+              key={"s" + i}
+              label={"Seat " + seat.seatNumber}
+              value={i}
+            />
+          ))}
           <Picker.Item
             key="s0"
             style={{ display: "none" }}
@@ -146,7 +106,7 @@ export class Action extends Component<
           selectTextOnFocus={true}
           style={{ width: "50px", marginLeft: "5px", paddingLeft: "5px" }}
         />
-        <MultiSelect />
+        <MultiSelect seats={this.props.seats} />
       </View>
     );
   }

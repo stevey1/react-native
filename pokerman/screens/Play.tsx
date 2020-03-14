@@ -15,7 +15,7 @@ import {
 export default class Play extends Component<
   {
     bigBlind: number;
-    dealer: number;
+    dealerSeatIndex: number;
     seats: ISeat[];
   },
   {
@@ -31,9 +31,6 @@ export default class Play extends Component<
     actions: [] as IAction[],
     allActions: [] as IActionHistory[]
   };
-  constructor(props: { bigBlind: number; dealer: ISeat; seats: ISeat[] }) {
-    super(props);
-  }
 
   componentDidMount = () => {
     const raiser = this.getBigBlindSeat();
@@ -110,28 +107,29 @@ export default class Play extends Component<
   setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) =>
     this.getBetSequence(previousSeat, round) >
     this.getBetSequence(currentSeat, round);
+
   getBetSequence = (seatNumber: number, round: Round) => {
-    const deatSeatNumber =
+    const dealerSeatIndex =
       round === Round.Preflop
-        ? this.props.dealer
-        : (this.props.dealer + 2) % this.props.seats.length;
-    return seatNumber < deatSeatNumber
-      ? seatNumber + deatSeatNumber
-      : seatNumber;
+        ? (this.props.dealerSeatIndex + 2) % this.props.seats.length
+        : this.props.dealerSeatIndex;
+    const dealerSeatNumber = this.props.seat[dealerSeatIndex].seatNumber;
+    // const seatIndex = this.getSeatIndex(seatNumber);
+    return seatNumber > dealerSeatNumber ? seatNumber : seatNumber + 10; //this.props.seats.length;
   };
+  getSeatIndex = (seatNumber: number) =>
+    this.props.seats.findIndex(seat => seat.seatNumber === seatNumber);
+
   displayMyHand = (cards: ICard[]) =>
     cards.map(card => (
       <Text key={"c" + card.cardNumber}>{card.cardNumber}</Text>
     ));
 
   getBigBlindSeat = () => {
-    const bigBlindSeatNumber =
-      (this.props.dealer + 2) % this.props.seats.length;
+    const bigBlindSeatIndex =
+      (this.props.dealerSeatIndex + 2) % this.props.seats.length;
 
-    const blindSeat = this.props.seats.find(
-      seat => (seat.seatNumber = bigBlindSeatNumber)
-    );
-    return blindSeat;
+    return this.props.seats[bigBlindSeatNumber];
   };
   render() {
     return (
