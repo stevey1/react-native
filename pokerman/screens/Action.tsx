@@ -8,6 +8,7 @@ export class Action extends Component<
     raiser?: ISeat;
     seats: ISeat[];
     handleAction: (action: IAction) => void;
+    handleCallers: (callers: ISeat[]) => void;
   },
   {
     amount: number;
@@ -109,7 +110,11 @@ export class Action extends Component<
           selectTextOnFocus={true}
           style={{ width: "50px", marginLeft: "5px", paddingLeft: "5px" }}
         />
-        <MultiSelect seats={this.props.seats} />
+        <MultiSelect
+          enabled={this.state.raiser && this.state.amount > 0}
+          callers={this.props.seats}
+          handleCallers={this.props.handleCallers}
+        />
       </View>
     );
   }

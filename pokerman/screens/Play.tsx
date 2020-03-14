@@ -65,45 +65,47 @@ export default class Play extends Component<
     action.checkRaise = false;
     let allActions = this.state.allActions;
     let actions = this.state.actions;
-    if (action.callers.length > 0 && action.amount === 0) {
-      allActions[allActions.length - 1].action.callers = action.callers;
-      this.setState({ allActions: allActions });
-
-      actions[round].callers = action.callers;
-      this.setState({ actions: actions });
-    } else {
-      if (allActions.length > 0) {
-        if (allActions[allActions.length - 1].round === round) {
-          const lastAction = allActions[allActions.length - 1].action;
-          if (
-            lastAction.raiser.seatNumber === action.raiser.seatNumber ||
-            (round === Round.Preflop &&
-              allActions.length === 1 &&
-              lastAction.amount === this.props.bigBlind)
-          ) {
-            // the same person or overrid big blind
-            allActions[allActions.length - 1].action = action;
-          } else {
-            action.raises = lastAction.raises + 1;
-            action.checkRaise = this.setCheckRaise(
-              lastAction.raiser.seatNumber,
-              action.raiser.seatNumber,
-              round
-            );
-            allActions.push({ action: action, round: round });
-          }
+    if (allActions.length > 0) {
+      if (allActions[allActions.length - 1].round === round) {
+        const lastAction = allActions[allActions.length - 1].action;
+        if (
+          lastAction.raiser.seatNumber === action.raiser.seatNumber ||
+          (round === Round.Preflop &&
+            allActions.length === 1 &&
+            lastAction.amount === this.props.bigBlind)
+        ) {
+          // the same person or overrid big blind
+          allActions[allActions.length - 1].action = action;
         } else {
+          action.raises = lastAction.raises + 1;
+          action.checkRaise = this.setCheckRaise(
+            lastAction.raiser.seatNumber,
+            action.raiser.seatNumber,
+            round
+          );
           allActions.push({ action: action, round: round });
         }
       } else {
         allActions.push({ action: action, round: round });
       }
-      this.setState({ allActions: allActions });
-
-      actions[round] = action;
-      this.setState({ actions: actions });
+    } else {
+      allActions.push({ action: action, round: round });
     }
+    this.setState({ allActions: allActions });
+
+    actions[round] = action;
+    this.setState({ actions: actions });
   };
+  handleCallers = (callers: ISeat[], round: Round) => {
+    const allActions = this.state.allActions;
+    allActions[allActions.length - 1].action.callers = callers;
+    this.setState({ allActions: allActions });
+
+    const actions = this.state.actions;
+    actions[round].callers = callers;
+    this.setState({ actions: actions });
+  };
+
   setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) => {
     return (
       this.getBetSequence(currentSeat, round) <
@@ -164,6 +166,7 @@ export default class Play extends Component<
             raiser={this.getBigBlindSeat()}
             seats={this.props.seats}
             handleAction={a => this.handleAction(a, Round.Preflop)}
+            handleCallers={c => this.handleCallers(c, Round.Preflop)}
           ></Action>
         </View>
         <View style={styles.control}>
@@ -191,6 +194,7 @@ export default class Play extends Component<
             key="flop"
             seats={this.props.seats}
             handleAction={a => this.handleAction(a, Round.Flop)}
+            handleCallers={c => this.handleCallers(c, Round.Flop)}
           ></Action>
         </View>
         <View style={styles.control}>
@@ -210,6 +214,7 @@ export default class Play extends Component<
             key="turn"
             seats={this.props.seats}
             handleAction={a => this.handleAction(a, Round.Turn)}
+            handleCallers={c => this.handleCallers(c, Round.Turn)}
           ></Action>
         </View>
         <View style={styles.control}>
@@ -228,6 +233,7 @@ export default class Play extends Component<
           <Action
             key="river"
             seats={this.props.seats}
+            handleCallers={c => this.handleCallers(c, Round.River)}
             handleAction={a => this.handleAction(a, Round.River)}
           ></Action>
         </View>

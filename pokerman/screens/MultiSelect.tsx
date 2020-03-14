@@ -11,44 +11,49 @@ import {
 import CheckBox from "./CheckBox";
 
 export class MultiSelect extends Component<
-  { seats: ISeat[] },
-  { isModalVisible: boolean; isSeatSelected: boolean[] }
+  { callers: ISeat[]; enabled: boolean },
+  {
+    isModalVisible: boolean;
+    selectedCallers: boolean[];
+    handleCallers: (callers: ISeat[]) => void;
+  }
 > {
   state = {
     isModalVisible: false,
-    isSeatSelected: []
+    selectedCallers: [] as boolean[]
   };
   toggleModal = () => {
-    if (this.state.isModalVisible) console.log("toggled");
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
-  seatSelected = (id: string) => {
-    console.log("i am here");
-    console.log("id", id);
+  callerSelected = (id: string) => {
     const index = parseInt(id);
-    const isSeatSelected = this.state.isSeatSelected;
-    isSeatSelected[index] = !this.state.isSeatSelected[index];
-    console.log("isSeatSelected", isSeatSelected);
-
-    this.setState({ isSeatSelected: isSeatSelected });
+    const selectedCallers = this.state.selectedCallers;
+    selectedCallers[index] = !this.state.selectedCallers[index];
+    console.log("selectedCallers", selectedCallers);
+    this.setState({ selectedCallers: selectedCallers });
   };
-
+  submitCallers = () => {
+    if (!this.props.enabled) return;
+    const callers = this.props.callers.filter(
+      (caller, index) => this.state.selectedCallers[index]
+    );
+    this.props.handleCallers(callers);
+    this.toggleModal();
+  };
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {this.props.seats.map((seat, index) => (
-          <View key={"v" + index}>
-            <CheckBox
-              checked={true}
-              //              color="#fc5185"
+        <Button title="Submit" onPress={this.submitCallers} />
 
-              selected={this.state.isSeatSelected[index]}
-              onPress={() => this.seatSelected(index)}
-              text={"Seat " + seat.seatNumber}
-            />
-          </View>
+        {this.props.callers.map((seat, index) => (
+          <CheckBox
+            key={"c" + index}
+            //              color="#fc5185"
+            selected={this.state.selectedCallers[index]}
+            onPress={() => this.callerSelected(index)}
+            text={"Seat " + seat.seatNumber}
+          />
         ))}
-        <Button title="Show modal" onPress={this.toggleModal} />
       </View>
     );
   }
