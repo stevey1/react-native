@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RectButton, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
@@ -24,6 +24,7 @@ export default class Play extends Component<
     board: ICard[];
     actions: IAction[];
     allActions: IActionHistory[];
+    currentRound: Round;
     showCaller: boolean;
   }
 > {
@@ -32,6 +33,7 @@ export default class Play extends Component<
     board: [] as ICard[],
     actions: [] as IAction[],
     allActions: [] as IActionHistory[],
+    currentRound: Round.Preflop,
     showCaller: false
   };
 
@@ -98,15 +100,22 @@ export default class Play extends Component<
 
     actions[round] = action;
     this.setState({ actions: actions });
+    this.setState({ currentRound: round });
   };
-  handleCallers = (callers: ISeat[], round: Round) => {
+  handleCallers = (callers: ISeat[]) => {
     const allActions = this.state.allActions;
     allActions[allActions.length - 1].action.callers = callers;
     this.setState({ allActions: allActions });
 
     const actions = this.state.actions;
-    actions[round].callers = callers;
+    actions[this.state.currentRound].callers = callers;
     this.setState({ actions: actions });
+    this.setState({ showCaller: false });
+    let currentRound = this.state.currentRound;
+    if (this.state.currentRound !== Round.River) {
+      currentRound += 1;
+      this.setState({ currentRound: currentRound });
+    }
   };
 
   setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) => {
@@ -177,8 +186,8 @@ export default class Play extends Component<
       </View>
     );
   };
-  private showCaller = () => {
-    return !this.state.showCaller ? (
+  private showCaller = () =>
+    !this.state.showCaller ? (
       <View></View>
     ) : (
       <View style={styles.control}>
@@ -187,12 +196,73 @@ export default class Play extends Component<
         </Text>
         <Caller
           key="caller"
-          seats={this.props.seats}
-          handleCallers={c => this.handleCallers(c, Round.River)}
+          seats={this.getSeatsInPlay(this.state.currentRound).filter(
+            seat =>
+              seat.seatNumber !==
+              this.state.actions[this.state.currentRound].raiser.seatNumber
+          )}
+          handleCallers={this.handleCallers}
         ></Caller>
       </View>
     );
+
+  showCurrentRound = () => {
+    if (this.state.currentRound === Round.Preflop) return <View></View>;
+    let roundData = [
+      <View key="r1">{this.getRoundData(0, 3, "Flop", Round.Flop)}</View>
+    ];
+    if (this.state.currentRound > Round.Flop) {
+      roundData.push(
+        <View key="r2">{this.getRoundData(3, 1, "Turn", Round.Turn)}</View>
+      );
+      if (this.state.currentRound > Round.Turn) {
+        roundData.push(
+          <View key="r3">{this.getRoundData(4, 1, "River", Round.River)}</View>
+        );
+      }
+    }
+    return <View>{roundData}</View>;
   };
+  getCards = (start: number, totalCards: number) => {
+    let cards = [];
+    for (let i = start; i < start + totalCards; i++) {
+      cards.push(
+        <Card
+          key={"c" + i}
+          handleCard={(c: ICard) => this.handleBoard(c, i)}
+        ></Card>
+      );
+    }
+    return <View style={styles.control}>{cards}</View>;
+  };
+  getRoundData = (
+    start: number,
+    totalCards: number,
+    label: string,
+    round: Round
+  ) => {
+    return (
+      <View>
+        <View key="l" style={styles.control}>
+          <Text key="f" style={styles.label}>
+            {label}:
+          </Text>
+          {this.getCards(start, totalCards)}
+        </View>
+        <View key="c" style={styles.control}>
+          <Text key="t" style={styles.label}>
+            Bet:
+          </Text>
+          <Action
+            key="a"
+            seats={this.getSeatsInPlay(round)}
+            handleAction={a => this.handleAction(a, round)}
+          ></Action>
+        </View>
+      </View>
+    );
+  };
+
   render() {
     return (
       <ScrollView
@@ -228,74 +298,7 @@ export default class Play extends Component<
             handleCallers={c => this.handleCallers(c, Round.Preflop)}
           ></Action>
         </View>
-        <View style={styles.control}>
-          <Text key="f" style={styles.label}>
-            Flop:
-          </Text>
-          <Card
-            key="b0"
-            handleCard={(c: ICard) => this.handleBoard(c, 0)}
-          ></Card>
-          <Card
-            key="b1"
-            handleCard={(c: ICard) => this.handleBoard(c, 1)}
-          ></Card>
-          <Card
-            key="b2"
-            handleCard={(c: ICard) => this.handleBoard(c, 2)}
-          ></Card>
-        </View>
-        <View style={styles.control}>
-          <Text key="fr" style={styles.label}>
-            Flop Bet:
-          </Text>
-          <Action
-            key="flop"
-            seats={this.getSeatsInPlay(Round.Flop)}
-            handleAction={a => this.handleAction(a, Round.Flop)}
-            handleCallers={c => this.handleCallers(c, Round.Flop)}
-          ></Action>
-        </View>
-        <View style={styles.control}>
-          <Text key="t" style={styles.label}>
-            Turn:
-          </Text>
-          <Card
-            key="b3"
-            handleCard={(c: ICard) => this.handleBoard(c, 3)}
-          ></Card>
-        </View>
-        <View style={styles.control}>
-          <Text key="tr" style={styles.label}>
-            Turn Bet:
-          </Text>
-          <Action
-            key="turn"
-            seats={this.getSeatsInPlay(Round.Turn)}
-            handleAction={a => this.handleAction(a, Round.Turn)}
-            handleCallers={c => this.handleCallers(c, Round.Turn)}
-          ></Action>
-        </View>
-        <View style={styles.control}>
-          <Text key="r" style={styles.label}>
-            River:
-          </Text>
-          <Card
-            key="b4"
-            handleCard={(c: ICard) => this.handleBoard(c, 4)}
-          ></Card>
-        </View>
-        <View style={styles.control}>
-          <Text key="rb" style={styles.label}>
-            River Bet:
-          </Text>
-          <Action
-            key="river"
-            seats={this.getSeatsInPlay(Round.River)}
-            handleCallers={c => this.handleCallers(c, Round.River)}
-            handleAction={a => this.handleAction(a, Round.River)}
-          ></Action>
-        </View>
+        {this.showCurrentRound()}
         {this.showCallerButton()}
 
         {this.showCaller()}
@@ -305,6 +308,10 @@ export default class Play extends Component<
 }
 
 const styles = StyleSheet.create({
-  label: { paddingRight: "7px", textAlign: "right", width: "100px" },
+  label: {
+    paddingRight: "7px",
+    textAlign: "right",
+    width: "100px"
+  },
   control: { flex: 1, flexDirection: "row", margin: "3px" }
 });
