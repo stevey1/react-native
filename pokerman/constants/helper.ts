@@ -1,4 +1,4 @@
-import { IPlayer, ISeat, Suit, Round, PlayerType } from "./DataTypes";
+import { IPlayer, ISeat, Suit, ICard, Round, PlayerType } from "./DataTypes";
 import i18n from "../i18n";
 const numberMap =
   i18n.locale === "en"
@@ -76,19 +76,19 @@ const player8 = { id: 8, name: "P8", playerType: PlayerType.TT };
 const player9 = { id: 9, name: "P9", playerType: PlayerType.TT };
 
 export const players: IPlayer[] = [
-  { id: 1, name: "P1", playerType: PlayerType.TT },
-  { id: 2, name: "P2", playerType: PlayerType.TT },
-  { id: 3, name: "P3", playerType: PlayerType.TT },
-  { id: 4, name: "P4", playerType: PlayerType.TT },
-  { id: 5, name: "P5", playerType: PlayerType.TT },
-  { id: 6, name: "P6", playerType: PlayerType.TT },
-  { id: 7, name: "P7", playerType: PlayerType.TT },
-  { id: 8, name: "P8", playerType: PlayerType.TT },
-  { id: 9, name: "P9", playerType: PlayerType.TT },
-  { id: 10, name: "P10", playerType: PlayerType.TT },
-  { id: 11, name: "Rock Player", playerType: PlayerType.TT },
-  { id: 12, name: "Jim Happer", playerType: PlayerType.TT },
-  { id: 13, name: "Tom  Dur", playerType: PlayerType.TT }
+  { id: 1, name: "Rock Star", playerType: PlayerType.TT, isMe: true },
+  { id: 2, name: "P2", playerType: PlayerType.TT, isMe: false },
+  { id: 3, name: "P3", playerType: PlayerType.TT, isMe: false },
+  { id: 4, name: "P4", playerType: PlayerType.TT, isMe: false },
+  { id: 5, name: "P5", playerType: PlayerType.TT, isMe: false },
+  { id: 6, name: "P6", playerType: PlayerType.TT, isMe: false },
+  { id: 7, name: "P7", playerType: PlayerType.TT, isMe: false },
+  { id: 8, name: "P8", playerType: PlayerType.TT, isMe: false },
+  { id: 9, name: "P9", playerType: PlayerType.TT, isMe: false },
+  { id: 10, name: "P10", playerType: PlayerType.TT, isMe: false },
+  { id: 11, name: "Rock Player", playerType: PlayerType.TT, isMe: false },
+  { id: 12, name: "Jim Happer", playerType: PlayerType.TT, isMe: false },
+  { id: 13, name: "Tom  Dur", playerType: PlayerType.TT, isMe: false }
 ];
 
 export const seats: ISeat[] = [
@@ -100,3 +100,20 @@ export const seats: ISeat[] = [
   { player: player8, seatNumber: 7 },
   { player: player9, seatNumber: 8 }
 ];
+export const runRules = (
+  round: Round,
+  myHand: ICard[],
+  board: ICard,
+  mySeatNumber: number,
+  dealerSeatNumber: number,
+  totalPlayers: number
+) => {
+  if (round === Round.Preflop) {
+  }
+};
+export const runPreRules = (
+  myHand: ICard[],
+  myPosition: number,
+  dealerSeatNumber: number,
+  totalPlayers: number
+) => {};

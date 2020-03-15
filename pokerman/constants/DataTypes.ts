@@ -2,6 +2,7 @@ export interface IPlayer {
   id: number;
   name: string;
   playerType: PlayerType;
+  isMe: boolean;
 }
 export interface ISeat {
   player: IPlayer;
@@ -49,6 +50,43 @@ export enum Suit {
   h,
   s,
   unknow = -1
+}
+
+export enum HandType {
+  AA = 0,
+  KK,
+  QQ,
+  JJ,
+  Pair7_10,
+  Pair2_6,
+  AKQ,
+  ATJ,
+  A789,
+  A2_6,
+  KQJ,
+  KT,
+  Callable,
+  Small
+}
+export enum BoardType {
+  PairOnBoard,
+  Flush,
+  Staight,
+  FlushDraw,
+  StraightDraw,
+  Dry
+}
+export enum MyHandMade {
+  StraighFlush,
+  FourOfKind,
+  FullHouse,
+  Flush,
+  Straight,
+  ThreeKind,
+  TwoPair,
+  Top10AboutPairAKKicker,
+  TopPair,
+  SecondPair
 }
 export enum Round {
   Preflop = 0,
