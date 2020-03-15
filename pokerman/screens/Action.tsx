@@ -27,9 +27,7 @@ export class Action extends Component<
   };
 
   handleChange = e => {
-    console.log(e.nativeEvent.text);
     const value = e.nativeEvent.text;
-    //if (isNaN(value)) return;
     const amount = parseInt(value);
     this.setState({ amount: amount });
 
@@ -51,7 +49,11 @@ export class Action extends Component<
       raiserSelected: i18n.t("action.seat") + " " + getNumberText(index + 1)
     });
     if (this.state.amount > 0) {
-      this.props.handleAction({ raiser: raiser, amount: this.state.amount });
+      this.props.handleAction({
+        raiser: raiser,
+        amount: this.state.amount,
+        caller: []
+      });
     }
   };
 
