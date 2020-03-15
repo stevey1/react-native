@@ -11,10 +11,12 @@
   },
   "play": {
     "myHand": "手牌",
-    "preFlop": "翻牌前",
+    "preFlop": "牌前下注",
     "flop": "翻牌",
     "turn": "转牌",
-    "river": "最后"
+    "river": "河牌",
+    "callers": "跟注",
+    "raise": "加注"
   },
   "action": {
     "amount": "量",

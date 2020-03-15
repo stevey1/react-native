@@ -1,4 +1,4 @@
-import { IPlayer, ISeat, Suit, PlayerType } from "./DataTypes";
+import { IPlayer, ISeat, Suit, Round, PlayerType } from "./DataTypes";
 import i18n from "../i18n";
 const numberMap =
   i18n.locale === "en"
@@ -47,11 +47,19 @@ Char	Number	Entity
 ♦	&#9830;	&diams;
 */
 const suitMap =
-  i18n.locale === "en" ? ["♣", "♦", "♥", "♠"] : ["♣", "♦", "♥", "♠"];
+  i18n.locale === "en" ? ["♣", "♦", "♥", "♠"] : ["草", "方", "红", "黑"];
 export const getSuitText = (suit: Suit) => {
   return suitMap[suit];
 };
-
+const roundText = [
+  i18n.t("play.preFlop"),
+  i18n.t("play.flop"),
+  i18n.t("play.turn"),
+  i18n.t("play.River")
+];
+export const getRoundText = (round: Round) => {
+  return roundText[round];
+};
 export const setCardColor = (suit: Suit) => {
   return suit === Suit.d || suit === Suit.h
     ? { color: "#FF0000" }

@@ -5,6 +5,7 @@ import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
+import { getRoundText, getNumberText, getSuitText } from "../constants/helper";
 import OptionButton from "./OptionButton";
 import {
   ISeat,
@@ -176,9 +177,10 @@ export default class Play extends Component<
       <View></View>
     ) : (
       <View style={styles.control}>
+        <Text key="p" style={styles.label}></Text>
         <OptionButton
-          icon="md-school"
-          label="Callers"
+          icon="md-people"
+          label={i18n.t("play.callers")}
           isLastOption={false}
           onPress={() => {
             this.setState({ showCaller: true });
@@ -193,7 +195,7 @@ export default class Play extends Component<
     ) : (
       <View style={styles.control}>
         <Text key="p" style={styles.label}>
-          Callers:
+          {i18n.t("play.callers")}:
         </Text>
         <Caller
           key="caller"
@@ -211,24 +213,19 @@ export default class Play extends Component<
     if (this.state.currentRound === Round.Preflop) return <View></View>;
     let roundData = [
       <View key="r1">
-        {this.getRoundData(0, 3, this.getRoundText(Round.Flop), Round.Flop)}
+        {this.getRoundData(0, 3, getRoundText(Round.Flop), Round.Flop)}
       </View>
     ];
     if (this.state.currentRound > Round.Flop) {
       roundData.push(
         <View key="r2">
-          {this.getRoundData(3, 1, this.getRoundText(Round.Turn), Round.Turn)}
+          {this.getRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
         </View>
       );
       if (this.state.currentRound > Round.Turn) {
         roundData.push(
           <View key="r3">
-            {this.getRoundData(
-              4,
-              1,
-              this.getRoundText(Round.River),
-              Round.River
-            )}
+            {this.getRoundData(4, 1, getRoundText(Round.River), Round.River)}
           </View>
         );
       }
@@ -263,7 +260,7 @@ export default class Play extends Component<
         </View>
         <View key="c" style={styles.control}>
           <Text key="t" style={styles.label}>
-            Bet:
+            {i18n.t("play.raise")}:
           </Text>
           <Action
             key="a"
@@ -273,18 +270,6 @@ export default class Play extends Component<
         </View>
       </View>
     );
-  };
-  getRoundText = (round: Round) => {
-    switch (round) {
-      case Round.Flop:
-        return i18n.t("play.flop");
-      case Round.Turn:
-        return i18n.t("play.turn");
-      case Round.River:
-        return i18n.t("play.river");
-      default:
-        return "";
-    }
   };
 
   render() {
@@ -321,7 +306,6 @@ export default class Play extends Component<
             handleAction={a => this.handleAction(a, Round.Preflop)}
             handleCallers={c => this.handleCallers(c, Round.Preflop)}
           ></Action>
-          <WebView html={"<p>Here I am &clubs;</p>"} />
         </View>
         {this.showCurrentRound()}
         {this.showCallerButton()}

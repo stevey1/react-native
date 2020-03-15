@@ -51,7 +51,11 @@ export class MultiSelect extends Component<
             key={"c" + i}
             selected={this.state.selectedCallers[i]}
             onPress={() => this.onChange(i)}
-            text={i18n.t("action.seat") + this.props.seats[i].seatNumber}
+            text={
+              i18n.t("action.seat") +
+              " " +
+              getNumberText(this.props.seats[i].seatNumber)
+            }
           />
         );
       }

@@ -14,7 +14,9 @@
     "preFlop": "Pre Flop",
     "flop": "Flop",
     "turn": "Turn",
-    "river": "River"
+    "river": "River",
+    "callers": "Callers",
+    "raise": "raise"
   },
   "action": {
     "amount": "amount",
