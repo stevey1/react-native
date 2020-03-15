@@ -14,21 +14,25 @@ export class Player extends Component<{}, { modalVisible: boolean }> {
     { text: "try 2", value: "2" },
     { text: "try 3", value: "3" }
   ];
+  showDropDown = () => (
+    <PickerDropDown
+      modalVisible={this.state.modalVisible}
+      itemSelected={this.handleItemSelected}
+      listItems={this.listItems}
+    ></PickerDropDown>
+  );
   render() {
     return (
       <View>
         <Button
           buttonStyle={{
-            backgroundColor: "#D1D1D1"
+            backgroundColor: "#D1D1D1",
+            width: 100
           }}
           title="show it"
           onPress={() => this.setState({ modalVisible: true })}
         />
-        <PickerDropDown
-          modalVisible={this.state.modalVisible}
-          itemSelected={this.handleItemSelected}
-          listItems={this.listItems}
-        ></PickerDropDown>
+        {this.showDropDown()}
       </View>
     );
   }

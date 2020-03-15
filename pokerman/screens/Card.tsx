@@ -1,94 +1,104 @@
 import React, { Component } from "react";
-import { Picker, View, ActionSheetIOS } from "react-native";
+import { View } from "react-native";
 import { Suit } from "../constants/DataTypes";
 import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
-import i18n from "../i18n";
+import PickerDropDown from "./PickerDropDown";
+import { Button } from "react-native-elements";
+
 export default class Card extends Component<
   {},
-  { cardNumber: number; suit: Suit }
+  {
+    cardNumber: number;
+    cardSelected: string;
+    suit: Suit;
+    suitSelected: string;
+    suitVisible: boolean;
+    cardVisible: boolean;
+  }
 > {
-  state = { cardNumber: 0, suit: Suit.unknow };
-
-  getCardNumbers = () => {
-    let cardNumbers = [];
-    for (let i = 14; i > 1; i--) {
-      cardNumbers.push(
-        <Picker.Item key={"c" + i} label={getNumberText(i)} value={i} />
-      );
-    }
-    return cardNumbers;
+  state = {
+    cardNumber: 0,
+    cardSelected: "C",
+    suit: Suit.unknow,
+    suitSelected: "s",
+    suitVisible: false,
+    cardVisible: false
   };
+  handleSuitSelected = (index: number) => {
+    this.setState({
+      suitVisible: false,
+      suit: index,
+      suitSelected: getSuitText(index)
+    });
 
+    // if (index >= 0 && this.state.cardNumber >= 0)
+    //   this.props.handleCard({
+    //     suit: index,
+    //     cardNumber: this.state.cardNumber
+    //   });
+  };
+  handleCardSelected = (index: number) => {
+    this.setState({
+      cardVisible: false,
+      cardNumber: index,
+      cardSelected: getNumberText(index)
+    });
+    // if (index >= 0 && this.state.suit >= 0)
+    //   this.props.handleCard({
+    //     suit: this.state.suit,
+    //     cardNumber: index
+    //   });
+  };
+  getCardList = () =>
+    [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2].map(i => ({
+      text: getNumberText(i),
+      value: i.toString()
+    }));
+  getSuitList = () =>
+    [0, 1, 2, 3].map(i => ({
+      text: getSuitText(i),
+      value: i.toString()
+    }));
+
+  showSuitDropDown = () => (
+    <PickerDropDown
+      key="suit"
+      modalVisible={this.state.suitVisible}
+      itemSelected={this.handleSuitSelected}
+      listItems={this.getSuitList()}
+    ></PickerDropDown>
+  );
+  showCardDropDown = () => (
+    <PickerDropDown
+      key="card"
+      modalVisible={this.state.cardVisible}
+      itemSelected={this.handleCardSelected}
+      listItems={this.getCardList()}
+    ></PickerDropDown>
+  );
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
-        <Picker
-          key="suit"
-          selectedValue={this.state.suit}
-          onValueChange={itemValue => {
-            const suit = parseInt(itemValue);
-            this.setState({ suit: suit });
-            if (suit > 0 && this.state.cardNumber > 0)
-              this.props.handleCard({
-                suit: suit,
-                cardNumber: this.state.cardNumber
-              });
+        <Button
+          key="s"
+          buttonStyle={{
+            backgroundColor: "#D1D1D1",
+            width: 60
           }}
-          style={[setCardColor(this.state.suit), { width: 50 }]}
-        >
-          <Picker.Item
-            key="s0"
-            label={getSuitText(Suit.c)}
-            color="#000000"
-            value="0"
-          />
-          <Picker.Item
-            key="s1"
-            label={getSuitText(Suit.d)}
-            color="#FF0000"
-            value="1"
-          />
-          <Picker.Item
-            key="s2"
-            label={getSuitText(Suit.h)}
-            color="#FF0000"
-            value="2"
-          />
-          <Picker.Item
-            key="s3"
-            label={getSuitText(Suit.s)}
-            color="#000000"
-            value="3"
-          />
-          <Picker.Item
-            key="s"
-            style={{ display: "none" }}
-            label=""
-            value="-1"
-          />
-        </Picker>
-        <Picker
-          key="card"
-          selectedValue={this.state.cardNumber}
-          onValueChange={itemValue => {
-            const cardNumber = parseInt(itemValue);
-            this.setState({ cardNumber: cardNumber });
-            if (cardNumber > 0 && this.state.suit > 0)
-              this.props.handleCard({
-                cardNumber: cardNumber,
-                suit: this.state.suit
-              });
+          title={this.state.suitSelected}
+          onPress={() => this.setState({ suitVisible: true })}
+        />
+        {this.showSuitDropDown()}
+        <Button
+          key="c"
+          buttonStyle={{
+            backgroundColor: "#D1D1D1",
+            width: 60
           }}
-          style={[setCardColor(this.state.suit), { width: 50 }]}
-        >
-          {this.getCardNumbers()}
-          <Picker.Item
-            key="c0"
-            style={{ display: "none" }}
-            value="0"
-            label=""
-          />
-        </Picker>
+          title={this.state.cardSelected}
+          onPress={() => this.setState({ cardVisible: true })}
+        />
+        {this.showCardDropDown()}
       </View>
     );
   }
