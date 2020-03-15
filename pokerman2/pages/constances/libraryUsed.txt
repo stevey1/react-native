@@ -3,6 +3,6 @@ yarn add install realm --save
 yarn add react-navigation --save
 yarn add react-native-gesture-handler --save
 yarn add react-navigation-stack --save
-react-native link realm
+react-native exitlink realm
 
 
