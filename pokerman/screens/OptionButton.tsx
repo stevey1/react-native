@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginTop: 1
   },
-  label: { paddingRight: "7px", textAlign: "right", width: "100px" },
-  control: { flex: 1, flexDirection: "row", margin: "3px" }
+  label: { paddingRight: 7, textAlign: "right", width: 100 },
+  control: { flex: 1, flexDirection: "row", margin: 3 }
 });

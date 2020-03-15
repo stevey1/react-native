@@ -62,7 +62,7 @@ export class MultiSelect extends Component<
       control.push(
         <View
           key={"m" + r}
-          style={{ flex: 1, flexDirection: "row", margin: "0 15px 0 15px" }}
+          style={{ flex: 1, flexDirection: "row", marginLeft: 15 }}
         >
           {row}
         </View>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, WebView, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
@@ -285,12 +285,12 @@ export default class Play extends Component<
           <Card
             key="m0"
             handleCard={(c: ICard) => this.handleMyHand(c, 0)}
-            style={{ margin: "3px" }}
+            style={{ margin: 3 }}
           ></Card>
           <Card
             key="m1"
             handleCard={(c: ICard) => this.handleMyHand(c, 1)}
-            style={{ margin: "3px" }}
+            style={{ margin: 3 }}
           ></Card>
           {this.displayMyHand(this.state.myHand)}
         </View>
@@ -318,9 +318,9 @@ export default class Play extends Component<
 
 const styles = StyleSheet.create({
   label: {
-    paddingRight: "7px",
+    paddingRight: 7,
     textAlign: "right",
-    width: "100px"
+    width: 100
   },
-  control: { flex: 1, flexDirection: "row", margin: "3px" }
+  control: { flex: 1, flexDirection: "row", margin: 3 }
 });

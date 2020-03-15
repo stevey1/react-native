@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Picker, View } from "react-native";
+import { Picker, View, ActionSheetIOS } from "react-native";
 import { Suit } from "../constants/DataTypes";
 import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
 import i18n from "../i18n";
@@ -34,7 +34,7 @@ export default class Card extends Component<
                 cardNumber: this.state.cardNumber
               });
           }}
-          style={[setCardColor(this.state.suit), { width: "50px" }]}
+          style={[setCardColor(this.state.suit), { width: 50 }]}
         >
           <Picker.Item
             key="s0"
@@ -79,7 +79,7 @@ export default class Card extends Component<
                 suit: this.state.suit
               });
           }}
-          style={[setCardColor(this.state.suit), { width: "50px" }]}
+          style={[setCardColor(this.state.suit), { width: 50 }]}
         >
           {this.getCardNumbers()}
           <Picker.Item

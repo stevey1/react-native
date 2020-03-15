@@ -62,7 +62,7 @@ export class Action extends Component<
               : "-1"
           }
           onChange={this.handleChange}
-          style={{ width: "90px" }}
+          style={{ width: 90 }}
         >
           {this.props.seats.map((seat, i) => (
             <Picker.Item
@@ -83,7 +83,7 @@ export class Action extends Component<
         <Text
           key="a"
           style={{
-            width: "70px",
+            width: 70,
             textAlign: "right"
           }}
         >
@@ -98,9 +98,9 @@ export class Action extends Component<
           maxLength={4}
           selectTextOnFocus={true}
           style={{
-            width: "50px",
-            marginLeft: "5px",
-            paddingLeft: "5px",
+            width: 50,
+            marginLeft: 5,
+            paddingLeft: 5,
             backgroundColor: "#FFFFFF",
             borderWidth: 1
           }}
