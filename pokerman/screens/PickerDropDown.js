@@ -7,13 +7,11 @@ export default class PickerDropDown extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
-      selected: ""
+      itemIndex: -1,
+      itemValue: this.props.value || ""
     };
   }
-
-  toggle = () => {
-    if (this.props.modalVisible) this.props.modalHide();
-  };
+  getListItems = () => {};
   render() {
     return (
       <View>
@@ -24,7 +22,7 @@ export default class PickerDropDown extends React.Component {
         >
           <View style={{ flex: 1 }}>
             <Picker
-              selectedValue={this.state.selected}
+              selectedValue={this.state.itemValue}
               style={{
                 height: 50,
                 alignSelf: "center",
@@ -34,15 +32,19 @@ export default class PickerDropDown extends React.Component {
               onValueChange={(itemValue, itemIndex) => {
                 if (this.props.modalVisible) {
                   this.setState({
-                    selected: itemValue
+                    itemValue: itemValue,
+                    itemIndex: itemIndex
                   });
                 }
               }}
             >
-              <Picker.Item label="Your Label" value="yourValue" />
-              <Picker.Item label="Your Label" value="yourValue2" />
-              <Picker.Item label="Your Label" value="yourValue3" />
-              <Picker.Item label="Your Label" value="yourValue4" />
+              {this.props.listItems.map(listItem => (
+                <Picker.Item
+                  key={"k" + listItem.value}
+                  label={listItem.text}
+                  value={listItem.value}
+                />
+              ))}
             </Picker>
           </View>
           <Button
@@ -50,7 +52,12 @@ export default class PickerDropDown extends React.Component {
               backgroundColor: "#D1D1D1"
             }}
             title="Done"
-            onPress={this.toggle}
+            onPress={() =>
+              this.props.itemSelected(
+                this.state.itemIndex,
+                this.state.itemValue
+              )
+            }
           />
         </Modal>
       </View>

@@ -6,18 +6,14 @@ import React, { Component } from "react";
 
 export class Player extends Component<{}, { modalVisible: boolean }> {
   state = { modalVisible: false };
-  handleModalHide = () => {
+  handleItemSelected = (value: string, index: number) => {
     this.setState({ modalVisible: false });
   };
-  showModal = () =>
-    !this.state.modalVisible ? (
-      <View></View>
-    ) : (
-      <PickerDropDown
-        modalVisible={this.state.modalVisible}
-        modalHide={this.handleModalHide}
-      ></PickerDropDown>
-    );
+  listItems = [
+    { text: "try 1", value: "1" },
+    { text: "try 2", value: "2" },
+    { text: "try 3", value: "3" }
+  ];
   render() {
     return (
       <View>
@@ -28,7 +24,11 @@ export class Player extends Component<{}, { modalVisible: boolean }> {
           title="show it"
           onPress={() => this.setState({ modalVisible: true })}
         />
-        {this.showModal()}
+        <PickerDropDown
+          modalVisible={this.state.modalVisible}
+          itemSelected={this.handleItemSelected}
+          listItems={this.listItems}
+        ></PickerDropDown>
       </View>
     );
   }
