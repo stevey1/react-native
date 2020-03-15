@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Picker, View } from "react-native";
 import { Suit } from "../constants/DataTypes";
-import { getCardNumberText, setCardColor } from "../constants/helper";
-
+import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
+import i18n from "../i18n";
 export default class Card extends Component<
   {},
   { cardNumber: number; suit: Suit }
@@ -13,11 +13,7 @@ export default class Card extends Component<
     let cardNumbers = [];
     for (let i = 14; i > 1; i--) {
       cardNumbers.push(
-        <Picker.Item
-          key={"c" + i}
-          label={getCardNumberText(i).toString()}
-          value={i}
-        />
+        <Picker.Item key={"c" + i} label={getNumberText(i)} value={i} />
       );
     }
     return cardNumbers;
@@ -40,15 +36,35 @@ export default class Card extends Component<
           }}
           style={[setCardColor(this.state.suit), { width: "50px" }]}
         >
-          <Picker.Item key="s1" label="草" color="#000000" value="1" />
-          <Picker.Item key="s2" label="方" color="#FF0000" value="2" />
-          <Picker.Item key="s3" label="红" color="#FF0000" value="3" />
-          <Picker.Item key="s4" label="黑" color="#000000" value="4" />
           <Picker.Item
             key="s0"
+            label={getSuitText(Suit.c)}
+            color="#000000"
+            value="0"
+          />
+          <Picker.Item
+            key="s1"
+            label={getSuitText(Suit.d)}
+            color="#FF0000"
+            value="1"
+          />
+          <Picker.Item
+            key="s2"
+            label={getSuitText(Suit.h)}
+            color="#FF0000"
+            value="2"
+          />
+          <Picker.Item
+            key="s3"
+            label={getSuitText(Suit.s)}
+            color="#000000"
+            value="3"
+          />
+          <Picker.Item
+            key="s"
             style={{ display: "none" }}
             label=""
-            value="0"
+            value="-1"
           />
         </Picker>
         <Picker

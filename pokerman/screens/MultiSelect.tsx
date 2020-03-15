@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { ISeat } from "../constants/DataTypes";
 import { View, Button } from "react-native";
 import CheckBox from "./CheckBox";
+import i18n from "../i18n";
+import { getNumberText } from "../constants/helper";
 
 export class MultiSelect extends Component<
   { seats: ISeat[]; enabled: boolean },
@@ -49,7 +51,7 @@ export class MultiSelect extends Component<
             key={"c" + i}
             selected={this.state.selectedCallers[i]}
             onPress={() => this.onChange(i)}
-            text={"Seat " + this.props.seats[i].seatNumber}
+            text={i18n.t("action.seat") + this.props.seats[i].seatNumber}
           />
         );
       }

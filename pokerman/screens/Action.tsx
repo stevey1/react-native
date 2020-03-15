@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Picker, TextInput, Text, View } from "react-native";
 import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
-import { getSeatText, getCardNumberText } from "./../constants/helper";
+import { getNumberText } from "./../constants/helper";
+import i18n from "../i18n";
 export class Action extends Component<
   {
     bigBlind?: number;
@@ -66,7 +67,9 @@ export class Action extends Component<
           {this.props.seats.map((seat, i) => (
             <Picker.Item
               key={"s" + i}
-              label={getSeatText() + " " + getCardNumberText(seat.seatNumber)}
+              label={
+                i18n.t("action.seat") + " " + getNumberText(seat.seatNumber)
+              }
               value={i}
             />
           ))}
@@ -84,7 +87,7 @@ export class Action extends Component<
             textAlign: "right"
           }}
         >
-          Amount:
+          {i18n.t("action.amount")}:
         </Text>
         <TextInput
           key="amount"

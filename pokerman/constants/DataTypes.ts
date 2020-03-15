@@ -44,11 +44,11 @@ export enum PossibleHand {
   Pair
 }
 export enum Suit {
-  unknow = 0,
-  c = 1,
+  c = 0,
   d,
   h,
-  s
+  s,
+  unknow = -1
 }
 export enum Round {
   Preflop = 0,

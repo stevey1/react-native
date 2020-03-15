@@ -1,61 +1,57 @@
 import { IPlayer, ISeat, Suit, PlayerType } from "./DataTypes";
+import i18n from "../i18n";
+const numberMap =
+  i18n.locale === "en"
+    ? [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "J",
+        "Q",
+        "K",
+        "A"
+      ]
+    : [
+        "",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六",
+        "七",
+        "八",
+        "九",
+        "十",
+        "J",
+        "Q",
+        "K",
+        "A"
+      ];
+export const getNumberText = (value: number) => {
+  return numberMap[value];
+};
+/*
+Char	Number	Entity
+♠	&#9824;	&spades;
+♣	&#9827;	&clubs;
+♥	&#9829;	&hearts;
+♦	&#9830;	&diams;
+*/
+const suitMap =
+  i18n.locale === "en" ? ["♣", "♦", "♥", "♠"] : ["♣", "♦", "♥", "♠"];
+export const getSuitText = (suit: Suit) => {
+  return suitMap[suit];
+};
 
-export const getCardNumberText = (cardNumber: number, language: number = 0) => {
-  switch (cardNumber) {
-    case 14:
-      return language ? "A" : "a";
-    case 13:
-      return language ? "A" : "k";
-    case 12:
-      return language ? "A" : "q";
-    case 11:
-      return language ? "J" : "j";
-    case 0:
-      return "";
-    case 1:
-      return "一";
-    case 2:
-      return language ? "2" : "二";
-    case 3:
-      return language ? "3" : "三";
-    case 4:
-      return language ? "4" : "四";
-    case 5:
-      return language ? "5" : "五";
-    case 6:
-      return language ? "6" : "六";
-    case 7:
-      return language ? "7" : "七";
-    case 8:
-      return language ? "8" : "八";
-    case 9:
-      return language ? "9" : "九";
-    case 10:
-      return language ? "10" : "十";
-    default:
-      return cardNumber;
-  }
-};
-export const getSuitText = (suit: Suit, language = 0) => {
-  switch (suit) {
-    case Suit.c:
-      return language ? "&clubs;" : "草";
-    case Suit.d:
-      return language ? "&diams;" : "方";
-    case Suit.h:
-      return language ? "&hearts;" : "红";
-    case Suit.s:
-      return language ? "&spades;" : "黑";
-    default:
-      return "";
-  }
-};
-export const getSeatText = (language = 0) => {
-  return language ? "Seat" : "座位";
-};
-export const getAmountText = (language = 0) => {
-  return language ? "Amount" : "量";
-};
 export const setCardColor = (suit: Suit) => {
   return suit === Suit.d || suit === Suit.h
     ? { color: "#FF0000" }

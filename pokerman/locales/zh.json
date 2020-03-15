@@ -8,5 +8,16 @@
   },
   "home": {
     "welcome": "Welcome to %{appName}!"
+  },
+  "play": {
+    "myHand": "手牌",
+    "preFlop": "翻牌前",
+    "flop": "翻牌",
+    "turn": "转牌",
+    "river": "最后"
+  },
+  "action": {
+    "amount": "量",
+    "seat": "座位"
   }
 }

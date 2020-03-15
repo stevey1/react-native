@@ -8,5 +8,16 @@
   },
   "home": {
     "welcome": "Welcome to %{appName}!"
+  },
+  "play": {
+    "myHand": "My hand",
+    "preFlop": "Pre Flop",
+    "flop": "Flop",
+    "turn": "Turn",
+    "river": "River"
+  },
+  "action": {
+    "amount": "amount",
+    "seat": "Seat"
   }
 }

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, WebView, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
+import i18n from "../i18n";
 import OptionButton from "./OptionButton";
 import {
   ISeat,
@@ -209,15 +210,26 @@ export default class Play extends Component<
   showCurrentRound = () => {
     if (this.state.currentRound === Round.Preflop) return <View></View>;
     let roundData = [
-      <View key="r1">{this.getRoundData(0, 3, "Flop", Round.Flop)}</View>
+      <View key="r1">
+        {this.getRoundData(0, 3, this.getRoundText(Round.Flop), Round.Flop)}
+      </View>
     ];
     if (this.state.currentRound > Round.Flop) {
       roundData.push(
-        <View key="r2">{this.getRoundData(3, 1, "Turn", Round.Turn)}</View>
+        <View key="r2">
+          {this.getRoundData(3, 1, this.getRoundText(Round.Turn), Round.Turn)}
+        </View>
       );
       if (this.state.currentRound > Round.Turn) {
         roundData.push(
-          <View key="r3">{this.getRoundData(4, 1, "River", Round.River)}</View>
+          <View key="r3">
+            {this.getRoundData(
+              4,
+              1,
+              this.getRoundText(Round.River),
+              Round.River
+            )}
+          </View>
         );
       }
     }
@@ -262,6 +274,18 @@ export default class Play extends Component<
       </View>
     );
   };
+  getRoundText = (round: Round) => {
+    switch (round) {
+      case Round.Flop:
+        return i18n.t("play.flop");
+      case Round.Turn:
+        return i18n.t("play.turn");
+      case Round.River:
+        return i18n.t("play.river");
+      default:
+        return "";
+    }
+  };
 
   render() {
     return (
@@ -271,7 +295,7 @@ export default class Play extends Component<
       >
         <View style={styles.control}>
           <Text key="my" style={styles.label}>
-            My Hands:
+            {i18n.t("play.myHand")}:
           </Text>
           <Card
             key="m0"
@@ -287,7 +311,7 @@ export default class Play extends Component<
         </View>
         <View style={styles.control}>
           <Text key="p" style={styles.label}>
-            Preflop Bet:
+            {i18n.t("play.preFlop")}:
           </Text>
           <Action
             key="pre"
@@ -297,6 +321,7 @@ export default class Play extends Component<
             handleAction={a => this.handleAction(a, Round.Preflop)}
             handleCallers={c => this.handleCallers(c, Round.Preflop)}
           ></Action>
+          <WebView html={"<p>Here I am &clubs;</p>"} />
         </View>
         {this.showCurrentRound()}
         {this.showCallerButton()}
