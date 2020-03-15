@@ -1,29 +1,18 @@
 import React from "react";
-import { Platform } from "react-native";
 import { Button } from "react-native-elements";
-import {
-  Modal,
-  Picker,
-  Text,
-  TouchableHighlight,
-  View,
-  Alert
-} from "react-native";
+import { Modal, Picker, Text, TouchableHighlight, View } from "react-native";
 
 export default class PickerDropDown extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showButton: true,
       modalVisible: false,
-      label: "Pick"
+      selected: ""
     };
   }
 
   toggle = () => {
-    this.setState({
-      modalVisible: !this.state.modalVisible
-    });
+    if (this.props.modalVisible) this.props.modalHide();
   };
   render() {
     return (
@@ -31,7 +20,7 @@ export default class PickerDropDown extends React.Component {
         <Modal
           animationType="slide"
           transparent={false}
-          visible={this.state.modalVisible}
+          visible={this.props.modalVisible}
         >
           <View style={{ flex: 1 }}>
             <Picker
@@ -43,10 +32,11 @@ export default class PickerDropDown extends React.Component {
                 width: 250
               }}
               onValueChange={(itemValue, itemIndex) => {
-                this.setState({
-                  selected: itemValue,
-                  label: itemValue
-                });
+                if (this.props.modalVisible) {
+                  this.setState({
+                    selected: itemValue
+                  });
+                }
               }}
             >
               <Picker.Item label="Your Label" value="yourValue" />
@@ -63,13 +53,6 @@ export default class PickerDropDown extends React.Component {
             onPress={this.toggle}
           />
         </Modal>
-        <Button
-          buttonStyle={{
-            backgroundColor: "#D1D1D1"
-          }}
-          title={this.state.label}
-          onPress={this.toggle}
-        />
       </View>
     );
   }
