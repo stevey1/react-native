@@ -30,24 +30,14 @@ export default class Card extends Component<
       suit: index,
       suitSelected: getSuitText(index)
     });
-
-    // if (index >= 0 && this.state.cardNumber >= 0)
-    //   this.props.handleCard({
-    //     suit: index,
-    //     cardNumber: this.state.cardNumber
-    //   });
   };
-  handleCardSelected = (index: number) => {
+  handleCardSelected = (index: number, value: string) => {
+    const cardNmber = parseInt(value);
     this.setState({
       cardVisible: false,
-      cardNumber: index,
-      cardSelected: getNumberText(index)
+      cardNumber: cardNmber,
+      cardSelected: getNumberText(cardNmber)
     });
-    // if (index >= 0 && this.state.suit >= 0)
-    //   this.props.handleCard({
-    //     suit: this.state.suit,
-    //     cardNumber: index
-    //   });
   };
   getCardList = () =>
     [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2].map(i => ({

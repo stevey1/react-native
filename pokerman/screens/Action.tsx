@@ -3,6 +3,9 @@ import { Picker, TextInput, Text, View } from "react-native";
 import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
 import { getNumberText } from "./../constants/helper";
 import i18n from "../i18n";
+import PickerDropDown from "./PickerDropDown";
+import { Button } from "react-native-elements";
+
 export class Action extends Component<
   {
     bigBlind?: number;
@@ -11,75 +14,76 @@ export class Action extends Component<
     handleAction: (action: IAction) => void;
   },
   {
+    seatVisible: boolean;
     amount: number;
     raiser: Nullable<ISeat>;
   }
 > {
   readonly state = {
+    seatVisible: false,
     amount: this.props.bigBlind || 0,
     raiser: this.props.raiser || null,
-    callers: [] as ISeat[],
-    selectedItems: []
+    raiserSelected: "?"
   };
 
   handleChange = e => {
-    const { name, value } = e.target;
-    let amount: number = 0;
-    let raiser: Nullable<ISeat> = null;
-    switch (name) {
-      case "raiser":
-        raiser = this.props.seats[parseInt(value)];
-        this.setState({ amount: amount });
-        this.setState({ raiser: raiser });
-        this.setState({ callers: [] });
+    console.log(e.nativeEvent.text);
+    const value = e.nativeEvent.text;
+    //if (isNaN(value)) return;
+    const amount = parseInt(value);
+    this.setState({ amount: amount });
 
-        break;
-      case "amount":
-        if (isNaN(value)) return;
-        amount = parseInt(value);
-        raiser = this.state.raiser;
-        this.setState({ amount: amount });
-        break;
-    }
-
-    if (raiser && amount > 0) {
-      this.props.handleAction({ raiser: raiser, amount: amount, callers: [] });
+    if (this.state.raiser && amount > 0) {
+      this.props.handleAction({
+        raiser: this.state.raiser,
+        amount: amount,
+        callers: []
+      });
     }
   };
 
+  handleRaiserSelected = (index: number) => {
+    const raiser = this.props.seats[index];
+    this.setState({
+      raiser: raiser,
+      amount: 0,
+      seatVisible: false,
+      raiserSelected: i18n.t("action.seat") + " " + getNumberText(index + 1)
+    });
+    if (this.state.amount > 0) {
+      this.props.handleAction({ raiser: raiser, amount: this.state.amount });
+    }
+  };
+
+  getSeatList = () =>
+    this.props.seats.map((seat, i) => ({
+      text: i18n.t("action.seat") + " " + getNumberText(i + 1),
+      value: i.toString()
+    }));
+  showSeatDropDown = () => (
+    <PickerDropDown
+      key="card"
+      modalVisible={this.state.seatVisible}
+      itemSelected={this.handleRaiserSelected}
+      listItems={this.getSeatList()}
+    ></PickerDropDown>
+  );
   mapToSeatIndex = (seatNumber: number) =>
     this.props.seats.findIndex(seat => seat.seatNumber === seatNumber);
 
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
-        <Picker
-          key="raiser"
-          name="raiser"
-          selectedValue={
-            this.state.raiser && this.state.raiser.seatNumber >= 0
-              ? this.mapToSeatIndex(this.state.raiser.seatNumber).toString()
-              : "-1"
-          }
-          onChange={this.handleChange}
-          style={{ width: 90 }}
-        >
-          {this.props.seats.map((seat, i) => (
-            <Picker.Item
-              key={"s" + i}
-              label={
-                i18n.t("action.seat") + " " + getNumberText(seat.seatNumber)
-              }
-              value={i}
-            />
-          ))}
-          <Picker.Item
-            key="s0"
-            style={{ display: "none" }}
-            label=""
-            value="-1"
-          />
-        </Picker>
+        <Button
+          key="s"
+          buttonStyle={{
+            backgroundColor: "#D1D1D1",
+            width: 90
+          }}
+          title={this.state.raiserSelected}
+          onPress={() => this.setState({ seatVisible: true })}
+        />
+        {this.showSeatDropDown()}
         <Text
           key="a"
           style={{
