@@ -1,28 +1,35 @@
 import React, { Component } from "react";
-import { Picker, TextInput, Text, View } from "react-native";
-import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
-import MultiSelect from "./MultiSelect";
-export class Caller extends Component<
-  {
-    seats: ISeat[];
-    handleCallers: (callers: ISeat[]) => void;
-  },
-  {
-    callers: ISeat[];
-  }
-> {
-  readonly state = {
-    amount: this.props.bigBlind || 0,
-    raiser: this.props.raiser || null,
-    callers: [] as ISeat[],
-    selectedItems: []
+import { ISeat } from "./../constants/DataTypes";
+import MultiPicker from "./MultiPicker";
+import i18n from "../i18n";
+import { getNumberText } from "../constants/helper";
+export class Caller extends Component<{
+  modalVisible: boolean;
+  seats: ISeat[];
+  callersSelected: (callers: ISeat[]) => void;
+}> {
+  handleItemsSelected = (indexes: number[]) => {
+    if (indexes.length > 0) {
+      this.props.callersSelected(indexes.map(index => this.props.seats[index]));
+    }
+  };
+
+  getListItems = () => {
+    this.props.seats.map((seat, i) => ({
+      text:
+        i18n.t("action.seat") +
+        " " +
+        getNumberText(this.props.seats[i].seatNumber),
+      value: seat.seatNumber
+    }));
   };
   render() {
     return (
       <View>
-        <MultiSelect
-          seats={this.props.seats}
-          handleCallers={this.props.handleCallers}
+        <MultiPicker
+          modalVisible={this.state.modalVisible}
+          listItems={this.getListItems}
+          itemsSelected={this.handleItemsSelected}
         />
       </View>
     );

@@ -6,12 +6,10 @@ export default class PickerDropDown extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false,
       itemIndex: -1,
-      itemValue: this.props.value || "▼"
+      itemValue: ""
     };
   }
-  getListItems = () => {};
   render() {
     return (
       <View>

@@ -27,7 +27,7 @@ export default class Play extends Component<
     actions: IAction[];
     allActions: IActionHistory[];
     currentRound: Round;
-    showCaller: boolean;
+    callerModalVisible: boolean;
   }
 > {
   state = {
@@ -36,7 +36,7 @@ export default class Play extends Component<
     actions: [] as IAction[],
     allActions: [] as IActionHistory[],
     currentRound: Round.Preflop,
-    showCaller: false
+    callerModalVisible: false
   };
 
   componentDidMount = () => {
@@ -105,15 +105,18 @@ export default class Play extends Component<
     this.setState({ currentRound: round });
   };
   handleCallers = (callers: ISeat[]) => {
+    this.setState({ callerModalVisible: false });
+
+    if (callers.length == 0) return;
     const allActions = this.state.allActions;
     allActions[allActions.length - 1].action.callers = callers;
-    this.setState({ allActions: allActions });
 
     const actions = this.state.actions;
     actions[this.state.currentRound].callers = callers;
-    this.setState({ actions: actions });
-    this.setState({ showCaller: false });
+
+    this.setState({ actions: actions, allActions: allActions });
     let currentRound = this.state.currentRound;
+
     if (this.state.currentRound !== Round.River) {
       currentRound += 1;
       this.setState({ currentRound: currentRound });
@@ -172,43 +175,20 @@ export default class Play extends Component<
     return seats;
   };
   private getLastAction = (round: Round) => this.state.actions[round];
-  private showCallerButton = () => {
-    return this.state.showCaller ? (
-      <View></View>
-    ) : (
-      <View style={styles.control}>
-        <Text key="p" style={styles.label}></Text>
-        <OptionButton
-          icon="md-people"
-          label={i18n.t("play.callers")}
-          isLastOption={false}
-          onPress={() => {
-            this.setState({ showCaller: true });
-          }}
-          style={{ width: 100 }}
-        />
-      </View>
-    );
-  };
-  private showCaller = () =>
-    !this.state.showCaller ? (
-      <View></View>
-    ) : (
-      <View style={styles.control}>
-        <Text key="p" style={styles.label}>
-          {i18n.t("play.callers")}:
-        </Text>
-        <Caller
-          key="caller"
-          seats={this.getSeatsInPlay(this.state.currentRound).filter(
-            seat =>
-              seat.seatNumber !==
-              this.state.actions[this.state.currentRound].raiser.seatNumber
-          )}
-          handleCallers={this.handleCallers}
-        ></Caller>
-      </View>
-    );
+  private showCallerButton = () => (
+    <View style={styles.control}>
+      <Text key="p" style={styles.label}>
+        Callers
+      </Text>
+      <OptionButton
+        label=""
+        onPress={() => {
+          this.setState({ callerModalVisible: true });
+        }}
+        style={{ width: 100 }}
+      />
+    </View>
+  );
 
   showCurrentRound = () => {
     if (this.state.currentRound === Round.Preflop) return <View></View>;
@@ -310,8 +290,15 @@ export default class Play extends Component<
         </View>
         {this.showCurrentRound()}
         {this.showCallerButton()}
-
-        {this.showCaller()}
+        <Caller
+          modalVisible={this.state.callerModalVisible}
+          seats={this.getSeatsInPlay(this.state.currentRound).filter(
+            seat =>
+              seat.seatNumber !==
+              this.state.actions[this.state.currentRound].raiser.seatNumber
+          )}
+          callersSelected={this.handleCallers}
+        ></Caller>
       </ScrollView>
     );
   }
