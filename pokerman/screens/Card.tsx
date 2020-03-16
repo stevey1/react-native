@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import { Suit } from "../constants/DataTypes";
 import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
-import PickerDropDown from "./PickerDropDown";
+import MyPicker from "./MyPicker";
 import OptionButton from "./OptionButton";
 export default class Card extends Component<
   {},
@@ -50,20 +50,20 @@ export default class Card extends Component<
     }));
 
   showSuitDropDown = () => (
-    <PickerDropDown
+    <MyPicker
       key="suit"
       modalVisible={this.state.suitVisible}
       itemSelected={this.handleSuitSelected}
       listItems={this.getSuitList()}
-    ></PickerDropDown>
+    ></MyPicker>
   );
   showCardDropDown = () => (
-    <PickerDropDown
+    <MyPicker
       key="card"
       modalVisible={this.state.cardVisible}
       itemSelected={this.handleCardSelected}
       listItems={this.getCardList()}
-    ></PickerDropDown>
+    ></MyPicker>
   );
   render() {
     return (

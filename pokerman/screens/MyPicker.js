@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "react-native-elements";
 import { Modal, Picker, Text, TouchableHighlight, View } from "react-native";
 
-export default class PickerDropDown extends React.Component {
+export default class MyPicker extends React.Component {
   constructor(props) {
     super(props);
 

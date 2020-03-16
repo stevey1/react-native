@@ -3,7 +3,7 @@ import { Button } from "react-native-elements";
 import { Modal, Text, View } from "react-native";
 import CheckBox from "./CheckBox";
 
-export default class MultiPicker extends React.Component {
+export default class MyMultiPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
