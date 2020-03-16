@@ -4,8 +4,7 @@ import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
 import { getNumberText } from "./../constants/helper";
 import i18n from "../i18n";
 import PickerDropDown from "./PickerDropDown";
-import { Button } from "react-native-elements";
-
+import OptionButton from "./OptionButton";
 export class Action extends Component<
   {
     bigBlind?: number;
@@ -23,7 +22,7 @@ export class Action extends Component<
     seatVisible: false,
     amount: this.props.bigBlind || 0,
     raiser: this.props.raiser || null,
-    raiserSelected: "?"
+    raiserSelected: ""
   };
 
   handleChange = e => {
@@ -64,7 +63,6 @@ export class Action extends Component<
     }));
   showSeatDropDown = () => (
     <PickerDropDown
-      key="card"
       modalVisible={this.state.seatVisible}
       itemSelected={this.handleRaiserSelected}
       listItems={this.getSeatList()}
@@ -76,18 +74,16 @@ export class Action extends Component<
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
-        <Button
-          key="s"
-          buttonStyle={{
+        <OptionButton
+          style={{
             backgroundColor: "#D1D1D1",
-            width: 90
+            width: 110
           }}
-          title={this.state.raiserSelected}
+          label={this.state.raiserSelected}
           onPress={() => this.setState({ seatVisible: true })}
         />
         {this.showSeatDropDown()}
         <Text
-          key="a"
           style={{
             width: 70,
             textAlign: "right"
@@ -107,7 +103,7 @@ export class Action extends Component<
             width: 50,
             marginLeft: 5,
             paddingLeft: 5,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "#D1D1D1",
             borderWidth: 1
           }}
         />

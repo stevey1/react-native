@@ -3,8 +3,7 @@ import { View } from "react-native";
 import { Suit } from "../constants/DataTypes";
 import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
 import PickerDropDown from "./PickerDropDown";
-import { Button } from "react-native-elements";
-
+import OptionButton from "./OptionButton";
 export default class Card extends Component<
   {},
   {
@@ -18,9 +17,9 @@ export default class Card extends Component<
 > {
   state = {
     cardNumber: 0,
-    cardSelected: "C",
+    cardSelected: "",
     suit: Suit.unknow,
-    suitSelected: "s",
+    suitSelected: "",
     suitVisible: false,
     cardVisible: false
   };
@@ -69,23 +68,23 @@ export default class Card extends Component<
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
-        <Button
+        <OptionButton
           key="s"
-          buttonStyle={{
+          style={{
             backgroundColor: "#D1D1D1",
-            width: 60
+            width: 70
           }}
-          title={this.state.suitSelected}
+          label={this.state.suitSelected}
           onPress={() => this.setState({ suitVisible: true })}
         />
         {this.showSuitDropDown()}
-        <Button
+        <OptionButton
           key="c"
-          buttonStyle={{
+          style={{
             backgroundColor: "#D1D1D1",
-            width: 60
+            width: 70
           }}
-          title={this.state.cardSelected}
+          label={this.state.cardSelected}
           onPress={() => this.setState({ cardVisible: true })}
         />
         {this.showCardDropDown()}

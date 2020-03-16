@@ -185,6 +185,7 @@ export default class Play extends Component<
           onPress={() => {
             this.setState({ showCaller: true });
           }}
+          style={{ width: 100 }}
         />
       </View>
     );
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   label: {
     paddingRight: 7,
     textAlign: "right",
-    width: 100
+    width: 85
   },
   control: { flex: 1, flexDirection: "row", margin: 3 }
 });
