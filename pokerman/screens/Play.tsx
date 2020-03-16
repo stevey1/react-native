@@ -5,7 +5,7 @@ import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
-import { getRoundText, getNumberText, getSuitText } from "../constants/helper";
+import { getRoundText } from "../constants/helper";
 import MyButton from "./MyButton";
 import {
   ISeat,
@@ -127,7 +127,6 @@ export default class Play extends Component<
       this.getActionOrder(currentSeat, round) <
       this.getActionOrder(previousSeat, round)
     );
-    p;
   };
 
   getActionOrder = (seatNumber: number, round: Round) => {
@@ -252,7 +251,6 @@ export default class Play extends Component<
       </View>
     );
   };
-
   render() {
     return (
       <ScrollView
