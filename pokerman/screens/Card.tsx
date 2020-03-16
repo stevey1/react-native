@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Suit } from "../constants/DataTypes";
 import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
 import MyPicker from "./MyPicker";
-import OptionButton from "./OptionButton";
+import MyButton from "./MyButton";
 export default class Card extends Component<
   {},
   {
@@ -68,7 +68,7 @@ export default class Card extends Component<
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
-        <OptionButton
+        <MyButton
           key="s"
           style={{
             backgroundColor: "#D1D1D1",
@@ -78,7 +78,7 @@ export default class Card extends Component<
           onPress={() => this.setState({ suitVisible: true })}
         />
         {this.showSuitDropDown()}
-        <OptionButton
+        <MyButton
           key="c"
           style={{
             backgroundColor: "#D1D1D1",

@@ -6,7 +6,7 @@ import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
 import { getRoundText, getNumberText, getSuitText } from "../constants/helper";
-import OptionButton from "./OptionButton";
+import MyButton from "./MyButton";
 import {
   ISeat,
   ICard,
@@ -180,7 +180,7 @@ export default class Play extends Component<
       <Text key="p" style={styles.label}>
         Callers
       </Text>
-      <OptionButton
+      <MyButton
         label=""
         onPress={() => {
           this.setState({ callerModalVisible: true });

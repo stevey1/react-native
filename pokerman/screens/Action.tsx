@@ -4,7 +4,7 @@ import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
 import { getNumberText } from "./../constants/helper";
 import i18n from "../i18n";
 import MyPicker from "./MyPicker";
-import OptionButton from "./OptionButton";
+import MyButton from "./MyButton";
 export class Action extends Component<
   {
     bigBlind?: number;
@@ -85,7 +85,7 @@ export class Action extends Component<
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
-        <OptionButton
+        <MyButton
           style={{
             width: 110
           }}

@@ -1,9 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { RectButton, ScrollView } from "react-native-gesture-handler";
 
-export default function OptionButton(props: {
+export default function MyButton(props: {
   style: any;
   label: string;
   onPress: () => void;
