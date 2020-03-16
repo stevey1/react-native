@@ -7,7 +7,7 @@ export default class MultiPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemsSelected: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(item => false)
+      indexes: props.listItems.map(item => false)
     };
   }
   onChange = index => {
@@ -18,10 +18,8 @@ export default class MultiPicker extends React.Component {
     this.setState({ indexes: indexes });
   };
   submitItems = () => {
-    const itemsSelected = this.props.items.filter(
-      (item, index) => this.state.indexes[index]
-    );
-    this.props.itemsSelected(itemsSelected);
+    const indexes = this.state.indexes.filter(i => i);
+    this.props.itemsSelected(indexes);
   };
   getCheckBoxes(countPerRow) {
     let control = [];
@@ -37,7 +35,7 @@ export default class MultiPicker extends React.Component {
         row.push(
           <CheckBox
             key={"c" + i}
-            selected={this.state.itemsSelected[i] || false}
+            selected={this.state.indexes[i] || false}
             onPress={() => this.onChange(i)}
             text={this.props.listItems[i].text}
             value={this.props.listItems[i].value}
