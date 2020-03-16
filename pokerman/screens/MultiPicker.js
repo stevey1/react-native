@@ -7,10 +7,10 @@ export default class MultiPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemSelected
+      itemsSelected: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(item => false)
     };
   }
-  onChange = (index: number) => {
+  onChange = index => {
     const indexes = this.state.indexes;
     indexes[index] =
       this.state.indexes[index] == null ? true : !this.state.indexes[index];
@@ -23,7 +23,7 @@ export default class MultiPicker extends React.Component {
     );
     this.props.itemsSelected(itemsSelected);
   };
-  getCheckBoxes(countPerRow: number) {
+  getCheckBoxes(countPerRow) {
     let control = [];
     const rows = Math.ceil(this.props.listItems.length / countPerRow);
     for (let r = 0; r < rows; r++) {
@@ -37,7 +37,7 @@ export default class MultiPicker extends React.Component {
         row.push(
           <CheckBox
             key={"c" + i}
-            selected={this.state.itemSelected[i] || false}
+            selected={this.state.itemsSelected[i] || false}
             onPress={() => this.onChange(i)}
             text={this.props.listItems[i].text}
             value={this.props.listItems[i].value}
@@ -63,7 +63,7 @@ export default class MultiPicker extends React.Component {
           transparent={false}
           visible={this.props.modalVisible}
         >
-          <View style={{ flex: 1 }}>{this.showCheckBoxes(4)}</View>
+          <View style={{ flex: 1 }}>{this.getCheckBoxes(4)}</View>
           <Button
             buttonStyle={{
               backgroundColor: "#D1D1D1"

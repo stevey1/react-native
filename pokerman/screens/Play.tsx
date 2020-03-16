@@ -128,6 +128,7 @@ export default class Play extends Component<
       this.getActionOrder(currentSeat, round) <
       this.getActionOrder(previousSeat, round)
     );
+    p;
   };
 
   getActionOrder = (seatNumber: number, round: Round) => {
@@ -283,22 +284,31 @@ export default class Play extends Component<
             key="pre"
             bigBlind={this.props.bigBlind}
             raiser={this.getBigBlindSeat()}
-            seats={this.props.seats}
+            seats={this.getSeatsInPlay(this.state.currentRound)}
             handleAction={a => this.handleAction(a, Round.Preflop)}
-            handleCallers={c => this.handleCallers(c, Round.Preflop)}
           ></Action>
         </View>
         {this.showCurrentRound()}
         {this.showCallerButton()}
-        <Caller
-          modalVisible={this.state.callerModalVisible}
-          seats={this.getSeatsInPlay(this.state.currentRound).filter(
-            seat =>
-              seat.seatNumber !==
-              this.state.actions[this.state.currentRound].raiser.seatNumber
-          )}
-          callersSelected={this.handleCallers}
-        ></Caller>
+        {
+          <Caller
+            modalVisible={this.state.callerModalVisible}
+            seats={this.getSeatsInPlay(this.state.currentRound)}
+            callersSelected={this.handleCallers}
+          ></Caller>
+          /**
+           * &&
+              this.state.actions.length > 0 &&
+              this.state.actions[this.state.currentRound] &&
+              this.state.actions[this.state.currentRound].raiser
+            
+           * .filter(
+              seat =>
+                seat.seatNumber !==
+                this.state.actions[this.state.currentRound].raiser.seatNumber
+            )
+           */
+        }
       </ScrollView>
     );
   }

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { View } from "react-native";
+
 import { ISeat } from "./../constants/DataTypes";
 import MultiPicker from "./MultiPicker";
 import i18n from "../i18n";
@@ -27,7 +29,7 @@ export class Caller extends Component<{
     return (
       <View>
         <MultiPicker
-          modalVisible={this.state.modalVisible}
+          modalVisible={this.props.modalVisible}
           listItems={this.getListItems}
           itemsSelected={this.handleItemsSelected}
         />
