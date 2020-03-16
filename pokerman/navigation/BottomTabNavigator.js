@@ -8,7 +8,7 @@ import Player from "../screens/Player";
 import i18n from "../i18n";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = "Seat";
+const INITIAL_ROUTE_NAME = "seat";
 
 export default function BottomTabNavigator({ navigation, route }) {
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
@@ -17,7 +17,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
-        name={i18n.t("navigation.seat")}
+        name="seat"
         component={Seat}
         options={{
           title: i18n.t("navigation.seat"), //"Seat Setup",
@@ -27,7 +27,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name={i18n.t("navigation.player")}
+        name="player"
         component={Player}
         options={{
           title: i18n.t("navigation.player"),
@@ -37,7 +37,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name={i18n.t("navigation.play")}
+        name="play"
         component={Play2}
         options={{
           title: i18n.t("navigation.play"),
@@ -47,7 +47,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name={i18n.t("navigation.timer")}
+        name="timer"
         component={Timer}
         options={{
           title: i18n.t("navigation.timer"),
@@ -63,5 +63,5 @@ export default function BottomTabNavigator({ navigation, route }) {
 function getHeaderTitle(route) {
   const routeName =
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-  return routeName;
+  return i18n.t("navigation." + routeName);
 }
