@@ -13,13 +13,13 @@ export class Action extends Component<
     handleAction: (action: IAction) => void;
   },
   {
-    seatVisible: boolean;
+    seatModalVisible: boolean;
     amount: number;
     raiser: Nullable<ISeat>;
   }
 > {
   readonly state = {
-    seatVisible: false,
+    seatModalVisible: false,
     amount: this.props.bigBlind || 0,
     raiser: this.props.raiser || null,
     raiserSelected: this.props.raiser
@@ -48,7 +48,7 @@ export class Action extends Component<
     this.setState({
       raiser: raiser,
       amount: 0,
-      seatVisible: false,
+      seatModalVisible: false,
       raiserSelected:
         i18n.t("action.seat") + " " + getNumberText(raiser.seatNumber)
     });
@@ -56,7 +56,7 @@ export class Action extends Component<
       this.props.handleAction({
         raiser: raiser,
         amount: this.state.amount,
-        caller: []
+        callers: []
       });
     }
   };
@@ -68,8 +68,8 @@ export class Action extends Component<
     }));
   showSeatDropDown = () => (
     <PickerDropDown
-      modalVisible={this.state.seatVisible}
-      value={this.state.raiser ? this.state.raiser.seatNumber : ""}
+      modalVisible={this.state.seatModalVisible}
+      value={this.props.raiser ? this.props.raiser.seatNumber : ""}
       itemSelected={this.handleRaiserSelected}
       listItems={this.getSeatList()}
     ></PickerDropDown>
@@ -85,7 +85,7 @@ export class Action extends Component<
             width: 110
           }}
           label={this.state.raiserSelected}
-          onPress={() => this.setState({ seatVisible: true })}
+          onPress={() => this.setState({ seatModalVisible: true })}
         />
         {this.showSeatDropDown()}
         <Text

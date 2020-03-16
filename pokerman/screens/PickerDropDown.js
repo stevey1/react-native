@@ -7,10 +7,11 @@ export default class PickerDropDown extends React.Component {
     super(props);
     this.state = {
       itemIndex: 0,
-      itemValue: props.value ? props.value : props.listItems[0].value
+      itemValue: props.value == null ? props.listItems[0].value : props.value
     };
   }
   render() {
+    console.log("props.value", this.props.value);
     return (
       <View>
         <Modal
