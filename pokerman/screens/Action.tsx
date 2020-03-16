@@ -76,7 +76,6 @@ export class Action extends Component<
       <View style={{ flexDirection: "row" }}>
         <OptionButton
           style={{
-            backgroundColor: "#D1D1D1",
             width: 110
           }}
           label={this.state.raiserSelected}
