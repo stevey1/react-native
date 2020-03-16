@@ -12,8 +12,6 @@ export class Caller extends Component<{
 }> {
   handleItemsSelected = (indexes: number[]) => {
     const callers = indexes.map(index => this.props.seats[index]);
-    console.log("callers", callers.length);
-
     this.props.callersSelected(callers);
   };
 
