@@ -22,7 +22,7 @@ export default class MultiPicker extends React.Component {
       .map((value, index) => ({ value, index }))
       .filter(item => item.value)
       .map(item => item.index);
-    this.props.itemsSelected(selectedselectedIndexes);
+    this.props.itemsSelected(selectedIndexes);
   };
   getCheckBoxes(countPerRow) {
     let control = [];

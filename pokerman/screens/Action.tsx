@@ -22,7 +22,11 @@ export class Action extends Component<
     seatVisible: false,
     amount: this.props.bigBlind || 0,
     raiser: this.props.raiser || null,
-    raiserSelected: ""
+    raiserSelected: this.props.raiser
+      ? i18n.t("action.seat") +
+        " " +
+        getNumberText(this.props.raiser.seatNumber)
+      : ""
   };
 
   handleChange = e => {
@@ -45,7 +49,8 @@ export class Action extends Component<
       raiser: raiser,
       amount: 0,
       seatVisible: false,
-      raiserSelected: i18n.t("action.seat") + " " + getNumberText(index + 1)
+      raiserSelected:
+        i18n.t("action.seat") + " " + getNumberText(raiser.seatNumber)
     });
     if (this.state.amount > 0) {
       this.props.handleAction({
@@ -58,12 +63,13 @@ export class Action extends Component<
 
   getSeatList = () =>
     this.props.seats.map((seat, i) => ({
-      text: i18n.t("action.seat") + " " + getNumberText(i + 1),
+      text: i18n.t("action.seat") + " " + getNumberText(seat.seatNumber),
       value: i.toString()
     }));
   showSeatDropDown = () => (
     <PickerDropDown
       modalVisible={this.state.seatVisible}
+      value={this.state.raiser ? this.state.raiser.seatNumber : ""}
       itemSelected={this.handleRaiserSelected}
       listItems={this.getSeatList()}
     ></PickerDropDown>
@@ -92,9 +98,8 @@ export class Action extends Component<
         </Text>
         <TextInput
           key="amount"
-          name="amount"
           onChange={this.handleChange}
-          value={this.state.amount === 0 ? "" : this.state.amount.toString()}
+          value={this.state.amount ? this.state.amount.toString() : ""}
           keyboardType={"numeric"}
           maxLength={4}
           selectTextOnFocus={true}

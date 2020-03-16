@@ -6,8 +6,8 @@ export default class PickerDropDown extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemIndex: -1,
-      itemValue: ""
+      itemIndex: 0,
+      itemValue: props.value ? props.value : props.listItems[0].value
     };
   }
   render() {

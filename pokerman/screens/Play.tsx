@@ -105,7 +105,6 @@ export default class Play extends Component<
     this.setState({ currentRound: round });
   };
   handleCallers = (callers: ISeat[]) => {
-    console.log(callers[0]);
     this.setState({ callerModalVisible: false });
     return;
     if (callers.length == 0) return;
