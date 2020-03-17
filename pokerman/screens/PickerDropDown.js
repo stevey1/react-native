@@ -5,13 +5,13 @@ import { Modal, Picker, Text, TouchableHighlight, View } from "react-native";
 export default class PickerDropDown extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       itemIndex: 0,
-      itemValue: props.value == null ? props.listItems[0].value : props.value
+      itemValue: props.value || props.listItems[0].value
     };
   }
   render() {
-    console.log("props.value", this.props.value);
     return (
       <View>
         <Modal

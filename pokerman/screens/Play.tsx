@@ -106,7 +106,6 @@ export default class Play extends Component<
   };
   handleCallers = (callers: ISeat[]) => {
     this.setState({ callerModalVisible: false });
-    return;
     if (callers.length == 0) return;
     const allActions = this.state.allActions;
     allActions[allActions.length - 1].action.callers = callers;

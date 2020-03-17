@@ -62,18 +62,23 @@ export class Action extends Component<
   };
 
   getSeatList = () =>
-    this.props.seats.map((seat, i) => ({
+    this.props.seats.map(seat => ({
       text: i18n.t("action.seat") + " " + getNumberText(seat.seatNumber),
-      value: i.toString()
+      value: seat.seatNumber.toString()
     }));
-  showSeatDropDown = () => (
-    <PickerDropDown
-      modalVisible={this.state.seatModalVisible}
-      value={this.props.raiser ? this.props.raiser.seatNumber : ""}
-      itemSelected={this.handleRaiserSelected}
-      listItems={this.getSeatList()}
-    ></PickerDropDown>
-  );
+  showSeatDropDown = () => {
+    if (!this.state.seatModalVisible) {
+      return <View></View>;
+    }
+    return (
+      <PickerDropDown
+        modalVisible={this.state.seatModalVisible}
+        value={this.props.raiser ? this.props.raiser.seatNumber : ""}
+        itemSelected={this.handleRaiserSelected}
+        listItems={this.getSeatList()}
+      ></PickerDropDown>
+    );
+  };
   mapToSeatIndex = (seatNumber: number) =>
     this.props.seats.findIndex(seat => seat.seatNumber === seatNumber);
 
