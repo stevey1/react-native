@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View } from "react-native";
 
 import { ISeat } from "./../constants/DataTypes";
-import MyMultiPicker from "./MyMultiPicker";
+import MyMultiPicker from "../components/MyMultiPicker";
 import i18n from "../i18n";
 import { getNumberText } from "../constants/helper";
 export class Caller extends Component<{

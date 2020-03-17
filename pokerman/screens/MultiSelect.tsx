@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ISeat } from "../constants/DataTypes";
 import { View, Button } from "react-native";
-import CheckBox from "./CheckBox";
+import CheckBox from "../components/CheckBox";
 import i18n from "../i18n";
 import { getNumberText } from "../constants/helper";
 

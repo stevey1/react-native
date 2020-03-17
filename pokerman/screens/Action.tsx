@@ -4,7 +4,7 @@ import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
 import { getNumberText } from "./../constants/helper";
 import i18n from "../i18n";
 import MyPicker from "./MyPicker";
-import MyButton from "./MyButton";
+import MyButton from "../components/MyButton";
 export class Action extends Component<
   {
     bigBlind?: number;

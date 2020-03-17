@@ -6,7 +6,7 @@ import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
 import { getRoundText } from "../constants/helper";
-import MyButton from "./MyButton";
+import MyButton from "../components/MyButton";
 import {
   ISeat,
   ICard,
