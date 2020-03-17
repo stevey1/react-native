@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import { Suit } from "../constants/DataTypes";
 import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
-import MyPicker from "./MyPicker";
+import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
 export default class Card extends Component<
   {},

@@ -1,4 +1,4 @@
-import PickerDropDown from "./MyPicker";
+import PickerDropDown from "../components/MyPicker";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-elements";
 

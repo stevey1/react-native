@@ -3,7 +3,7 @@ import { Picker, TextInput, Text, View } from "react-native";
 import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
 import { getNumberText } from "./../constants/helper";
 import i18n from "../i18n";
-import MyPicker from "./MyPicker";
+import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
 export class Action extends Component<
   {
