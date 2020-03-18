@@ -39,6 +39,11 @@ export default class MyPicker extends React.Component {
             >
               {this.props.listItems.map(listItem => (
                 <Picker.Item
+                  style={
+                    listItem.text === "方" || listItem.text === "红"
+                      ? { color: "#FF0000" }
+                      : {}
+                  }
                   key={"k" + listItem.value}
                   label={listItem.text}
                   value={listItem.value}

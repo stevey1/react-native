@@ -5,12 +5,17 @@ import { RectButton, ScrollView } from "react-native-gesture-handler";
 export default function MyButton(props: {
   style: any;
   label: string;
+  labelStyle?: any;
   onPress: () => void;
 }) {
   return (
     <RectButton style={[styles.option, props.style]} onPress={props.onPress}>
       <View style={{ flexDirection: "row" }}>
-        <Text style={{ flex: 1, textAlign: "center" }}>{props.label}</Text>
+        <Text
+          style={[{ flex: 1, textAlign: "center" }, props.labelStyle || {}]}
+        >
+          {props.label}
+        </Text>
         <Text style={{ width: 10, textAlign: "right" }}>▼</Text>
       </View>
     </RectButton>

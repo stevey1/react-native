@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View } from "react-native";
 import { Suit } from "../constants/DataTypes";
-import { getNumberText, setCardColor, getSuitText } from "../constants/helper";
+import { getNumberText, getCardColor, getSuitText } from "../constants/helper";
 import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
 export default class Card extends Component<
@@ -52,6 +52,7 @@ export default class Card extends Component<
   showSuitDropDown = () => (
     <MyPicker
       key="suit"
+      style={getCardColor(this.state.suit)}
       modalVisible={this.state.suitVisible}
       itemSelected={this.handleSuitSelected}
       listItems={this.getSuitList()}
@@ -60,6 +61,7 @@ export default class Card extends Component<
   showCardDropDown = () => (
     <MyPicker
       key="card"
+      style={getCardColor(this.state.suit)}
       modalVisible={this.state.cardVisible}
       itemSelected={this.handleCardSelected}
       listItems={this.getCardList()}
@@ -75,6 +77,7 @@ export default class Card extends Component<
             margin: 0
           }}
           label={this.state.suitSelected}
+          labelStyle={getCardColor(this.state.suit)}
           onPress={() => this.setState({ suitVisible: true })}
         />
         <MyButton
@@ -83,6 +86,7 @@ export default class Card extends Component<
             marginRight: 2,
             width: 45
           }}
+          labelStyle={getCardColor(this.state.suit)}
           label={this.state.cardSelected}
           onPress={() => this.setState({ cardVisible: true })}
         />

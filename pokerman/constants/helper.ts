@@ -39,13 +39,6 @@ const numberMap =
 export const getNumberText = (value: number) => {
   return numberMap[value];
 };
-/*
-Char	Number	Entity
-♠	&#9824;	&spades;
-♣	&#9827;	&clubs;
-♥	&#9829;	&hearts;
-♦	&#9830;	&diams;
-*/
 const suitMap =
   i18n.locale === "en" ? ["♣", "♦", "♥", "♠"] : ["草", "方", "红", "黑"];
 export const getSuitText = (suit: Suit) => {
@@ -60,7 +53,7 @@ const roundText = [
 export const getRoundText = (round: Round) => {
   return roundText[round];
 };
-export const setCardColor = (suit: Suit) => {
+export const getCardColor = (suit: Suit) => {
   return suit === Suit.d || suit === Suit.h
     ? { color: "#FF0000" }
     : { color: "#000000" };
