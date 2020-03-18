@@ -55,7 +55,7 @@ const roundText = [
   i18n.t("play.preFlop"),
   i18n.t("play.flop"),
   i18n.t("play.turn"),
-  i18n.t("play.River")
+  i18n.t("play.river")
 ];
 export const getRoundText = (round: Round) => {
   return roundText[round];

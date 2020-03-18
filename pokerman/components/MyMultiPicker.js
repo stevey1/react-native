@@ -46,10 +46,7 @@ export default class MyMultiPicker extends React.Component {
         );
       }
       control.push(
-        <View
-          key={"m" + r}
-          style={{ flex: 1, flexDirection: "row", marginLeft: 15 }}
-        >
+        <View key={"m" + r} style={{ flex: 1, flexDirection: "row" }}>
           {row}
         </View>
       );
@@ -64,7 +61,11 @@ export default class MyMultiPicker extends React.Component {
           transparent={false}
           visible={this.props.modalVisible}
         >
-          <View style={{ flex: 1 }}>{this.getCheckBoxes(4)}</View>
+          <View style={{ flex: 1, marginTop: 200 }}>
+            <View style={{ height: 200, paddingLeft: 40 }}>
+              {this.getCheckBoxes(1)}
+            </View>
+          </View>
           <Button
             buttonStyle={{
               backgroundColor: "#D1D1D1"

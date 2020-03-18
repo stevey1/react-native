@@ -50,12 +50,12 @@ export default class Play extends Component<
     };
     const actions = this.state.actions;
     actions[Round.Preflop] = action;
-    this.setState({ actions: actions });
+
     const allActions = this.state.allActions;
     allActions.push({ action: action, round: Round.Preflop });
     // don't need to call this; be carefull when using object or object arry in props and stats, it update them
     // this.props.seat.seatNumber+1, seatNumber get updated, crazy!!!
-    this.setState({ allActions: allActions });
+    this.setState({ actions: actions, allActions: allActions });
   };
   handleMyHand = (card: ICard, cardId: number) => {
     const cards = this.state.myHand || [];
@@ -98,11 +98,13 @@ export default class Play extends Component<
     } else {
       allActions.push({ action: action, round: round });
     }
-    this.setState({ allActions: allActions });
-
     actions[round] = action;
-    this.setState({ actions: actions });
-    this.setState({ currentRound: round });
+
+    this.setState({
+      allActions: allActions,
+      actions: actions,
+      currentRound: round
+    });
   };
   handleCallers = (callers: ISeat[]) => {
     this.setState({ callerModalVisible: false });
@@ -117,7 +119,7 @@ export default class Play extends Component<
     let currentRound = this.state.currentRound;
 
     if (this.state.currentRound !== Round.River) {
-      currentRound += 1;
+      currentRound++;
       this.setState({ currentRound: currentRound });
     }
   };
@@ -177,11 +179,13 @@ export default class Play extends Component<
   private showCallerButton = () => (
     <View style={styles.control}>
       <Text key="p" style={styles.label}>
-        Callers
+        {i18n.t("play.callers")}:
       </Text>
       <MyButton
         label=""
         onPress={() => {
+          if (!this.state.actions[this.state.currentRound])
+            this.setState({ currentRound: this.state.currentRound - 1 });
           this.setState({ callerModalVisible: true });
         }}
         style={{ width: 100 }}
@@ -202,7 +206,7 @@ export default class Play extends Component<
           {this.getRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
         </View>
       );
-      if (this.state.currentRound > Round.Turn) {
+      if (this.state.currentRound === Round.River) {
         roundData.push(
           <View key="r3">
             {this.getRoundData(4, 1, getRoundText(Round.River), Round.River)}
@@ -287,7 +291,12 @@ export default class Play extends Component<
         {
           <Caller
             modalVisible={this.state.callerModalVisible}
-            seats={this.getSeatsInPlay(this.state.currentRound)}
+            seats={this.getSeatsInPlay(this.state.currentRound).filter(
+              seat =>
+                !this.state.actions[this.state.currentRound] ||
+                seat.seatNumber !==
+                  this.state.actions[this.state.currentRound].raiser.seatNumber
+            )}
             callersSelected={this.handleCallers}
           ></Caller>
           /**
@@ -296,11 +305,7 @@ export default class Play extends Component<
               this.state.actions[this.state.currentRound] &&
               this.state.actions[this.state.currentRound].raiser
             
-           * .filter(
-              seat =>
-                seat.seatNumber !==
-                this.state.actions[this.state.currentRound].raiser.seatNumber
-            )
+           * 
            */
         }
       </ScrollView>
