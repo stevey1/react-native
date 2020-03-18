@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   option: {
     backgroundColor: "#D1D1D1", //#fdfdfd
     paddingHorizontal: 5,
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderWidth: StyleSheet.hairlineWidth,
     borderRightWidth: 0,
     borderLeftWidth: 0,

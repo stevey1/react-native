@@ -253,10 +253,7 @@ export default class Play extends Component<
   };
   render() {
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
+      <ScrollView>
         <View style={styles.control}>
           <Text key="my" style={styles.label}>
             {i18n.t("play.myHand")}:
@@ -268,7 +265,7 @@ export default class Play extends Component<
           ></Card>
           <Card
             key="m1"
-            handleCard={(c: ICard) => this.handleMyHand(c, 1)}
+            handleCard={c => this.handleMyHand(c, 1)}
             style={{ margin: 3 }}
           ></Card>
           {this.displayMyHand(this.state.myHand)}
@@ -317,5 +314,5 @@ const styles = StyleSheet.create({
     textAlign: "right",
     width: 85
   },
-  control: { flex: 1, flexDirection: "row", margin: 3 }
+  control: { flex: 1, flexDirection: "row", margin: 1 }
 });
