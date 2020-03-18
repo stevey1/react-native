@@ -71,12 +71,12 @@ export class Action extends Component<
       return <View></View>;
     }
     return (
-      <PickerDropDown
+      <MyPicker
         modalVisible={this.state.seatModalVisible}
         value={this.props.raiser ? this.props.raiser.seatNumber : ""}
         itemSelected={this.handleRaiserSelected}
         listItems={this.getSeatList()}
-      ></PickerDropDown>
+      ></MyPicker>
     );
   };
   mapToSeatIndex = (seatNumber: number) =>
@@ -87,7 +87,7 @@ export class Action extends Component<
       <View style={{ flexDirection: "row" }}>
         <MyButton
           style={{
-            width: 110
+            width: 80
           }}
           label={this.state.raiserSelected}
           onPress={() => this.setState({ seatModalVisible: true })}

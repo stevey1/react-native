@@ -10,26 +10,22 @@ export default function MyButton(props: {
   return (
     <RectButton style={[styles.option, props.style]} onPress={props.onPress}>
       <View style={{ flexDirection: "row" }}>
-        <Text style={{ flex: 3, textAlign: "left" }}>{props.label}</Text>
-        <Text style={{ flex: 1, textAlign: "right" }}>▼</Text>
+        <Text style={{ flex: 1, textAlign: "center" }}>{props.label}</Text>
+        <Text style={{ width: 10, textAlign: "right" }}>▼</Text>
       </View>
     </RectButton>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fafafa"
-  },
-
   option: {
     backgroundColor: "#D1D1D1", //#fdfdfd
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
     paddingVertical: 15,
     borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: "#ededed",
+    borderRightWidth: 0,
+    borderLeftWidth: 0,
+    borderColor: "#D1D1D1",
     borderRadius: 6
   },
 

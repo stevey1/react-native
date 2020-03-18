@@ -71,22 +71,22 @@ export default class Card extends Component<
         <MyButton
           key="s"
           style={{
-            backgroundColor: "#D1D1D1",
-            width: 70
+            width: 45,
+            margin: 0
           }}
           label={this.state.suitSelected}
           onPress={() => this.setState({ suitVisible: true })}
         />
-        {this.showSuitDropDown()}
         <MyButton
           key="c"
           style={{
-            backgroundColor: "#D1D1D1",
-            width: 70
+            marginRight: 2,
+            width: 45
           }}
           label={this.state.cardSelected}
           onPress={() => this.setState({ cardVisible: true })}
         />
+        {this.showSuitDropDown()}
         {this.showCardDropDown()}
       </View>
     );
