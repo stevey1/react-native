@@ -50,14 +50,20 @@ const roundText = [
   i18n.t("play.turn"),
   i18n.t("play.river")
 ];
-export const getRoundText = (round: Round) => {
-  return roundText[round];
-};
-export const getCardColor = (suit: Suit) => {
-  return suit === Suit.d || suit === Suit.h
+export const getRoundText = (round: Round) => roundText[round];
+
+export const getCardColor = (suit: Suit) =>
+  suit === Suit.d || suit === Suit.h
     ? { color: "#FF0000" }
     : { color: "#000000" };
-};
+
+export const getCardText = (card: ICard) =>
+  getSuitText(card.suit) + getNumberText(card.cardNumber);
+export const getSeatText = (seatNumber: number) =>
+  i18n.t("action.seat") + i18n.locale === "en"
+    ? " "
+    : "" + getNumberText(seatNumber);
+
 const player1 = { id: 1, name: "P1", playerType: PlayerType.TT };
 const player2 = { id: 2, name: "P2", playerType: PlayerType.TT };
 const player3 = { id: 3, name: "P3", playerType: PlayerType.TT };

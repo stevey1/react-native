@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { TextInput, Text, View } from "react-native";
 import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
-import { getNumberText } from "./../constants/helper";
+import { getSeatText } from "./../constants/helper";
 import i18n from "../i18n";
 import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
@@ -16,6 +16,7 @@ export class Action extends Component<
     seatModalVisible: boolean;
     amount: number;
     raiser: Nullable<ISeat>;
+    raiserSelected: string;
   }
 > {
   readonly state = {
@@ -23,9 +24,7 @@ export class Action extends Component<
     amount: this.props.bigBlind || 0,
     raiser: this.props.raiser || null,
     raiserSelected: this.props.raiser
-      ? i18n.t("action.seat") +
-        " " +
-        getNumberText(this.props.raiser.seatNumber)
+      ? getSeatText(this.props.raiser.seatNumber)
       : ""
   };
 
@@ -38,7 +37,9 @@ export class Action extends Component<
       this.props.handleAction({
         raiser: this.state.raiser,
         amount: amount,
-        callers: []
+        callers: [] as ISeat[],
+        checkRaise: false,
+        raises: 1
       });
     }
   };
@@ -49,21 +50,22 @@ export class Action extends Component<
       raiser: raiser,
       amount: 0,
       seatModalVisible: false,
-      raiserSelected:
-        i18n.t("action.seat") + " " + getNumberText(raiser.seatNumber)
+      raiserSelected: getSeatText(raiser.seatNumber)
     });
     if (this.state.amount > 0) {
       this.props.handleAction({
         raiser: raiser,
         amount: this.state.amount,
-        callers: []
+        callers: [],
+        checkRaise: false,
+        raises: 1
       });
     }
   };
 
   getSeatList = () =>
     this.props.seats.map(seat => ({
-      text: i18n.t("action.seat") + " " + getNumberText(seat.seatNumber),
+      text: getSeatText(seat.seatNumber),
       value: seat.seatNumber.toString()
     }));
   showSeatDropDown = () => {

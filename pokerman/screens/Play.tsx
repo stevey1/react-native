@@ -5,12 +5,7 @@ import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
-import {
-  getRoundText,
-  getCardColor,
-  getNumberText,
-  getSuitText
-} from "../constants/helper";
+import { getRoundText, getCardColor, getCardText } from "../constants/helper";
 import MyButton from "../components/MyButton";
 import {
   ISeat,
@@ -159,7 +154,7 @@ export default class Play extends Component<
           key={"c" + card.cardNumber.toString() + card.suit.toString()}
           style={getCardColor(card.suit)}
         >
-          {getSuitText(card.suit) + getNumberText(card.cardNumber)}
+          {getCardText(card)}
         </Text>
       ));
   displayAction = () => {

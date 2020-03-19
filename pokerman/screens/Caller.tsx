@@ -3,8 +3,7 @@ import { View } from "react-native";
 
 import { ISeat } from "./../constants/DataTypes";
 import MyMultiPicker from "../components/MyMultiPicker";
-import i18n from "../i18n";
-import { getNumberText } from "../constants/helper";
+import { getSeatText } from "../constants/helper";
 export class Caller extends Component<{
   modalVisible: boolean;
   seats: ISeat[];
@@ -17,7 +16,7 @@ export class Caller extends Component<{
 
   getListItems = () =>
     this.props.seats.map((seat, i) => ({
-      text: i18n.t("action.seat") + " " + getNumberText(seat.seatNumber),
+      text: getSeatText(seat.seatNumber),
       value: seat.seatNumber
     }));
 

@@ -4,7 +4,7 @@ import { ISeat, IPlayer } from "../constants/DataTypes";
 import { Text, View } from "react-native";
 import MyButton from "../components/MyButton";
 import MyPicker from "../components/MyPicker";
-import CheckBox from "../components/CheckBox";
+import { getSeatText } from "../constants/helper";
 export default class Seat extends Component<
   {
     existingSeats: ISeat[];
@@ -50,7 +50,7 @@ export default class Seat extends Component<
     for (let i = 0; i < maxSeats; i++) {
       seatList.push(
         <View key={"v" + i} style={{ flexDirection: "row" }}>
-          <Text key={"t" + i}>Seat {i + 1}</Text>
+          <Text key={"t" + i}> {getSeatText(i + 1)}</Text>
           <MyButton
             key={"b" + i}
             style={{
@@ -72,7 +72,11 @@ export default class Seat extends Component<
         text: p.name,
         value: p.id
       }));
-    return [{ text: "empty", value: -1 }, ...playersList];
+    return [
+      ...playersList,
+      { text: "{Empty}", value: -1 },
+      { text: "{Seat Out}", value: -2 }
+    ];
   };
   showPlayerDropDown = (seatNumber: number) => {
     return (
