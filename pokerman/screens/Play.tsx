@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ProgressViewIOS } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
@@ -65,7 +65,6 @@ export default class Play extends Component<
   handleMyHand = (card: ICard, cardId: number) => {
     const cards = this.state.myHand || [];
     cards[cardId] = card;
-    console.log("myHand", cards);
     this.setState({ myHand: cards });
   };
   handleBoard = (card: ICard, cardId: number) => {
@@ -74,8 +73,6 @@ export default class Play extends Component<
     this.setState({ board: cards });
   };
   handleAction = (action: IAction, round: Round) => {
-    action.raises = 1;
-    action.checkRaise = false;
     let allActions = this.state.allActions;
     let actions = this.state.actions;
     if (allActions.length > 0) {
@@ -86,6 +83,9 @@ export default class Play extends Component<
           lastAction.amount !== this.props.bigBlind
         ) {
           // the same person
+          action.raises = allActions[allActions.length - 1].action.raises;
+          action.checkRaise =
+            allActions[allActions.length - 1].action.checkRaise;
           allActions[allActions.length - 1].action = action;
         } else {
           action.raises = lastAction.raises + 1;
@@ -99,9 +99,13 @@ export default class Play extends Component<
           allActions.push({ action: action, round: round });
         }
       } else {
+        action.raises = 1;
+        action.checkRaise = false;
         allActions.push({ action: action, round: round });
       }
     } else {
+      action.raises = 1;
+      action.checkRaise = false;
       allActions.push({ action: action, round: round });
     }
     actions[round] = action;
