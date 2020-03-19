@@ -5,6 +5,7 @@ import { Text, View } from "react-native";
 import MyButton from "../components/MyButton";
 import MyPicker from "../components/MyPicker";
 import { getSeatText } from "../constants/helper";
+
 export default class Seat extends Component<
   {
     existingSeats: ISeat[];
@@ -22,8 +23,10 @@ export default class Seat extends Component<
     playersSelected: [] as IPlayer[]
   };
   componentDidMount = () => {
-    let existingPlayers: IPlayer[];
-    this.props.existingSeats.map((s, i) => (existingPlayers[i] = s.player));
+    let existingPlayers = [] as IPlayer[];
+    this.props.existingSeats.forEach(seat => {
+      existingPlayers.push(seat.player);
+    });
     this.setState({ playersSelected: existingPlayers });
   };
   handleFinishSeating = () => {
@@ -56,7 +59,11 @@ export default class Seat extends Component<
             style={{
               width: 80
             }}
-            label={this.state.playersSelected[i].name}
+            label={
+              this.state.playersSelected[i]
+                ? this.state.playersSelected[i].name
+                : ""
+            }
             onPress={() => this.handleButtonPress(i)}
           />
         </View>
