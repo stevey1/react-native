@@ -23,10 +23,10 @@ export default class MyPicker extends React.Component {
             <Picker
               selectedValue={this.state.itemValue}
               style={{
-                height: 50,
+                height: 0,
                 alignSelf: "center",
-                marginBottom: 30,
-                width: 250
+                marginBottom: 10,
+                width: 300
               }}
               onValueChange={(itemValue, itemIndex) => {
                 if (this.props.modalVisible) {
@@ -39,10 +39,13 @@ export default class MyPicker extends React.Component {
             >
               {this.props.listItems.map(listItem => (
                 <Picker.Item
-                  style={
-                    listItem.text === "方" || listItem.text === "红"
-                      ? { color: "#FF0000" }
-                      : {}
+                  color={
+                    listItem.text === "方" ||
+                    listItem.text === "红" ||
+                    listItem.text === "♦" ||
+                    listItem.text === "♥"
+                      ? "red"
+                      : ""
                   }
                   key={"k" + listItem.value}
                   label={listItem.text}
