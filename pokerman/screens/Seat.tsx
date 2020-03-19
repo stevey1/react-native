@@ -1,26 +1,38 @@
-import React, { Component, ChangeEvent } from "react";
+import React, { Component } from "react";
 import { players } from "../constants/helper";
 import { ISeat, IPlayer } from "../constants/DataTypes";
-import { Text, View } from "react-native";
+import { Text, View, TextInput } from "react-native";
 import MyButton from "../components/MyButton";
 import MyPicker from "../components/MyPicker";
 import { getSeatText } from "../constants/helper";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 export default class Seat extends Component<
   {
+    navigation: any;
     existingSeats: ISeat[];
-    handleSeatsChange: (seats: ISeat[]) => void;
+    dealerSeatIndex: number;
+    bigBlind: number;
+    handleSeatsChange: (
+      seats: ISeat[],
+      dealerSeatIndex: number,
+      bigBlind: number
+    ) => void;
   },
   {
     redirectToPlay: boolean;
     playerModalVisible: boolean[];
     playersSelected: IPlayer[];
+    dealerSeatIndex: number;
+    bigBlind: number;
   }
 > {
   state = {
     redirectToPlay: false,
     playerModalVisible: [] as boolean[],
-    playersSelected: [] as IPlayer[]
+    playersSelected: [] as IPlayer[],
+    dealerSeatIndex: this.props.dealerSeatIndex,
+    bigBlind: this.props.bigBlind
   };
   componentDidMount = () => {
     let existingPlayers = [] as IPlayer[];
@@ -33,7 +45,12 @@ export default class Seat extends Component<
     const seatSelected = this.state.playersSelected
       .filter(p => p)
       .map((p, index) => ({ seatNumber: index, player: p }));
-    this.props.handleSeatsChange(seatSelected);
+    this.props.handleSeatsChange(
+      seatSelected,
+      this.state.dealerSeatIndex,
+      this.state.bigBlind
+    );
+    this.props.navigation.navigate("play");
   };
 
   handlePlayerSelected = (index: number, value: number, seatNumber: number) => {
@@ -47,12 +64,17 @@ export default class Seat extends Component<
     playerModalVisible[index] = true;
     this.setState({ playerModalVisible: playerModalVisible });
   };
+  handleChange = (e, name) => {
+    const value = parseInt(e.nativeEvent.text);
+    if (name === "bigBlind") this.setState({ bigBlind: value });
+    else this.setState({ dealerSeatIndex: value });
+  };
   setUpSeats = () => {
     const maxSeats = 10;
     let seatList = [];
     for (let i = 0; i < maxSeats; i++) {
       seatList.push(
-        <View key={"v" + i} style={{ flexDirection: "row" }}>
+        <View key={"v" + i} style={{ flexDirection: "row", height: 30 }}>
           <Text key={"t" + i}> {getSeatText(i + 1)}</Text>
           <MyButton
             key={"b" + i}
@@ -100,7 +122,45 @@ export default class Seat extends Component<
   render() {
     return (
       <View>
-        <View style={{ flex: 1 }}>{this.setUpSeats()}</View>
+        <View style={{ flex: 1 }}>
+          <View>{this.setUpSeats()}</View>
+          <View style={{ flexDirection: "row", height: 30 }}>
+            <Text key="td">Dealer:</Text>
+            <TextInput
+              key="dealer"
+              onChange={e => this.handleChange(e, "dealer")}
+              value={this.state.dealerSeatIndex.toString()}
+              keyboardType={"numeric"}
+              maxLength={2}
+              selectTextOnFocus={true}
+              style={{
+                width: 50,
+                marginLeft: 5,
+                paddingLeft: 5,
+                backgroundColor: "#D1D1D1",
+                borderWidth: 1
+              }}
+            />
+          </View>
+          <View style={{ flexDirection: "row", height: 30 }}>
+            <Text key="tb">Big Blind:</Text>
+            <TextInput
+              key="bigBlind"
+              onChange={e => this.handleChange(e, "bigBlind")}
+              value={this.state.bigBlind.toString()}
+              keyboardType={"numeric"}
+              maxLength={1}
+              selectTextOnFocus={true}
+              style={{
+                width: 50,
+                marginLeft: 5,
+                paddingLeft: 5,
+                backgroundColor: "#D1D1D1",
+                borderWidth: 1
+              }}
+            />
+          </View>
+        </View>
         <button onClick={this.handleFinishSeating}>Done</button>
       </View>
     );

@@ -60,9 +60,9 @@ export const getCardColor = (suit: Suit) =>
 export const getCardText = (card: ICard) =>
   getSuitText(card.suit) + getNumberText(card.cardNumber);
 export const getSeatText = (seatNumber: number) =>
-  i18n.t("action.seat") + i18n.locale === "en"
-    ? " "
-    : "" + getNumberText(seatNumber);
+  i18n.t("action.seat") +
+  (i18n.locale === "en" ? " " : "") +
+  getNumberText(seatNumber);
 
 const player1 = { id: 1, name: "P1", playerType: PlayerType.TT };
 const player2 = { id: 2, name: "P2", playerType: PlayerType.TT };
@@ -91,13 +91,13 @@ export const players: IPlayer[] = [
 ];
 
 export const seats: ISeat[] = [
-  { player: player2, seatNumber: 2 },
+  { player: player1, seatNumber: 0 },
+  { player: player2, seatNumber: 1 },
+  { player: player3, seatNumber: 2 },
   { player: player4, seatNumber: 3 },
   { player: player5, seatNumber: 4 },
   { player: player6, seatNumber: 5 },
-  { player: player7, seatNumber: 6 },
-  { player: player8, seatNumber: 7 },
-  { player: player9, seatNumber: 8 }
+  { player: player7, seatNumber: 6 }
 ];
 export const runRules = (
   round: Round,
