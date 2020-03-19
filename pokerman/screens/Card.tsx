@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-import { Suit } from "../constants/DataTypes";
+import { Suit, ICard } from "../constants/DataTypes";
 import { getNumberText, getCardColor, getSuitText } from "../constants/helper";
 import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
 export default class Card extends Component<
-  {},
+  { handleCard: (card: ICard) => void },
   {
     cardNumber: number;
     cardSelected: string;
@@ -16,7 +16,7 @@ export default class Card extends Component<
   }
 > {
   state = {
-    cardNumber: 0,
+    cardNumber: -1,
     cardSelected: "",
     suit: Suit.unknow,
     suitSelected: "",
@@ -29,14 +29,20 @@ export default class Card extends Component<
       suit: index,
       suitSelected: getSuitText(index)
     });
+    if (index >= 0 && this.state.cardNumber >= 0) {
+      this.props.handleCard({ cardNumber: this.state.cardNumber, suit: index });
+    }
   };
   handleCardSelected = (index: number, value: string) => {
-    const cardNmber = parseInt(value);
+    const cardNumber = parseInt(value);
     this.setState({
       cardVisible: false,
-      cardNumber: cardNmber,
-      cardSelected: getNumberText(cardNmber)
+      cardNumber: cardNumber,
+      cardSelected: getNumberText(cardNumber)
     });
+    if (cardNumber >= 0 && this.state.suit >= 0) {
+      this.props.handleCard({ cardNumber: cardNumber, suit: this.state.suit });
+    }
   };
   getCardList = () =>
     [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2].map(i => ({

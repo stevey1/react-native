@@ -1,11 +1,16 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ProgressViewIOS } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
-import { getRoundText } from "../constants/helper";
+import {
+  getRoundText,
+  getCardColor,
+  getNumberText,
+  getSuitText
+} from "../constants/helper";
 import MyButton from "../components/MyButton";
 import {
   ISeat,
@@ -45,7 +50,7 @@ export default class Play extends Component<
       raiser: raiser,
       amount: this.props.bigBlind,
       callers: [] as ISeat[],
-      raises: 1,
+      raises: 0,
       checkRaise: false
     };
     const actions = this.state.actions;
@@ -60,6 +65,7 @@ export default class Play extends Component<
   handleMyHand = (card: ICard, cardId: number) => {
     const cards = this.state.myHand || [];
     cards[cardId] = card;
+    console.log("myHand", cards);
     this.setState({ myHand: cards });
   };
   handleBoard = (card: ICard, cardId: number) => {
@@ -76,20 +82,20 @@ export default class Play extends Component<
       if (allActions[allActions.length - 1].round === round) {
         const lastAction = allActions[allActions.length - 1].action;
         if (
-          lastAction.raiser.seatNumber === action.raiser.seatNumber ||
-          (round === Round.Preflop &&
-            allActions.length === 1 &&
-            lastAction.amount === this.props.bigBlind)
+          lastAction.raiser.seatNumber === action.raiser.seatNumber &&
+          lastAction.amount === this.props.bigBlind
         ) {
-          // the same person or overrid big blind
+          // the same person
           allActions[allActions.length - 1].action = action;
         } else {
           action.raises = lastAction.raises + 1;
-          action.checkRaise = this.setCheckRaise(
-            lastAction.raiser.seatNumber,
-            action.raiser.seatNumber,
-            round
-          );
+          action.checkRaise =
+            action.raises > 1 &&
+            this.setCheckRaise(
+              lastAction.raiser.seatNumber,
+              action.raiser.seatNumber,
+              round
+            );
           allActions.push({ action: action, round: round });
         }
       } else {
@@ -141,10 +147,54 @@ export default class Play extends Component<
     return seatNumber > dealerSeatNumber ? seatNumber : seatNumber + 10; //this.props.seats.length;
   };
 
-  displayMyHand = (cards: ICard[]) =>
-    cards.map(card => (
-      <Text key={"c" + card.cardNumber}>{card.cardNumber}</Text>
-    ));
+  displayCards = (cards: ICard[]) =>
+    cards
+      .sort((a, b) => a.cardNumber - b.cardNumber)
+      .map(card => (
+        <Text
+          key={"c" + card.cardNumber.toString() + card.suit.toString()}
+          style={getCardColor(card.suit)}
+        >
+          {getSuitText(card.suit) + getNumberText(card.cardNumber)}
+        </Text>
+      ));
+  displayAction = () => {
+    if (this.state.actions.length === 0) return <View></View>;
+    let display = [];
+    display.push(this.displayRoundAction(Round.Preflop));
+    if (this.state.actions.length === 1) return display;
+
+    display.push(this.displayRoundAction(Round.Flop));
+    if (this.state.actions.length === 2) return display;
+    display.push(this.displayRoundAction(Round.Turn));
+    if (this.state.actions.length === 3) return display;
+    display.push(this.displayRoundAction(Round.River));
+    return display;
+  };
+  displayRoundAction = (round: Round) => {
+    const action = this.state.actions[round];
+    return (
+      <Text
+        style={[
+          action.raises > 1 ? { color: "#ff0000" } : {},
+          action.checkRaise ? { color: "#ff0000" } : {}
+        ]}
+      >
+        {action.checkRaise ? "Check Raise" : ""}#{action.raises} by{" "}
+        {action.raiser.seatNumber}, {action.amount}$, plays in play:{" "}
+        {action.callers.length + 1}
+      </Text>
+    );
+  };
+  displayPot = () => {
+    const pot = this.state.allActions.reduce(
+      (preAction, currentAction) =>
+        preAction +
+        currentAction.action.amount * (currentAction.action.callers.length + 1),
+      0
+    );
+    return <Text>Pot: {pot.toString()}$</Text>;
+  };
 
   getBigBlindSeat = () => {
     const bigBlindSeatIndex =
@@ -272,7 +322,6 @@ export default class Play extends Component<
             handleCard={c => this.handleMyHand(c, 1)}
             style={{ margin: 3 }}
           ></Card>
-          {this.displayMyHand(this.state.myHand)}
         </View>
         <View style={styles.control}>
           <Text key="p" style={styles.label}>
@@ -288,26 +337,26 @@ export default class Play extends Component<
         </View>
         {this.showCurrentRound()}
         {this.showCallerButton()}
-        {
-          <Caller
-            modalVisible={this.state.callerModalVisible}
-            seats={this.getSeatsInPlay(this.state.currentRound).filter(
-              seat =>
-                !this.state.actions[this.state.currentRound] ||
-                seat.seatNumber !==
-                  this.state.actions[this.state.currentRound].raiser.seatNumber
-            )}
-            callersSelected={this.handleCallers}
-          ></Caller>
-          /**
-           * &&
-              this.state.actions.length > 0 &&
-              this.state.actions[this.state.currentRound] &&
-              this.state.actions[this.state.currentRound].raiser
-            
-           * 
-           */
-        }
+        <Caller
+          modalVisible={this.state.callerModalVisible}
+          seats={this.getSeatsInPlay(this.state.currentRound).filter(
+            seat =>
+              !this.state.actions[this.state.currentRound] ||
+              seat.seatNumber !==
+                this.state.actions[this.state.currentRound].raiser.seatNumber
+          )}
+          callersSelected={this.handleCallers}
+        ></Caller>
+        <View style={{ flexDirection: "row" }}>
+          <Text>{i18n.t("play.myHand")}:</Text>
+          {this.displayCards(this.state.myHand)}
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <Text>{i18n.t("play.flop")}:</Text>
+          {this.displayCards(this.state.board)}
+        </View>
+        <View>{this.displayAction()}</View>
+        <View>{this.displayPot()}</View>
       </ScrollView>
     );
   }
