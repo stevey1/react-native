@@ -83,7 +83,7 @@ export default class Play extends Component<
         const lastAction = allActions[allActions.length - 1].action;
         if (
           lastAction.raiser.seatNumber === action.raiser.seatNumber &&
-          lastAction.amount === this.props.bigBlind
+          lastAction.amount !== this.props.bigBlind
         ) {
           // the same person
           allActions[allActions.length - 1].action = action;
@@ -176,8 +176,8 @@ export default class Play extends Component<
     return (
       <Text
         style={[
-          action.raises > 1 ? { color: "#ff0000" } : {},
-          action.checkRaise ? { color: "#ff0000" } : {}
+          action.raises > 1 ? { color: "#ff0000", fontSize: 12 } : {},
+          action.checkRaise ? { color: "#ff0000", fontSize: 18 } : {}
         ]}
       >
         {action.checkRaise ? "Check Raise" : ""}#{action.raises} by{" "}
