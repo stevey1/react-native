@@ -7,8 +7,11 @@ export default class MyPicker extends React.Component {
     super(props);
 
     this.state = {
-      itemIndex: 0,
-      itemValue: props.value || props.listItems[0].value
+      itemIndex:
+        props.value === ""
+          ? 0
+          : this.props.listItems.findIndex(x => x.value === props.value),
+      itemValue: props.value !== "" ? props.value : props.listItems[0].value
     };
   }
   render() {

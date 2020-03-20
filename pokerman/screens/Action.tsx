@@ -75,7 +75,7 @@ export class Action extends Component<
     return (
       <MyPicker
         modalVisible={this.state.seatModalVisible}
-        value={this.props.raiser ? this.props.raiser.seatNumber : ""}
+        value={this.props.raiser ? this.props.raiser.seatNumber.toString() : ""}
         itemSelected={this.handleRaiserSelected}
         listItems={this.getSeatList()}
       ></MyPicker>

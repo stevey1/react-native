@@ -58,7 +58,6 @@ export default class Seat extends Component<
   };
 
   handlePlayerSelected = (index: number, value: number, seatNumber: number) => {
-    console.log("value", value);
     let playersSelected = this.state.playersSelected;
     const player = players.find(p => p.id === value);
     playersSelected[seatNumber] = player;
