@@ -204,6 +204,15 @@ export const runPreRules = (
   dealerSeatNumber: number,
   totalPlayers: number
 ) => {};
+
+const ordinal_of = n =>
+  n.toString() +
+  (["st", "nd", "rd"][(((((n < 0 ? -n : n) + 90) % 100) - 10) % 10) - 1] ||
+    "th");
+
+export const getNumberOrdinal = n =>
+  i18n.locale === "en" ? ordinal_of(n) : getNumberText(n);
+
 const rules = {
   myHand: {
     AJ: "Raise preflop",
@@ -260,11 +269,3 @@ const rules = {
     "Don't call all in, unless he has short stack(losing), impatient, or I have the nuts!!!",
   allIn: "I all in. With J+ pair A kicker/overpair/2 pairs, "
 };
-
-const ordinal_of = n =>
-  n.toString() +
-  (["st", "nd", "rd"][(((((n < 0 ? -n : n) + 90) % 100) - 10) % 10) - 1] ||
-    "th");
-
-export const getNumberOrdinal = n =>
-  i18n.locale === "en" ? ordinal_of(n) : getNumberText(n);
