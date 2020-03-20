@@ -6,6 +6,8 @@ import MyButton from "../components/MyButton";
 import MyPicker from "../components/MyPicker";
 import { getSeatText } from "../constants/helper";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Button } from "react-native-elements";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default class Seat extends Component<
   {
@@ -21,7 +23,8 @@ export default class Seat extends Component<
   },
   {
     redirectToPlay: boolean;
-    playerModalVisible: boolean[];
+    modalForSeatNumber: number;
+    playerModalVisible: boolean;
     playersSelected: IPlayer[];
     dealerSeatIndex: number;
     bigBlind: number;
@@ -29,7 +32,8 @@ export default class Seat extends Component<
 > {
   state = {
     redirectToPlay: false,
-    playerModalVisible: [] as boolean[],
+    modalForSeatNumber: -1,
+    playerModalVisible: false,
     playersSelected: [] as IPlayer[],
     dealerSeatIndex: this.props.dealerSeatIndex,
     bigBlind: this.props.bigBlind
@@ -55,14 +59,17 @@ export default class Seat extends Component<
 
   handlePlayerSelected = (index: number, value: number, seatNumber: number) => {
     let playersSelected = this.state.playersSelected;
-    playersSelected[seatNumber] = players.find(p => (p.id = value));
-    this.setState({ playersSelected: playersSelected });
+    const player = players.find(p => p.id === value);
+    playersSelected[seatNumber] = player;
+    this.setState({
+      playersSelected: playersSelected,
+      playerModalVisible: false,
+      modalForSeatNumber: -1
+    });
   };
 
   handleButtonPress = (index: number) => {
-    let playerModalVisible = this.state.playerModalVisible;
-    playerModalVisible[index] = true;
-    this.setState({ playerModalVisible: playerModalVisible });
+    this.setState({ playerModalVisible: true, modalForSeatNumber: index });
   };
   handleChange = (e, name) => {
     const value = parseInt(e.nativeEvent.text);
@@ -74,29 +81,28 @@ export default class Seat extends Component<
     let seatList = [];
     for (let i = 0; i < maxSeats; i++) {
       seatList.push(
-        <View key={"v" + i} style={{ flexDirection: "row", height: 30 }}>
+        <View key={"v" + i} style={{ flexDirection: "row" }}>
           <Text key={"t" + i}> {getSeatText(i + 1)}</Text>
           <MyButton
             key={"b" + i}
             style={{
-              width: 80
+              width: 150
             }}
             label={
-              this.state.playersSelected[i]
+              (this.state.playersSelected[i]
                 ? this.state.playersSelected[i].name
-                : ""
+                : "") + ":"
             }
             onPress={() => this.handleButtonPress(i)}
           />
         </View>
-        // seat out
       );
     }
     return seatList;
   };
   getPlayerList = (seatNumber: number) => {
     const playersList = players
-      .filter(p => p.id === seatNumber + 1 || p.id > seatNumber)
+      .filter(p => p.id === seatNumber + 1 || p.id > 10)
       .map(p => ({
         text: p.name,
         value: p.id
@@ -107,21 +113,23 @@ export default class Seat extends Component<
       { text: "{Seat Out}", value: -2 }
     ];
   };
-  showPlayerDropDown = (seatNumber: number) => {
-    return (
+  showPlayerDropDown = () =>
+    this.state.playerModalVisible ? (
       <MyPicker
-        modalVisible={this.state.playerModalVisible[seatNumber]}
-        value=""
+        modalVisible={this.state.playerModalVisible}
+        value={this.state.playersSelected[this.state.modalForSeatNumber]}
         itemSelected={(index, value) =>
-          this.handlePlayerSelected(index, value, seatNumber)
+          this.handlePlayerSelected(index, value, this.state.modalForSeatNumber)
         }
-        listItems={this.getPlayerList(seatNumber)}
+        listItems={this.getPlayerList(this.state.modalForSeatNumber)}
       ></MyPicker>
+    ) : (
+      <View></View>
     );
-  };
+
   render() {
     return (
-      <View>
+      <ScrollView>
         <View style={{ flex: 1 }}>
           <View>{this.setUpSeats()}</View>
           <View style={{ flexDirection: "row", height: 30 }}>
@@ -161,8 +169,15 @@ export default class Seat extends Component<
             />
           </View>
         </View>
-        <button onClick={this.handleFinishSeating}>Done</button>
-      </View>
+        <Button
+          buttonStyle={{
+            backgroundColor: "#D1D1D1"
+          }}
+          title="Done"
+          onPress={this.handleFinishSeating}
+        />
+        {this.showPlayerDropDown()}
+      </ScrollView>
     );
   }
 }

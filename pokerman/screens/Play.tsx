@@ -174,6 +174,7 @@ export default class Play extends Component<
     const action = this.state.actions[round];
     return (
       <Text
+        key={"a" + round}
         style={[
           action.raises > 1 ? { color: "#ff0000", fontSize: 12 } : {},
           action.checkRaise ? { color: "#ff0000", fontSize: 18 } : {}
