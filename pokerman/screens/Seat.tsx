@@ -7,6 +7,7 @@ import MyPicker from "../components/MyPicker";
 import { getSeatText } from "../constants/helper";
 import { Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
+import i18n from "../i18n";
 
 export default class Seat extends Component<
   {
@@ -89,7 +90,7 @@ export default class Seat extends Component<
       seatList.push(
         <View key={"v" + i} style={styles.control}>
           <Text key={"t" + i} style={styles.label}>
-            {getSeatText(i) + ":"}
+            {getSeatText(i)}
           </Text>
           <MyButton
             key={"b" + i}
@@ -165,7 +166,7 @@ export default class Seat extends Component<
           <View>{this.setUpSeats()}</View>
           <View style={styles.control}>
             <Text key="td" style={styles.label}>
-              Dealer:
+              {i18n.t("seat.dealer") + ":"}
             </Text>
             <MyButton
               key={"dealer"}
@@ -182,7 +183,7 @@ export default class Seat extends Component<
           </View>
           <View style={styles.control}>
             <Text key="tb" style={styles.label}>
-              Big Blind:
+              {i18n.t("seat.bigBlind") + ":"}
             </Text>
             <TextInput
               key="bigBlind"

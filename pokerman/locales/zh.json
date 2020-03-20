@@ -22,10 +22,10 @@
     "amount": "量",
     "seat": "座位",
     "pot": "Pot: ",
-    "no": "No. ",
+    "raise": "B",
     "by": "by ",
     "checkRaise": "Check Raise",
-    "players": "players: "
+    "players": "Players: "
   },
   "seat": {
     "dealer": "Dealer",

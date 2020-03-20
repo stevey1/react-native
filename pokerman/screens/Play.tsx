@@ -5,7 +5,12 @@ import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
-import { getRoundText, getCardColor, getCardText } from "../constants/helper";
+import {
+  getRoundText,
+  getCardColor,
+  getCardText,
+  getNumberOrdinal
+} from "../constants/helper";
 import MyButton from "../components/MyButton";
 import {
   ISeat,
@@ -173,14 +178,34 @@ export default class Play extends Component<
     return (
       <Text
         key={"a" + round}
-        style={[
-          action.raises > 1 ? { color: "#ff0000", fontSize: 12 } : {},
-          action.checkRaise ? { color: "#ff0000", fontSize: 18 } : {}
-        ]}
+        style={
+          action.checkRaise
+            ? { color: "#ff0000", fontSize: 18 }
+            : action.raises > 1
+            ? { color: "#ff0000", fontSize: 16 }
+            : { fontSize: 14 }
+        }
       >
-        {action.checkRaise ? "Check Raise" : ""}#{action.raises} by{" "}
-        {action.raiser.seatNumber}, {action.amount}$, plays in play:{" "}
-        {action.callers.length + 1}
+        {(action.checkRaise
+          ? "***" + i18n.t("action.checkRaise") + "***"
+          : "") +
+          action.raiser.player.name +
+          " " +
+          action.raises +
+          i18n.t("action.raise") +
+          " " +
+          i18n.t("action.by") +
+          " " +
+          action.amount +
+          "$. " +
+          i18n.t("action.players") +
+          ": " +
+          (action.callers.length + 1) +
+          " - " +
+          action.callers.reduce(
+            (p, c) => p + ((!p && ",") || "") + c.player.name,
+            ""
+          )}
       </Text>
     );
   };
@@ -191,7 +216,11 @@ export default class Play extends Component<
         currentAction.action.amount * (currentAction.action.callers.length + 1),
       0
     );
-    return <Text>Pot: {pot.toString()}$</Text>;
+    return (
+      <Text style={{ fontSize: 14 }}>
+        {i18n.t("action.pot") + ":" + pot.toString()}$
+      </Text>
+    );
   };
 
   getBigBlindSeat = () => {

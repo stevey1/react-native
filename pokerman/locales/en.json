@@ -21,11 +21,11 @@
   "action": {
     "amount": "Amount",
     "seat": "Seat",
-    "pot": "Pot: ",
-    "no": "No. ",
-    "by": "by ",
+    "pot": "Pot",
+    "by": "by",
     "checkRaise": "Check Raise",
-    "players": "players: "
+    "raise": "B",
+    "players": "Players"
   },
   "seat": {
     "dealer": "Dealer",

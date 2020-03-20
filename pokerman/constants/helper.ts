@@ -62,7 +62,8 @@ export const getCardText = (card: ICard) =>
 export const getSeatText = (seatNumber: number) =>
   i18n.t("action.seat") +
   (i18n.locale === "en" ? " " : "") +
-  getNumberText(seatNumber + 1);
+  getNumberText(seatNumber + 1) +
+  ":";
 
 export const getPlayerText = (player: IPlayer) => player.name;
 const player1 = { id: 1, name: "P1", playerType: PlayerType.TT };
@@ -92,13 +93,13 @@ export const AllPlayers: IPlayer[] = [
 ];
 
 export const seats: ISeat[] = [
-  { player: player1, seatNumber: 0 },
-  { player: player2, seatNumber: 1 },
-  { player: player3, seatNumber: 2 },
-  { player: player4, seatNumber: 3 },
-  { player: player5, seatNumber: 4 },
-  { player: player6, seatNumber: 5 },
-  { player: player7, seatNumber: 6 }
+  { player: player1, seatNumber: 0, betOrder: 0 },
+  { player: player2, seatNumber: 1, betOrder: 1 },
+  { player: player3, seatNumber: 2, betOrder: 2 },
+  { player: player4, seatNumber: 3, betOrder: 3 },
+  { player: player5, seatNumber: 4, betOrder: 4 },
+  { player: player6, seatNumber: 5, betOrder: 5 },
+  { player: player7, seatNumber: 6, betOrder: 6 }
 ];
 export const runRules = (
   round: Round,
@@ -117,3 +118,11 @@ export const runPreRules = (
   dealerSeatNumber: number,
   totalPlayers: number
 ) => {};
+
+const ordinal_of = n =>
+  n.toString() +
+  (["st", "nd", "rd"][(((((n < 0 ? -n : n) + 90) % 100) - 10) % 10) - 1] ||
+    "th");
+
+export const getNumberOrdinal = n =>
+  i18n.locale === "en" ? ordinal_of(n) : getNumberText(n);

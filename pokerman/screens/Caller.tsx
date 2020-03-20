@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-
 import { ISeat } from "./../constants/DataTypes";
 import MyMultiPicker from "../components/MyMultiPicker";
 export class Caller extends Component<{
