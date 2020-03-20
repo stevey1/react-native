@@ -1,11 +1,10 @@
 import React, { Component } from "react";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 import { players } from "../constants/helper";
 import { ISeat, IPlayer } from "../constants/DataTypes";
-import { Text, View, TextInput } from "react-native";
 import MyButton from "../components/MyButton";
 import MyPicker from "../components/MyPicker";
 import { getSeatText } from "../constants/helper";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -28,6 +27,7 @@ export default class Seat extends Component<
     playersSelected: IPlayer[];
     dealerSeatIndex: number;
     bigBlind: number;
+    seatModalVisible: boolean;
   }
 > {
   state = {
@@ -36,7 +36,8 @@ export default class Seat extends Component<
     playerModalVisible: false,
     playersSelected: [] as IPlayer[],
     dealerSeatIndex: this.props.dealerSeatIndex,
-    bigBlind: this.props.bigBlind
+    bigBlind: this.props.bigBlind,
+    seatModalVisible: false
   };
   componentDidMount = () => {
     let existingPlayers = [] as IPlayer[];
@@ -68,9 +69,6 @@ export default class Seat extends Component<
     });
   };
 
-  handleButtonPress = (index: number) => {
-    this.setState({ playerModalVisible: true, modalForSeatNumber: index });
-  };
   handleChange = (e, name) => {
     const value = parseInt(e.nativeEvent.text);
     if (name === "bigBlind") this.setState({ bigBlind: value });
@@ -81,8 +79,11 @@ export default class Seat extends Component<
     let seatList = [];
     for (let i = 0; i < maxSeats; i++) {
       seatList.push(
-        <View key={"v" + i} style={{ flexDirection: "row" }}>
-          <Text key={"t" + i}> {getSeatText(i) + ":"}</Text>
+        <View key={"v" + i} style={styles.control}>
+          <Text key={"t" + i} style={styles.label}>
+            {" "}
+            {getSeatText(i) + ":"}
+          </Text>
           <MyButton
             key={"b" + i}
             style={{
@@ -93,7 +94,9 @@ export default class Seat extends Component<
                 ? this.state.playersSelected[i].name
                 : ""
             }
-            onPress={() => this.handleButtonPress(i)}
+            onPress={() =>
+              this.setState({ playerModalVisible: true, modalForSeatNumber: i })
+            }
           />
         </View>
       );
@@ -126,32 +129,49 @@ export default class Seat extends Component<
     ) : (
       <View></View>
     );
+  getSeatList = () =>
+    this.state.playersSelected
+      .filter(p => p)
+      .map((p, index) => ({
+        text: getSeatText(index),
+        value: index
+      }));
+  showSeatDropDown = () =>
+    this.state.seatModalVisible ? (
+      <MyPicker
+        modalVisible={this.state.seatModalVisible}
+        value={this.state.dealerSeatIndex.toString()}
+        itemSelected={(index, value) => {
+          this.setState({ dealerSeatIndex: index, seatModalVisible: false });
+        }}
+        listItems={this.getSeatList()}
+      ></MyPicker>
+    ) : (
+      <View></View>
+    );
 
   render() {
     return (
       <ScrollView>
         <View style={{ flex: 1 }}>
           <View>{this.setUpSeats()}</View>
-          <View style={{ flexDirection: "row", height: 30 }}>
-            <Text key="td">Dealer:</Text>
-            <TextInput
-              key="dealer"
-              onChange={e => this.handleChange(e, "dealer")}
-              value={this.state.dealerSeatIndex.toString()}
-              keyboardType={"numeric"}
-              maxLength={2}
-              selectTextOnFocus={true}
+          <View style={styles.control}>
+            <Text key="td" style={styles.label}>
+              Dealer:
+            </Text>
+            <MyButton
+              key={"dealer"}
               style={{
-                width: 50,
-                marginLeft: 5,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
+                width: 150
               }}
+              label={getSeatText(this.state.dealerSeatIndex)}
+              onPress={() => this.setState({ seatModalVisible: true })}
             />
           </View>
-          <View style={{ flexDirection: "row", height: 30 }}>
-            <Text key="tb">Big Blind:</Text>
+          <View style={styles.control}>
+            <Text key="tb" style={styles.label}>
+              Big Blind:
+            </Text>
             <TextInput
               key="bigBlind"
               onChange={e => this.handleChange(e, "bigBlind")}
@@ -177,7 +197,17 @@ export default class Seat extends Component<
           onPress={this.handleFinishSeating}
         />
         {this.showPlayerDropDown()}
+
+        {this.showSeatDropDown()}
       </ScrollView>
     );
   }
 }
+const styles = StyleSheet.create({
+  label: {
+    paddingRight: 7,
+    textAlign: "right",
+    width: 85
+  },
+  control: { flex: 1, flexDirection: "row", margin: 1, height: 40 }
+});
