@@ -75,7 +75,7 @@ const player7 = { id: 7, name: "P7", playerType: PlayerType.TT };
 const player8 = { id: 8, name: "P8", playerType: PlayerType.TT };
 const player9 = { id: 9, name: "P9", playerType: PlayerType.TT };
 
-export const players: IPlayer[] = [
+export const AllPlayers: IPlayer[] = [
   { id: 1, name: "Me", playerType: PlayerType.TT, isMe: true },
   { id: 2, name: "P2", playerType: PlayerType.TT, isMe: false },
   { id: 3, name: "P3", playerType: PlayerType.TT, isMe: false },

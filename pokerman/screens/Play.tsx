@@ -328,7 +328,7 @@ export default class Play extends Component<
           <Action
             key="pre"
             bigBlind={this.props.bigBlind}
-            raiser={this.getBigBlindSeat()}
+            preflopRaiser={this.getBigBlindSeat()}
             seats={this.getSeatsInPlay(Round.Preflop)}
             handleAction={a => this.handleAction(a, Round.Preflop)}
           ></Action>
@@ -337,12 +337,14 @@ export default class Play extends Component<
         {this.showCallerButton()}
         <Caller
           modalVisible={this.state.callerModalVisible}
-          seats={this.getSeatsInPlay(this.state.currentRound).filter(
-            seat =>
-              !this.state.actions[this.state.currentRound] ||
-              seat.seatNumber !==
-                this.state.actions[this.state.currentRound].raiser.seatNumber
-          )}
+          raiserSeatNumber={
+            (!this.state.actions[this.state.currentRound] &&
+              this.state.actions[
+                this.state.currentRound
+              ].raiser.seatNumber.toString()) ||
+            ""
+          }
+          seats={this.getSeatsInPlay(this.state.currentRound)}
           callersSelected={this.handleCallers}
         ></Caller>
         <View style={{ flexDirection: "row" }}>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import { players } from "../constants/helper";
+import { AllPlayers } from "../constants/helper";
 import { ISeat, IPlayer } from "../constants/DataTypes";
 import MyButton from "../components/MyButton";
 import MyPicker from "../components/MyPicker";
@@ -16,43 +16,47 @@ export default class Seat extends Component<
     handleSeatsChange: (seats: ISeat[], bigBlind: number) => void;
   },
   {
-    redirectToPlay: boolean;
-    modalForSeatNumber: number;
-    playerModalVisible: boolean;
-    playersSelected: IPlayer[];
+    seatedPlayers: IPlayer[];
     dealerSeatIndex: number;
     bigBlind: number;
+
+    playerModalVisible: boolean;
+    modalForSeatNumber: number;
     seatModalVisible: boolean;
+
+    redirectToPlay: boolean;
   }
 > {
   state = {
-    redirectToPlay: false,
-    modalForSeatNumber: -1,
-    playerModalVisible: false,
-    playersSelected: [] as IPlayer[],
-    dealerSeatIndex: this.props.existingSeats[
-      this.props.existingSeats.length - 1
-    ].betOrder,
+    seatedPlayers: [] as IPlayer[],
+    dealerSeatIndex: 0,
     bigBlind: this.props.bigBlind,
-    seatModalVisible: false
+
+    playerModalVisible: false,
+    modalForSeatNumber: -1,
+    seatModalVisible: false,
+
+    redirectToPlay: false
   };
   componentDidMount = () => {
-    let existingPlayers = [] as IPlayer[];
+    let players = [] as IPlayer[];
     this.props.existingSeats.forEach(seat => {
-      existingPlayers.push(seat.player);
+      players[seat.seatNumber] = seat.player;
     });
-    this.setState({ playersSelected: existingPlayers });
+    this.setState({
+      seatedPlayers: players,
+      dealerSeatIndex: this.props.existingSeats.length - 1
+    });
   };
   handleFinishSeating = () => {
-    const seatSelected = this.state.playersSelected
+    const seatSelected = this.state.seatedPlayers
       .map((p, index) => ({
         seatNumber: index,
         player: p,
         betOrder:
           index <= this.state.dealerSeatIndex
-            ? index + this.state.playersSelected.length
-            : index,
-        isMe: p && p.isMe
+            ? index + this.state.seatedPlayers.length
+            : index
       }))
       .filter(s => s.player)
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
@@ -61,13 +65,20 @@ export default class Seat extends Component<
   };
 
   handlePlayerSelected = (index: number, value: number, seatNumber: number) => {
-    let playersSelected = this.state.playersSelected;
-    const player = players.find(p => p.id === value);
-    playersSelected[seatNumber] = player;
+    let seatedPlayers = this.state.seatedPlayers;
+    const player = AllPlayers.find(p => p.id === value);
+    seatedPlayers[seatNumber] = player;
+    let dealerSeatIndex = this.state.dealerSeatIndex;
+    const playerCount = seatedPlayers.filter(p => p).length;
+    if (playerCount - 1 < dealerSeatIndex) {
+      dealerSeatIndex = playerCount - 1;
+    }
+
     this.setState({
-      playersSelected: playersSelected,
+      seatedPlayers: seatedPlayers,
       playerModalVisible: false,
-      modalForSeatNumber: -1
+      modalForSeatNumber: -1,
+      dealerSeatIndex
     });
   };
 
@@ -85,7 +96,7 @@ export default class Seat extends Component<
             style={{
               width: 150
             }}
-            label={this.state.playersSelected[i]?.name || ""}
+            label={this.state.seatedPlayers[i]?.name || ""}
             onPress={() =>
               this.setState({ playerModalVisible: true, modalForSeatNumber: i })
             }
@@ -96,12 +107,12 @@ export default class Seat extends Component<
     return seatList;
   };
   getPlayerList = (seatNumber: number) => {
-    const playersList = players
-      .filter(p => p.id === seatNumber + 1 || p.id > 10)
-      .map(p => ({
-        text: p.name,
-        value: p.id
-      }));
+    const playersList = AllPlayers.filter(
+      p => p.id === seatNumber + 1 || p.id > 10
+    ).map(p => ({
+      text: p.name,
+      value: p.id
+    }));
     return [
       ...playersList,
       { text: "{Empty}", value: -1 },
@@ -112,7 +123,7 @@ export default class Seat extends Component<
     this.state.playerModalVisible ? (
       <MyPicker
         modalVisible={this.state.playerModalVisible}
-        value={this.state.playersSelected[this.state.modalForSeatNumber].id}
+        value={this.state.seatedPlayers[this.state.modalForSeatNumber].id}
         itemSelected={(index, value) =>
           this.handlePlayerSelected(index, value, this.state.modalForSeatNumber)
         }
@@ -122,7 +133,7 @@ export default class Seat extends Component<
       <View></View>
     );
   getSeatList = () =>
-    this.state.playersSelected
+    this.state.seatedPlayers
       .filter(p => p)
       .map((p, index) => ({
         text: p.name,
@@ -143,6 +154,7 @@ export default class Seat extends Component<
     );
 
   render() {
+    const seatedPlayers = this.state.seatedPlayers.filter(p => p != null);
     return (
       <ScrollView>
         <View style={{ flex: 1 }}>
@@ -157,9 +169,9 @@ export default class Seat extends Component<
                 width: 150
               }}
               label={
-                this.state.playersSelected.filter(p => p)[
-                  this.state.dealerSeatIndex
-                ].name
+                seatedPlayers.length > 0 &&
+                seatedPlayers[this.state.dealerSeatIndex] &&
+                seatedPlayers[this.state.dealerSeatIndex].name
               }
               onPress={() => this.setState({ seatModalVisible: true })}
             />

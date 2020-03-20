@@ -7,7 +7,7 @@ import MyButton from "../components/MyButton";
 export class Action extends Component<
   {
     bigBlind?: number;
-    raiser?: ISeat;
+    preflopRaiser?: ISeat;
     seats: ISeat[];
     handleAction: (action: IAction) => void;
   },
@@ -21,8 +21,10 @@ export class Action extends Component<
   readonly state = {
     seatModalVisible: false,
     amount: this.props.bigBlind || 0,
-    raiser: this.props.raiser || null,
-    raiserSelected: this.props.raiser ? this.props.raiser.player.name : ""
+    raiser: this.props.preflopRaiser || null,
+    raiserSelected: this.props.preflopRaiser
+      ? this.props.preflopRaiser.player.name
+      : ""
   };
 
   handleChange = e => {
@@ -72,7 +74,11 @@ export class Action extends Component<
     return (
       <MyPicker
         modalVisible={this.state.seatModalVisible}
-        value={this.props.raiser ? this.props.raiser.seatNumber.toString() : ""}
+        value={
+          this.props.preflopRaiser
+            ? this.props.preflopRaiser.seatNumber.toString()
+            : ""
+        }
         itemSelected={this.handleRaiserSelected}
         listItems={this.getSeatList()}
       ></MyPicker>
