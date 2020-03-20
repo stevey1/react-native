@@ -164,8 +164,10 @@ export default class Play extends Component<
 
     display.push(this.displayRoundAction(Round.Flop));
     if (this.state.actions.length === 2) return display;
+
     display.push(this.displayRoundAction(Round.Turn));
     if (this.state.actions.length === 3) return display;
+
     display.push(this.displayRoundAction(Round.River));
     return display;
   };

@@ -204,6 +204,62 @@ export const runPreRules = (
   dealerSeatNumber: number,
   totalPlayers: number
 ) => {};
+const rules = {
+  myHand: {
+    AJ: "Raise preflop",
+    AT: "Raise preflop",
+    A9_: "Raise preflop, small raise without position.",
+    AA:
+      "Prefere to reduce to 2- callers; Must Raise 3XPot, under the gun: check raise; canot raise: prepare to fold after flop",
+    KK:
+      "Prefere to reduce to 2- callers; Must Raise 3XPot - Watch AA, under the gun: check raise; canot raise: prepare to fold after flop",
+    QQJJ:
+      "Re-raise to 55-75 dollars, people call you must have A*, prepare to fold flop A",
+    TT99: "Rasie befor flop",
+    P88_: "Small rasie before flop with position"
+  },
+  preFlop: {
+    raise: "A*, KJ* or pocket? 3 A on play. Is my kicker big", //Who will raise or call, 50%->A*, 30%->K*, 20%->poket pair
+    raise_bigger: "Poket pair? TT-QQ? 3 A on play. Is my kicker big", //Who will raise or call, 50%->A*, 30%->K*, 20%->poket pair
+    Raise2: "Raise 2 - TT/JJ/QQ? or KK/AA?",
+    Raise3: "Raise 3 - KK/AA?",
+    checkRaise: "Check Raise - Must be AA, at least KK?" //Who will raise or call, 50%->A*, 30%->K*, 20%->poket pair
+  },
+  flop: {
+    theirHand: "More like: A*, K* or pocket",
+    reraise_dry_board: "two pair or set?",
+    reraise_wet_board: "straight?",
+    reraise_water_board: "two pair or set?",
+    myAction: {
+      potBet: "Pot bet ",
+      AllIn: "I all in. With J+ pair A kicker/overpair/2 pairs, "
+    }
+  },
+  turn: {
+    myAction: {
+      potBet: "Pot bet ",
+      AllIn: "I all in. With J+ pair A kicker/overpair/2 pairs, "
+    }
+  },
+  river: {
+    myAction: {
+      notCallAllIn: "Don't call all in"
+    }
+  },
+  board: {
+    fullHouse: "Full House on board-prepare to fold, don't draw(dead)",
+    flushOnBoard: "Flush on board-prepare to fold, don't draw(dead)",
+    strarightOnBoard: "Straight on board-prepare to fold",
+    eazyStrarightOnBoard:
+      "4 cards Straight on board-prepare to fold, don't draw(dead)"
+  },
+  raise: {
+    checkRaise: "Check Rasise"
+  },
+  notCallAllIn:
+    "Don't call all in, unless he has short stack(losing), impatient, or I have the nuts!!!",
+  allIn: "I all in. With J+ pair A kicker/overpair/2 pairs, "
+};
 
 const ordinal_of = n =>
   n.toString() +
