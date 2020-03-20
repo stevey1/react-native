@@ -1,4 +1,12 @@
-import { IPlayer, ISeat, Suit, ICard, Round, PlayerType } from "./DataTypes";
+import {
+  IPlayer,
+  ISeat,
+  Suit,
+  ICard,
+  Round,
+  RaiseType,
+  CallType
+} from "./DataTypes";
 import i18n from "../i18n";
 const numberMap =
   i18n.locale === "en"
@@ -66,30 +74,108 @@ export const getSeatText = (seatNumber: number) =>
   ":";
 
 export const getPlayerText = (player: IPlayer) => player.name;
-const player1 = { id: 1, name: "P1", playerType: PlayerType.TT };
-const player2 = { id: 2, name: "P2", playerType: PlayerType.TT };
-const player3 = { id: 3, name: "P3", playerType: PlayerType.TT };
-const player4 = { id: 4, name: "P4", playerType: PlayerType.TT };
-const player5 = { id: 5, name: "P5", playerType: PlayerType.TT };
-const player6 = { id: 6, name: "P6", playerType: PlayerType.TT };
-const player7 = { id: 7, name: "P7", playerType: PlayerType.TT };
-const player8 = { id: 8, name: "P8", playerType: PlayerType.TT };
-const player9 = { id: 9, name: "P9", playerType: PlayerType.TT };
+const player1 = {
+  id: 1,
+  name: "P1",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: true
+};
+const player2 = {
+  id: 2,
+  name: "P2",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
+const player3 = {
+  id: 3,
+  name: "P3",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
+const player4 = {
+  id: 4,
+  name: "P4",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
+const player5 = {
+  id: 5,
+  name: "P5",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
+const player6 = {
+  id: 6,
+  name: "P6",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
+const player7 = {
+  id: 7,
+  name: "P7",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
+const player8 = {
+  id: 8,
+  name: "P8",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
+const player9 = {
+  id: 9,
+  name: "P9",
+  raiseType: RaiseType.M,
+  callType: CallType.M,
+  isMe: false
+};
 
 export const AllPlayers: IPlayer[] = [
-  { id: 1, name: "Me", playerType: PlayerType.TT, isMe: true },
-  { id: 2, name: "P2", playerType: PlayerType.TT, isMe: false },
-  { id: 3, name: "P3", playerType: PlayerType.TT, isMe: false },
-  { id: 4, name: "P4", playerType: PlayerType.TT, isMe: false },
-  { id: 5, name: "P5", playerType: PlayerType.TT, isMe: false },
-  { id: 6, name: "P6", playerType: PlayerType.TT, isMe: false },
-  { id: 7, name: "P7", playerType: PlayerType.TT, isMe: false },
-  { id: 8, name: "P8", playerType: PlayerType.TT, isMe: false },
-  { id: 9, name: "P9", playerType: PlayerType.TT, isMe: false },
-  { id: 10, name: "P10", playerType: PlayerType.TT, isMe: false },
-  { id: 11, name: "Rock Player", playerType: PlayerType.TT, isMe: false },
-  { id: 12, name: "Jim Happer", playerType: PlayerType.TT, isMe: false },
-  { id: 13, name: "Tom  Dur", playerType: PlayerType.TT, isMe: false }
+  player1,
+  player2,
+  player3,
+  player4,
+  player5,
+  player6,
+  player7,
+  player8,
+  player9,
+  {
+    id: 10,
+    name: "P10",
+    raiseType: RaiseType.M,
+    callType: CallType.M,
+    isMe: false
+  },
+  {
+    id: 11,
+    name: "Rock Player",
+    raiseType: RaiseType.M,
+    callType: CallType.M,
+    isMe: false
+  },
+  {
+    id: 12,
+    name: "Jim Happer",
+    raiseType: RaiseType.M,
+    callType: CallType.M,
+    isMe: false
+  },
+  {
+    id: 13,
+    name: "Tom  Dur",
+    raiseType: RaiseType.M,
+    callType: CallType.M,
+    isMe: false
+  }
 ];
 
 export const seats: ISeat[] = [

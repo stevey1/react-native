@@ -1,7 +1,8 @@
 export interface IPlayer {
   id: number;
   name: string;
-  playerType: PlayerType;
+  raiseType: RaiseType;
+  callType: CallType;
   isMe: boolean;
 }
 export interface ISeat {
@@ -30,12 +31,15 @@ export interface IActionHistory {
   round: Round;
 }
 
-export enum PlayerType {
-  TT, //100% trust their raise
-  LL,
-  TL,
-  LT,
-  Bluffer
+export enum RaiseType {
+  L = 1,
+  M,
+  T //100% trust their raise
+}
+export enum CallType {
+  L = 1,
+  M,
+  T // Becarefull
 }
 export enum PossibleHand {
   BigA,

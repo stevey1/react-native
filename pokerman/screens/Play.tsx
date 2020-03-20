@@ -5,12 +5,8 @@ import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
-import {
-  getRoundText,
-  getCardColor,
-  getCardText,
-  getNumberOrdinal
-} from "../constants/helper";
+import { getRoundText, getCardColor, getCardText } from "../constants/helper";
+import { RaiseType, CallType } from "../constants/DataTypes";
 import MyButton from "../components/MyButton";
 import {
   ISeat,
@@ -179,33 +175,40 @@ export default class Play extends Component<
       <Text
         key={"a" + round}
         style={
-          action.checkRaise
+          action.checkRaise && !action.raiser.player.isMe
             ? { color: "#ff0000", fontSize: 18 }
-            : action.raises > 1
+            : action.raises > 1 && !action.raiser.player.isMe
             ? { color: "#ff0000", fontSize: 16 }
             : { fontSize: 14 }
         }
       >
-        {(action.checkRaise
+        {action.checkRaise && !action.raiser.player.isMe
           ? "***" + i18n.t("action.checkRaise") + "***"
-          : "") +
-          action.raiser.player.name +
-          " " +
-          action.raises +
-          i18n.t("action.raise") +
-          " " +
-          i18n.t("action.by") +
-          " " +
-          action.amount +
-          "$. " +
-          i18n.t("action.players") +
-          ": " +
-          (action.callers.length + 1) +
-          " - " +
-          action.callers.reduce(
-            (p, c) => p + ((!p && ",") || "") + c.player.name,
-            ""
-          )}
+          : "" +
+            action.raiser.player.name +
+            ((!action.raiser.player.isMe &&
+              "_" + RaiseType[action.raiser.player.raiseType]) ||
+              "") +
+            " " +
+            action.raises +
+            i18n.t("action.raise") +
+            " " +
+            i18n.t("action.by") +
+            " " +
+            action.amount +
+            "$. " +
+            i18n.t("action.players") +
+            ": " +
+            (action.callers.length + 1) +
+            " - " +
+            action.callers.reduce(
+              (p, c) =>
+                p +
+                ((!p && ",") || "") +
+                c.player.name +
+                (c.player.isMe ? "" : "_" + CallType[c.player.callType]),
+              ""
+            )}
       </Text>
     );
   };
