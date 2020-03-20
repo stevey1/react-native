@@ -20,6 +20,18 @@
   },
   "action": {
     "amount": "量",
-    "seat": "座位"
+    "seat": "座位",
+    "pot": "Pot: ",
+    "no": "No. ",
+    "by": "by ",
+    "checkRaise": "Check Raise",
+    "players": "players: "
+  },
+  "seat": {
+    "dealer": "Dealer",
+    "bigBlind": "Big Blind"
+  },
+  "button": {
+    "done": "Done"
   }
 }

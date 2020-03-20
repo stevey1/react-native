@@ -204,26 +204,26 @@ export default class Play extends Component<
     let seats = this.props.seats;
     if (round === Round.Preflop) return seats;
 
-    let action = this.getLastAction(Round.Preflop);
+    let action = this.state.actions[Round.Preflop];
     if (action) {
-      seats = [action.raiser as any, ...action.callers];
+      seats = [action.raiser, ...action.callers];
     }
     if (round === Round.Flop) return seats;
 
-    action = this.getLastAction(Round.Flop);
+    action = this.state.actions[Round.Flop];
     if (action) {
-      seats = [action.raiser as any, ...action.callers];
+      seats = [action.raiser, ...action.callers];
     }
 
     if (round === Round.Turn) return seats;
 
-    action = this.getLastAction(Round.Turn);
+    action = this.state.actions[Round.Turn];
     if (action) {
-      seats = [action.raiser as any, ...action.callers];
+      seats = [action.raiser, ...action.callers];
     }
     return seats;
   };
-  private getLastAction = (round: Round) => this.state.actions[round];
+
   private showCallerButton = () => (
     <View style={styles.control}>
       <Text key="p" style={styles.label}>
@@ -248,20 +248,20 @@ export default class Play extends Component<
         {this.getRoundData(0, 3, getRoundText(Round.Flop), Round.Flop)}
       </View>
     ];
-    if (this.state.currentRound > Round.Flop) {
-      roundData.push(
-        <View key="r2">
-          {this.getRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
-        </View>
-      );
-      if (this.state.currentRound === Round.River) {
-        roundData.push(
-          <View key="r3">
-            {this.getRoundData(4, 1, getRoundText(Round.River), Round.River)}
-          </View>
-        );
-      }
-    }
+    if (this.state.currentRound === Round.Flop) return <View>{roundData}</View>;
+
+    roundData.push(
+      <View key="r2">
+        {this.getRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
+      </View>
+    );
+    if (this.state.currentRound === Round.Turn) return <View>{roundData}</View>;
+
+    roundData.push(
+      <View key="r3">
+        {this.getRoundData(4, 1, getRoundText(Round.River), Round.River)}
+      </View>
+    );
     return <View>{roundData}</View>;
   };
   getCards = (start: number, totalCards: number) => {
@@ -338,7 +338,7 @@ export default class Play extends Component<
         <Caller
           modalVisible={this.state.callerModalVisible}
           raiserSeatNumber={
-            (!this.state.actions[this.state.currentRound] &&
+            (this.state.actions[this.state.currentRound] &&
               this.state.actions[
                 this.state.currentRound
               ].raiser.seatNumber.toString()) ||

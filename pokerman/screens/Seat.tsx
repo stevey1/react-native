@@ -123,7 +123,11 @@ export default class Seat extends Component<
     this.state.playerModalVisible ? (
       <MyPicker
         modalVisible={this.state.playerModalVisible}
-        value={this.state.seatedPlayers[this.state.modalForSeatNumber].id}
+        value={
+          (this.state.seatedPlayers[this.state.modalForSeatNumber] &&
+            this.state.seatedPlayers[this.state.modalForSeatNumber].id) ||
+          ""
+        }
         itemSelected={(index, value) =>
           this.handlePlayerSelected(index, value, this.state.modalForSeatNumber)
         }

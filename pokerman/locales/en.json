@@ -16,10 +16,22 @@
     "turn": "Turn",
     "river": "River",
     "callers": "Callers",
-    "raise": "raise"
+    "raise": "Raise"
   },
   "action": {
-    "amount": "amount",
-    "seat": "Seat"
+    "amount": "Amount",
+    "seat": "Seat",
+    "pot": "Pot: ",
+    "no": "No. ",
+    "by": "by ",
+    "checkRaise": "Check Raise",
+    "players": "players: "
+  },
+  "seat": {
+    "dealer": "Dealer",
+    "bigBlind": "Big Blind"
+  },
+  "button": {
+    "done": "Done"
   }
 }
