@@ -12,13 +12,8 @@ export default class Seat extends Component<
   {
     navigation: any;
     existingSeats: ISeat[];
-    dealerSeatIndex: number;
     bigBlind: number;
-    handleSeatsChange: (
-      seats: ISeat[],
-      dealerSeatIndex: number,
-      bigBlind: number
-    ) => void;
+    handleSeatsChange: (seats: ISeat[], bigBlind: number) => void;
   },
   {
     redirectToPlay: boolean;
@@ -35,7 +30,9 @@ export default class Seat extends Component<
     modalForSeatNumber: -1,
     playerModalVisible: false,
     playersSelected: [] as IPlayer[],
-    dealerSeatIndex: this.props.dealerSeatIndex,
+    dealerSeatIndex: this.props.existingSeats[
+      this.props.existingSeats.length - 1
+    ].betOrder,
     bigBlind: this.props.bigBlind,
     seatModalVisible: false
   };
@@ -48,13 +45,18 @@ export default class Seat extends Component<
   };
   handleFinishSeating = () => {
     const seatSelected = this.state.playersSelected
-      .filter(p => p)
-      .map((p, index) => ({ seatNumber: index, player: p }));
-    this.props.handleSeatsChange(
-      seatSelected,
-      this.state.dealerSeatIndex,
-      this.state.bigBlind
-    );
+      .map((p, index) => ({
+        seatNumber: index,
+        player: p,
+        betOrder:
+          index <= this.state.dealerSeatIndex
+            ? index + this.state.playersSelected.length
+            : index,
+        isMe: p && p.isMe
+      }))
+      .filter(s => s.player)
+      .sort((s1, s2) => s1.betOrder - s2.betOrder);
+    this.props.handleSeatsChange(seatSelected, this.state.bigBlind);
     this.props.navigation.navigate("play");
   };
 
@@ -69,11 +71,6 @@ export default class Seat extends Component<
     });
   };
 
-  handleChange = (e, name) => {
-    const value = parseInt(e.nativeEvent.text);
-    if (name === "bigBlind") this.setState({ bigBlind: value });
-    else this.setState({ dealerSeatIndex: value });
-  };
   setUpSeats = () => {
     const maxSeats = 10;
     let seatList = [];
@@ -174,7 +171,9 @@ export default class Seat extends Component<
             </Text>
             <TextInput
               key="bigBlind"
-              onChange={e => this.handleChange(e, "bigBlind")}
+              onChange={e =>
+                this.setState({ bigBlind: parseInt(e.nativeEvent.text) })
+              }
               value={this.state.bigBlind.toString()}
               keyboardType={"numeric"}
               maxLength={1}

@@ -7,6 +7,8 @@ export interface IPlayer {
 export interface ISeat {
   player: IPlayer;
   seatNumber: number;
+  isMe: boolean;
+  betOrder: number;
 }
 export interface IPlay {
   myHand: ICard[];

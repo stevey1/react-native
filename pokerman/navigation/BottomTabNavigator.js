@@ -17,13 +17,12 @@ export default class BottomTabNavigator extends Component {
     super(props);
     const { navigation, route } = props;
     navigation.setOptions({ headerTitle: this.getHeaderTitle(route) });
-    this.state = { seats: defaultSeats, dealerSeatIndex: 0, bigBlind: 2 };
+    this.state = { seats: defaultSeats, bigBlind: 2 };
   }
   playKey = 1;
-  handleSeatsSetup = (seats, dealerSeatIndex, bigBlind) => {
+  handleSeatsSetup = (seats, bigBlind) => {
     this.setState({
       seats: seats,
-      dealerSeatIndex: dealerSeatIndex,
       bigBlind: bigBlind
     });
   };
@@ -49,10 +48,9 @@ export default class BottomTabNavigator extends Component {
           {props => (
             <Seat
               {...props}
-              existingSeats={defaultSeats}
+              existingSeats={this.state.seats}
               handleSeatsChange={this.handleSeatsSetup}
               bigBlind={this.state.bigBlind}
-              dealerSeatIndex={this.state.dealerSeatIndex}
             />
           )}
         </BottomTab.Screen>
@@ -80,8 +78,7 @@ export default class BottomTabNavigator extends Component {
               key={this.playKey.toString()}
               {...props}
               bigBlind={this.state.bigBlind}
-              dealerSeatIndex={this.state.dealerSeatIndex}
-              seats={defaultSeats}
+              seats={this.state.seats}
             />
           )}
         </BottomTab.Screen>

@@ -18,7 +18,6 @@ import {
 export default class Play extends Component<
   {
     bigBlind: number;
-    dealerSeatIndex: number;
     seats: ISeat[];
   },
   {
@@ -87,8 +86,8 @@ export default class Play extends Component<
           action.checkRaise =
             action.raises > 1 &&
             this.setCheckRaise(
-              lastAction.raiser.seatNumber,
-              action.raiser.seatNumber,
+              lastAction.raiser.betOrder,
+              action.raiser.betOrder,
               round
             );
           allActions.push({ action: action, round: round });
@@ -129,21 +128,20 @@ export default class Play extends Component<
     }
   };
 
-  setCheckRaise = (previousSeat: number, currentSeat: number, round: Round) => {
+  setCheckRaise = (betOrder1: number, betOrder2: number, round: Round) => {
     return (
-      this.getActionOrder(currentSeat, round) <
-      this.getActionOrder(previousSeat, round)
+      this.getBetOrder(betOrder2, round) < this.getBetOrder(betOrder1, round)
     );
   };
 
-  getActionOrder = (seatNumber: number, round: Round) => {
-    const dealerSeatIndex =
-      round === Round.Preflop
-        ? (this.props.dealerSeatIndex + 2) % this.props.seats.length
-        : this.props.dealerSeatIndex;
-    const dealerSeatNumber = this.props.seats[dealerSeatIndex].seatNumber;
-    // const seatIndex = this.getSeatIndex(seatNumber);
-    return seatNumber > dealerSeatNumber ? seatNumber : seatNumber + 10; //this.props.seats.length;
+  getBetOrder = (betOrder: number, round: Round) => {
+    if (round !== Round.Preflop) return betOrder;
+    const seatIndex = this.props.seats.findIndex(s => s.betOrder === betOrder);
+    const indexFromDealer = this.props.seats.length - 1 - seatIndex;
+    if (indexFromDealer === 1 || indexFromDealer == 2) {
+      return betOrder + this.props.seats.length;
+    }
+    return betOrder;
   };
 
   displayCards = (cards: ICard[]) =>
@@ -198,7 +196,7 @@ export default class Play extends Component<
 
   getBigBlindSeat = () => {
     const bigBlindSeatIndex =
-      (this.props.dealerSeatIndex + 2) % this.props.seats.length;
+      (this.props.seats.length - 3) % this.props.seats.length;
 
     return this.props.seats[bigBlindSeatIndex];
   };
@@ -331,7 +329,7 @@ export default class Play extends Component<
             key="pre"
             bigBlind={this.props.bigBlind}
             raiser={this.getBigBlindSeat()}
-            seats={this.getSeatsInPlay(this.state.currentRound)}
+            seats={this.getSeatsInPlay(Round.Preflop)}
             handleAction={a => this.handleAction(a, Round.Preflop)}
           ></Action>
         </View>
