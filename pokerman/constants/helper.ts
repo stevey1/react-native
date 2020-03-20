@@ -215,17 +215,20 @@ export const getNumberOrdinal = n =>
 
 const rules = {
   myHand: {
-    AJ: "Raise preflop",
-    AT: "Raise preflop",
-    A9_: "Raise preflop, small raise without position.",
     AA:
       "Prefere to reduce to 2- callers; Must Raise 3XPot, under the gun: check raise; canot raise: prepare to fold after flop",
     KK:
       "Prefere to reduce to 2- callers; Must Raise 3XPot - Watch AA, under the gun: check raise; canot raise: prepare to fold after flop",
     QQJJ:
       "Re-raise to 55-75 dollars, people call you must have A*, prepare to fold flop A",
-    TT99: "Rasie befor flop",
-    P88_: "Small rasie before flop with position"
+    AJ: "Raise preflop, 45$",
+    AT: "Raise preflop; 45$",
+    A9_:
+      "Good caller hand vs pocket pair vs JJ -> Raise preflop, small raise without position. 45$",
+    KJ: "raise preflop, not call over 20$",
+    QJ: "Raise preflop, small raise without position. not call 20$",
+    TT99: "Rasie befor flop, worth 45$",
+    P88_: "Small rasie before flop with position; worth 35$"
   },
   preFlop: {
     raise: "A*, KJ* or pocket? 3 A on play. Is my kicker big", //Who will raise or call, 50%->A*, 30%->K*, 20%->poket pair
