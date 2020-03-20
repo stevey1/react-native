@@ -62,7 +62,7 @@ export const getCardText = (card: ICard) =>
 export const getSeatText = (seatNumber: number) =>
   i18n.t("action.seat") +
   (i18n.locale === "en" ? " " : "") +
-  getNumberText(seatNumber);
+  getNumberText(seatNumber + 1);
 
 const player1 = { id: 1, name: "P1", playerType: PlayerType.TT };
 const player2 = { id: 2, name: "P2", playerType: PlayerType.TT };

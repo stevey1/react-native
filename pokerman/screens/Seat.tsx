@@ -58,6 +58,7 @@ export default class Seat extends Component<
   };
 
   handlePlayerSelected = (index: number, value: number, seatNumber: number) => {
+    console.log("value", value);
     let playersSelected = this.state.playersSelected;
     const player = players.find(p => p.id === value);
     playersSelected[seatNumber] = player;
@@ -82,16 +83,16 @@ export default class Seat extends Component<
     for (let i = 0; i < maxSeats; i++) {
       seatList.push(
         <View key={"v" + i} style={{ flexDirection: "row" }}>
-          <Text key={"t" + i}> {getSeatText(i + 1)}</Text>
+          <Text key={"t" + i}> {getSeatText(i) + ":"}</Text>
           <MyButton
             key={"b" + i}
             style={{
               width: 150
             }}
             label={
-              (this.state.playersSelected[i]
+              this.state.playersSelected[i]
                 ? this.state.playersSelected[i].name
-                : "") + ":"
+                : ""
             }
             onPress={() => this.handleButtonPress(i)}
           />
@@ -117,7 +118,7 @@ export default class Seat extends Component<
     this.state.playerModalVisible ? (
       <MyPicker
         modalVisible={this.state.playerModalVisible}
-        value={this.state.playersSelected[this.state.modalForSeatNumber]}
+        value={this.state.playersSelected[this.state.modalForSeatNumber].id}
         itemSelected={(index, value) =>
           this.handlePlayerSelected(index, value, this.state.modalForSeatNumber)
         }
