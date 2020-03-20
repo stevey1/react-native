@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { TextInput, Text, View } from "react-native";
 import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
-import { getSeatText } from "./../constants/helper";
 import i18n from "../i18n";
 import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
@@ -23,9 +22,7 @@ export class Action extends Component<
     seatModalVisible: false,
     amount: this.props.bigBlind || 0,
     raiser: this.props.raiser || null,
-    raiserSelected: this.props.raiser
-      ? getSeatText(this.props.raiser.seatNumber)
-      : ""
+    raiserSelected: this.props.raiser ? this.props.raiser.player.name : ""
   };
 
   handleChange = e => {
@@ -50,7 +47,7 @@ export class Action extends Component<
       raiser: raiser,
       amount: 0,
       seatModalVisible: false,
-      raiserSelected: getSeatText(raiser.seatNumber)
+      raiserSelected: raiser.player.name
     });
     if (this.state.amount > 0) {
       this.props.handleAction({
@@ -65,7 +62,7 @@ export class Action extends Component<
 
   getSeatList = () =>
     this.props.seats.map(seat => ({
-      text: getSeatText(seat.seatNumber),
+      text: seat.player.name,
       value: seat.seatNumber.toString()
     }));
   showSeatDropDown = () => {

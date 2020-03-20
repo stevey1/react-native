@@ -78,7 +78,6 @@ export default class Seat extends Component<
       seatList.push(
         <View key={"v" + i} style={styles.control}>
           <Text key={"t" + i} style={styles.label}>
-            {" "}
             {getSeatText(i) + ":"}
           </Text>
           <MyButton
@@ -86,11 +85,7 @@ export default class Seat extends Component<
             style={{
               width: 150
             }}
-            label={
-              this.state.playersSelected[i]
-                ? this.state.playersSelected[i].name
-                : ""
-            }
+            label={this.state.playersSelected[i]?.name || ""}
             onPress={() =>
               this.setState({ playerModalVisible: true, modalForSeatNumber: i })
             }
@@ -130,7 +125,7 @@ export default class Seat extends Component<
     this.state.playersSelected
       .filter(p => p)
       .map((p, index) => ({
-        text: getSeatText(index),
+        text: p.name,
         value: index
       }));
   showSeatDropDown = () =>
@@ -161,7 +156,11 @@ export default class Seat extends Component<
               style={{
                 width: 150
               }}
-              label={getSeatText(this.state.dealerSeatIndex)}
+              label={
+                this.state.playersSelected.filter(p => p)[
+                  this.state.dealerSeatIndex
+                ].name
+              }
               onPress={() => this.setState({ seatModalVisible: true })}
             />
           </View>

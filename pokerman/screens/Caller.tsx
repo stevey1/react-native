@@ -3,7 +3,6 @@ import { View } from "react-native";
 
 import { ISeat } from "./../constants/DataTypes";
 import MyMultiPicker from "../components/MyMultiPicker";
-import { getSeatText } from "../constants/helper";
 export class Caller extends Component<{
   modalVisible: boolean;
   seats: ISeat[];
@@ -16,7 +15,7 @@ export class Caller extends Component<{
 
   getListItems = () =>
     this.props.seats.map((seat, i) => ({
-      text: getSeatText(seat.seatNumber),
+      text: seat.player.name,
       value: seat.seatNumber
     }));
 

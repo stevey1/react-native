@@ -64,6 +64,7 @@ export const getSeatText = (seatNumber: number) =>
   (i18n.locale === "en" ? " " : "") +
   getNumberText(seatNumber + 1);
 
+export const getPlayerText = (player: IPlayer) => player.name;
 const player1 = { id: 1, name: "P1", playerType: PlayerType.TT };
 const player2 = { id: 2, name: "P2", playerType: PlayerType.TT };
 const player3 = { id: 3, name: "P3", playerType: PlayerType.TT };
@@ -75,7 +76,7 @@ const player8 = { id: 8, name: "P8", playerType: PlayerType.TT };
 const player9 = { id: 9, name: "P9", playerType: PlayerType.TT };
 
 export const players: IPlayer[] = [
-  { id: 1, name: "Rock Star", playerType: PlayerType.TT, isMe: true },
+  { id: 1, name: "Me", playerType: PlayerType.TT, isMe: true },
   { id: 2, name: "P2", playerType: PlayerType.TT, isMe: false },
   { id: 3, name: "P3", playerType: PlayerType.TT, isMe: false },
   { id: 4, name: "P4", playerType: PlayerType.TT, isMe: false },
