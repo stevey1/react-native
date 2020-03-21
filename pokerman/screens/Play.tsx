@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Card from "./Card";
 import Action from "./Action";
@@ -195,33 +195,32 @@ export default class Play extends Component<
             : { fontSize: 14 }
         }
       >
-        {action.checkRaise && !action.raiser.player.isMe
+        {(action.checkRaise && !action.raiser.player.isMe
           ? "***" + i18n.t("action.checkRaise") + "***"
-          : "" +
-            action.raiser.player.name +
-            ((!action.raiser.player.isMe &&
-              "_" + RaiseType[action.raiser.player.raiseType]) ||
-              "") +
-            " " +
-            action.raises +
-            i18n.t("action.raise") +
-            " " +
-            i18n.t("action.by") +
-            " " +
-            action.amount +
-            "$. " +
-            i18n.t("action.players") +
-            ": " +
-            (action.callers.length + 1) +
-            " - " +
-            action.callers.reduce(
-              (p, c) =>
-                p +
-                ((!p && ",") || "") +
-                c.player.name +
-                (c.player.isMe ? "" : "_" + CallType[c.player.callType]),
-              ""
-            )}
+          : "") +
+          action.raiser.player.name +
+          ((!action.raiser.player.isMe &&
+            "_" + RaiseType[action.raiser.player.raiseType]) ||
+            "") +
+          " " +
+          action.raises +
+          i18n.t("action.raise") +
+          " " +
+          i18n.t("action.by") +
+          " " +
+          action.amount +
+          "$. " +
+          i18n.t("action.players") +
+          ": " +
+          (action.callers.length + 1) +
+          action.callers.reduce(
+            (p, c) =>
+              p +
+              ((!p && ",") || "") +
+              c.player.name +
+              (c.player.isMe ? "" : "_" + CallType[c.player.callType]),
+            " - "
+          )}
       </Text>
     );
   };
@@ -259,7 +258,6 @@ export default class Play extends Component<
             ? seats.length - 1
             : s.betOrder - 2
       }));
-      console.log("after", seats);
       return this.sortSeats(seats);
     }
 
@@ -300,7 +298,23 @@ export default class Play extends Component<
       />
     </View>
   );
-
+  showCaller = () =>
+    this.state.callerModalVisible ? (
+      <Caller
+        modalVisible={this.state.callerModalVisible}
+        raiserSeatNumber={
+          (this.state.actions[this.state.currentRound] &&
+            this.state.actions[
+              this.state.currentRound
+            ].raiser.seatNumber.toString()) ||
+          ""
+        }
+        seats={this.getSeatsInPlay(this.state.currentRound)}
+        callersSelected={this.handleCallers}
+      ></Caller>
+    ) : (
+      <View></View>
+    );
   showCurrentRound = () => {
     if (this.state.currentRound === Round.Preflop) return <View></View>;
     let roundData = [
@@ -394,18 +408,7 @@ export default class Play extends Component<
         </View>
         {this.showCurrentRound()}
         {this.showCallerButton()}
-        <Caller
-          modalVisible={this.state.callerModalVisible}
-          raiserSeatNumber={
-            (this.state.actions[this.state.currentRound] &&
-              this.state.actions[
-                this.state.currentRound
-              ].raiser.seatNumber.toString()) ||
-            ""
-          }
-          seats={this.getSeatsInPlay(this.state.currentRound)}
-          callersSelected={this.handleCallers}
-        ></Caller>
+        {this.showCaller()}
         <View style={{ flexDirection: "row" }}>
           <Text>{i18n.t("play.myHand")}:</Text>
           {this.displayCards(this.state.myHand)}

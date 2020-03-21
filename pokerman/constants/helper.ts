@@ -76,7 +76,7 @@ export const getSeatText = (seatNumber: number) =>
 export const getPlayerText = (player: IPlayer) => player.name;
 const player1 = {
   id: 1,
-  name: "P1",
+  name: "Me",
   raiseType: RaiseType.M,
   callType: CallType.M,
   isMe: true

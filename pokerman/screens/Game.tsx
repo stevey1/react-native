@@ -48,9 +48,10 @@ export default class Game extends Component<
               </Text>
               <TextInput
                 key="tis"
-                onChange={e =>
-                  this.setState({ smallBlind: parseInt(e.nativeEvent.text) })
-                }
+                onChange={e => {
+                  if (e.nativeEvent.text)
+                    this.setState({ smallBlind: parseInt(e.nativeEvent.text) });
+                }}
                 value={this.state.smallBlind.toString()}
                 keyboardType={"numeric"}
                 maxLength={1}
@@ -70,9 +71,10 @@ export default class Game extends Component<
               </Text>
               <TextInput
                 key="bigBlind"
-                onChange={e =>
-                  this.setState({ bigBlind: parseInt(e.nativeEvent.text) })
-                }
+                onChange={e => {
+                  if (e.nativeEvent.text)
+                    this.setState({ bigBlind: parseInt(e.nativeEvent.text) });
+                }}
                 value={this.state.bigBlind.toString()}
                 keyboardType={"numeric"}
                 maxLength={1}
@@ -92,9 +94,10 @@ export default class Game extends Component<
               </Text>
               <TextInput
                 key="straddle"
-                onChange={e =>
-                  this.setState({ straddle: parseInt(e.nativeEvent.text) })
-                }
+                onChange={e => {
+                  if (e.nativeEvent.text)
+                    this.setState({ straddle: parseInt(e.nativeEvent.text) });
+                }}
                 value={this.state.straddle.toString()}
                 keyboardType={"numeric"}
                 maxLength={1}

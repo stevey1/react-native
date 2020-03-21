@@ -13,7 +13,7 @@ export default class MyMultiPicker extends React.Component {
   onChange = index => {
     if (
       this.props.hightlightValue &&
-      this.props.listItems[i].value === this.props.hightlightValue
+      this.props.listItems[index].value == this.props.hightlightValue
     )
       return;
 
@@ -48,9 +48,9 @@ export default class MyMultiPicker extends React.Component {
             onPress={() => this.onChange(i)}
             text={this.props.listItems[i].text}
             value={this.props.listItems[i].value}
-            style={
+            textStyle={
               this.props.hightlightValue &&
-              this.props.listItems[i].value === this.props.hightlightValue
+              this.props.listItems[i].value == this.props.hightlightValue
                 ? { color: "#ff0000" }
                 : {}
             }
