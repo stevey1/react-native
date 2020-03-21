@@ -51,17 +51,23 @@ export default class Seat extends Component<
   }
 
   handleFinishSeating = () => {
+    console.log("dealerSeatIndex", this.state.dealerSeatIndex);
     const seatSelected = this.state.seatedPlayers
       .map((p, index) => ({
         seatNumber: index,
         player: p,
-        betOrder:
-          index <= this.state.dealerSeatIndex
-            ? index + this.state.seatedPlayers.length
-            : index
+        betOrder: 0
       }))
       .filter(s => s.player)
+      .map((s, index, seats) => ({
+        ...s,
+        betOrder:
+          index > this.state.dealerSeatIndex
+            ? index - this.state.dealerSeatIndex
+            : index - this.state.dealerSeatIndex + seats.length - 1
+      }))
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
+    console.log("seatSelected", seatSelected);
     this.props.handleSeatsChange(seatSelected);
     this.props.navigation.navigate("play");
   };

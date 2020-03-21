@@ -7,7 +7,6 @@ import MyButton from "../components/MyButton";
 export class Action extends Component<
   {
     bigBlind?: number;
-    preflopRaiser?: ISeat;
     seats: ISeat[];
     handleAction: (action: IAction) => void;
   },
@@ -20,10 +19,12 @@ export class Action extends Component<
 > {
   readonly state = {
     seatModalVisible: false,
-    amount: this.props.bigBlind || 0,
-    raiser: this.props.preflopRaiser || null,
-    raiserSelected: this.props.preflopRaiser
-      ? this.props.preflopRaiser.player.name
+    amount: this.props.bigBlind ?? 0,
+    raiser: this.props.bigBlind
+      ? this.props.seats[this.props.seats.length - 1]
+      : null,
+    raiserSelected: this.props.bigBlind
+      ? this.props.seats[this.props.seats.length - 1].player.name
       : ""
   };
 

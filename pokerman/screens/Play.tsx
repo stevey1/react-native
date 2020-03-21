@@ -32,6 +32,14 @@ export default class Play extends Component<
     callerModalVisible: boolean;
   }
 > {
+  state = {
+    myHand: [] as ICard[],
+    board: [] as ICard[],
+    actions: [] as IAction[],
+    allActions: [] as IActionHistory[],
+    currentRound: Round.Preflop,
+    callerModalVisible: false
+  };
   constructor(props: { bigBlind: number; seats: ISeat[] }) {
     super(props);
     const raiser = this.getBigBlindSeat();
@@ -49,7 +57,7 @@ export default class Play extends Component<
     allActions.push({ action: action, round: Round.Preflop });
     // don't need to call this; be carefull when using object or object arry in props and stats, it update them
     // this.props.seat.seatNumber+1, seatNumber get updated, crazy!!!
-
+    //this.setState({ actions: actions, allActions: allActions });
     this.state = {
       myHand: [] as ICard[],
       board: [] as ICard[],
@@ -233,34 +241,49 @@ export default class Play extends Component<
 
   getBigBlindSeat = () => {
     const bigBlindSeatIndex =
-      (this.props.seats.length - 3) % this.props.seats.length;
+      (this.props.seats.length - 1 + 2) % this.props.seats.length;
 
     return this.props.seats[bigBlindSeatIndex];
   };
   private getSeatsInPlay = (round: Round) => {
     let seats = this.props.seats;
-    if (round === Round.Preflop) return seats;
+    console.log("pres", seats);
+
+    if (round === Round.Preflop) {
+      seats = seats.map((s, index) => ({
+        ...s,
+        betOrder:
+          index === 0
+            ? seats.length - 2
+            : index === 1
+            ? seats.length - 1
+            : s.betOrder - 2
+      }));
+      console.log("after", seats);
+      return this.sortSeats(seats);
+    }
 
     let action = this.state.actions[Round.Preflop];
     if (action) {
       seats = [action.raiser, ...action.callers];
     }
-    if (round === Round.Flop) return seats;
+    if (round === Round.Flop) this.sortSeats(seats);
 
     action = this.state.actions[Round.Flop];
     if (action) {
       seats = [action.raiser, ...action.callers];
     }
 
-    if (round === Round.Turn) return seats;
+    if (round === Round.Turn) this.sortSeats(seats);
 
     action = this.state.actions[Round.Turn];
     if (action) {
       seats = [action.raiser, ...action.callers];
     }
-    return seats;
+    this.sortSeats(seats);
   };
-
+  sortSeats = (seats: ISeat[]) =>
+    seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
   private showCallerButton = () => (
     <View style={styles.control}>
       <Text key="p" style={styles.label}>
@@ -365,7 +388,6 @@ export default class Play extends Component<
           <Action
             key="pre"
             bigBlind={this.props.bigBlind}
-            preflopRaiser={this.getBigBlindSeat()}
             seats={this.getSeatsInPlay(Round.Preflop)}
             handleAction={a => this.handleAction(a, Round.Preflop)}
           ></Action>
