@@ -81,32 +81,26 @@ export default class Play extends Component<
   handleAction = (action: IAction, round: Round) => {
     let allActions = this.state.allActions;
     let actions = this.state.actions;
-    if (allActions.length > 0) {
-      if (allActions[allActions.length - 1].round === round) {
-        const lastAction = allActions[allActions.length - 1].action;
-        if (
-          lastAction.raiser.seatNumber === action.raiser.seatNumber &&
-          lastAction.amount !== this.props.bigBlind
-        ) {
-          // the same person
-          action.raises = allActions[allActions.length - 1].action.raises;
-          action.checkRaise =
-            allActions[allActions.length - 1].action.checkRaise;
-          allActions[allActions.length - 1].action = action;
-        } else {
-          action.raises = lastAction.raises + 1;
-          action.checkRaise =
-            action.raises > 1 &&
-            this.setCheckRaise(
-              lastAction.raiser.betOrder,
-              action.raiser.betOrder,
-              round
-            );
-          allActions.push({ action: action, round: round });
-        }
+    const lastAction = actions[round];
+
+    if (lastAction) {
+      if (
+        lastAction.raiser.seatNumber === action.raiser.seatNumber &&
+        lastAction.raises > 0
+      ) {
+        // the same person
+        action.raises = lastAction.raises;
+        action.checkRaise = lastAction.checkRaise;
+        allActions[allActions.length - 1].action = action;
       } else {
-        action.raises = 1;
-        action.checkRaise = false;
+        action.raises = lastAction.raises + 1;
+        action.checkRaise =
+          action.raises > 1 &&
+          this.setCheckRaise(
+            lastAction.raiser.betOrder,
+            action.raiser.betOrder,
+            round
+          );
         allActions.push({ action: action, round: round });
       }
     } else {
@@ -114,6 +108,7 @@ export default class Play extends Component<
       action.checkRaise = false;
       allActions.push({ action: action, round: round });
     }
+
     actions[round] = action;
 
     this.setState({
