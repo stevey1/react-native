@@ -240,39 +240,21 @@ export default class Play extends Component<
     return this.props.seats[bigBlindSeatIndex];
   };
   private getSeatsInPlay = (round: Round) => {
-    let seats = this.props.seats;
-
     if (round === Round.Preflop) {
-      seats = seats.map((s, index) => ({
+      const totalSeats = this.props.seats.length;
+      const seats = this.props.seats.map((s, index) => ({
         ...s,
         betOrder:
           index === 0
-            ? seats.length - 2
+            ? totalSeats - 2
             : index === 1
-            ? seats.length - 1
+            ? totalSeats - 1
             : s.betOrder - 2
       }));
       return this.sortSeats(seats);
     }
-
-    let action = this.state.actions[Round.Preflop];
-    if (action) {
-      seats = [action.raiser, ...action.callers];
-    }
-    if (round === Round.Flop) this.sortSeats(seats);
-
-    action = this.state.actions[Round.Flop];
-    if (action) {
-      seats = [action.raiser, ...action.callers];
-    }
-
-    if (round === Round.Turn) this.sortSeats(seats);
-
-    action = this.state.actions[Round.Turn];
-    if (action) {
-      seats = [action.raiser, ...action.callers];
-    }
-    this.sortSeats(seats);
+    const action = this.state.actions[round - 1];
+    return this.sortSeats([action.raiser, ...action.callers]);
   };
   sortSeats = (seats: ISeat[]) =>
     seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
