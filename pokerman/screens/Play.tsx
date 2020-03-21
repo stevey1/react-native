@@ -11,7 +11,7 @@ import {
   getNumberText,
   getSuitText
 } from "../constants/helper";
-import { RaiseType, CallType } from "../constants/DataTypes";
+import { PlayType } from "../constants/DataTypes";
 import MyButton from "../components/MyButton";
 import styles from "./styles";
 
@@ -211,7 +211,12 @@ export default class Play extends Component<
         >
           {action.raiser.player.name +
             ((!action.raiser.player.isMe &&
-              "_" + RaiseType[action.raiser.player.raiseType]) ||
+              "_" +
+                PlayType[
+                  (round === Round.Preflop &&
+                    action.raiser.player.preflopRaiseType) ||
+                    action.raiser.player.raiseType
+                ]) ||
               "") +
             " " +
             action.raises +
@@ -227,7 +232,14 @@ export default class Play extends Component<
                 p +
                 ((p !== " - " && ", ") || "") +
                 c.player.name +
-                (c.player.isMe ? "" : "_" + CallType[c.player.callType]),
+                (c.player.isMe
+                  ? ""
+                  : "_" +
+                    PlayType[
+                      (round === Round.Preflop &&
+                        action.raiser.player.preflopCallType) ||
+                        action.raiser.player.callType
+                    ]),
               " - "
             )}
         </Text>

@@ -13,6 +13,7 @@
   "play": {
     "myHand": "My hand",
     "preFlop": "Pre Flop",
+    "board": "Board",
     "flop": "Flop",
     "turn": "Turn",
     "river": "River",

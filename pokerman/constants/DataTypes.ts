@@ -1,8 +1,10 @@
 export interface IPlayer {
   id: number;
   name: string;
-  raiseType: RaiseType;
-  callType: CallType;
+  preflopRaiseType: PlayType;
+  preflopCallType: PlayType;
+  raiseType: PlayType;
+  callType: PlayType;
   isMe: boolean;
 }
 export interface ISeat {
@@ -31,16 +33,14 @@ export interface IActionHistory {
   round: Round;
 }
 
-export enum RaiseType {
-  L = 1,
+export enum PlayType {
+  LL = 1,
+  L,
   M,
-  T //100% trust their raise
+  T, //100% trust their raise
+  TT //100% trust their raise
 }
-export enum CallType {
-  L = 1,
-  M,
-  T // Becarefull
-}
+
 export enum PossibleHand {
   BigA,
   A,

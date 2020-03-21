@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { Text, View } from "react-native";
 import { AllPlayers } from "../constants/helper";
 import { ISeat, IPlayer } from "../constants/DataTypes";
 import MyButton from "../components/MyButton";

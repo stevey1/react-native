@@ -14,6 +14,7 @@
     "myHand": "手牌",
     "preFlop": "牌前下注",
     "flop": "翻牌",
+    "board": "面牌",
     "turn": "转牌",
     "river": "河牌",
     "callers": "跟注",
