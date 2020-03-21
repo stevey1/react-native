@@ -39,18 +39,15 @@ export default class Game extends Component<
 
   render() {
     return (
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
-          <View style={styles.bigContainer}>
-            <View key="s" style={styles.control}>
-              <Text key="s" style={styles.label}>
+          <View style={{ padding: 10 }}>
+            <View key="vs" style={styles.control}>
+              <Text key="ts" style={styles.label}>
                 {i18n.t("game.smallBlind") + ":"}
               </Text>
               <TextInput
-                key="s"
+                key="tis"
                 onChange={e =>
                   this.setState({ smallBlind: parseInt(e.nativeEvent.text) })
                 }
@@ -67,8 +64,8 @@ export default class Game extends Component<
                 }}
               />
             </View>
-            <View key="b" style={styles.control}>
-              <Text key="b" style={styles.label}>
+            <View key="vb" style={styles.control}>
+              <Text key="tb" style={styles.label}>
                 {i18n.t("game.bigBlind") + ":"}
               </Text>
               <TextInput
@@ -89,12 +86,12 @@ export default class Game extends Component<
                 }}
               />
             </View>
-            <View key="st" style={styles.control}>
-              <Text key="st" style={styles.label}>
+            <View key="vst" style={styles.control}>
+              <Text key="tst" style={styles.label}>
                 {i18n.t("game.straddle") + ":"}
               </Text>
               <TextInput
-                key="st"
+                key="straddle"
                 onChange={e =>
                   this.setState({ straddle: parseInt(e.nativeEvent.text) })
                 }
@@ -112,13 +109,11 @@ export default class Game extends Component<
               />
             </View>
           </View>
-          <View style={styles.footerContainer}>
-            <Button
-              buttonStyle={{ backgroundColor: "#D1D1D1" }}
-              title="Done"
-              onPress={this.handleFinishSetup}
-            />
-          </View>
+          <Button
+            buttonStyle={{ backgroundColor: "#D1D1D1" }}
+            title="Done"
+            onPress={this.handleFinishSetup}
+          />
         </View>
       </ScrollView>
     );

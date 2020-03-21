@@ -161,12 +161,9 @@ export default class Seat extends Component<
   render() {
     const seatedPlayers = this.state.seatedPlayers.filter(p => p != null);
     return (
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
-          <View style={styles.bigContainer}>
+          <View style={{ padding: 10 }}>
             <View>{this.setUpSeats()}</View>
             <View style={styles.control}>
               <Text key="td" style={styles.label}>
@@ -190,15 +187,13 @@ export default class Seat extends Component<
             {this.showSeatDropDown()}
           </View>
 
-          <View>
-            <Button
-              buttonStyle={{
-                backgroundColor: "#D1D1D1"
-              }}
-              title="Done"
-              onPress={this.handleFinishSeating}
-            />
-          </View>
+          <Button
+            buttonStyle={{
+              backgroundColor: "#D1D1D1"
+            }}
+            title="Done"
+            onPress={this.handleFinishSeating}
+          />
         </View>
       </ScrollView>
     );

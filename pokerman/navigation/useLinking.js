@@ -11,6 +11,7 @@ export default function(containerRef) {
           play: "play",
           player: "player",
           seat: "seat",
+          game: "game",
           timer: "timer"
         }
       }
