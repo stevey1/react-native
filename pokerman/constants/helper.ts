@@ -61,7 +61,7 @@ const roundText = [
 export const getRoundText = (round: Round) => roundText[round];
 
 export const getCardColor = (suit: Suit) =>
-  suit === Suit.d || suit === Suit.h
+  i18n.locale === "en" && (suit === Suit.d || suit === Suit.h)
     ? { color: "#FF0000" }
     : { color: "#000000" };
 

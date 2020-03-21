@@ -5,7 +5,12 @@ import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
 import i18n from "../i18n";
-import { getRoundText, getCardColor, getCardText } from "../constants/helper";
+import {
+  getRoundText,
+  getCardColor,
+  getNumberText,
+  getSuitText
+} from "../constants/helper";
 import { RaiseType, CallType } from "../constants/DataTypes";
 import MyButton from "../components/MyButton";
 import styles from "./styles";
@@ -151,32 +156,35 @@ export default class Play extends Component<
     return betOrder;
   };
 
-  displayCards = (cards: ICard[]) =>
-    cards
+  displayCards = (cards: ICard[]) => {
+    const suitDisplay = cards
+      .sort((a, b) => a.cardNumber - b.cardNumber)
+      .map(card => (
+        <Text
+          key={"s" + card.cardNumber.toString() + card.suit.toString()}
+          style={getCardColor(card.suit)}
+        >
+          {getSuitText(card.suit)}
+        </Text>
+      ));
+    const cardDisplay = cards
       .sort((a, b) => a.cardNumber - b.cardNumber)
       .map(card => (
         <Text
           key={"c" + card.cardNumber.toString() + card.suit.toString()}
           style={getCardColor(card.suit)}
         >
-          {getCardText(card)}
+          {getNumberText(card.cardNumber)}
         </Text>
       ));
-  displayAction = () => {
-    if (this.state.actions.length === 0) return <View></View>;
-    let display = [];
-    display.push(this.displayRoundAction(Round.Preflop));
-    if (this.state.actions.length === 1) return display;
-
-    display.push(this.displayRoundAction(Round.Flop));
-    if (this.state.actions.length === 2) return display;
-
-    display.push(this.displayRoundAction(Round.Turn));
-    if (this.state.actions.length === 3) return display;
-
-    display.push(this.displayRoundAction(Round.River));
-    return display;
+    return (
+      <View style={{ flexDirection: "row" }}>
+        {suitDisplay}
+        {cardDisplay}
+      </View>
+    );
   };
+
   displayRoundAction = (round: Round) => {
     const action = this.state.actions[round];
     return action ? (
