@@ -10,6 +10,11 @@ export default class Game extends Component<
     bigBlind: number;
     straddle: number;
     navigation: any;
+    handleGameChange: (
+      smallBlind: number,
+      bigBlind: number,
+      straddle: number
+    ) => void;
   },
   {
     smallBlind: number;
@@ -22,7 +27,7 @@ export default class Game extends Component<
     bigBlind: this.props.bigBlind,
     straddle: this.props.straddle
   };
-  handleFinishSeating = () => {
+  handleFinishSetup = () => {
     this.props.handleGameChange(
       this.state.smallBlind,
       this.state.bigBlind,
@@ -59,7 +64,7 @@ export default class Game extends Component<
           </View>
           <View key="b" style={styles.control}>
             <Text key="b" style={styles.label}>
-              {i18n.t("seat.bigBlind") + ":"}
+              {i18n.t("game.bigBlind") + ":"}
             </Text>
             <TextInput
               key="bigBlind"
@@ -81,7 +86,7 @@ export default class Game extends Component<
           </View>
           <View key="st" style={styles.control}>
             <Text key="st" style={styles.label}>
-              {i18n.t("seat.staddle") + ":"}
+              {i18n.t("game.straddle") + ":"}
             </Text>
             <TextInput
               key="st"
@@ -107,7 +112,7 @@ export default class Game extends Component<
             backgroundColor: "#D1D1D1"
           }}
           title="Done"
-          onPress={this.handleFinishSeating}
+          onPress={this.handleFinishSetup}
         />
       </ScrollView>
     );

@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBarIcon from "../components/TabBarIcon";
 import Seat from "../screens/Seat";
 import Play from "../screens/Play";
+import Game from "../screens/Game";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
 import i18n from "../i18n";
@@ -37,7 +38,6 @@ export default class BottomTabNavigator extends Component {
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
         <BottomTab.Screen
           name="game"
-          game
           options={{
             title: i18n.t("navigation.game"), //"Seat Setup",
             tabBarIcon: ({ focused }) => (
@@ -46,19 +46,18 @@ export default class BottomTabNavigator extends Component {
           }}
         >
           {props => (
-            <Seat
+            <Game
               {...props}
-              existingSeats={this.state.seats}
-              handleSeatsChange={(smallBlind, bigBlind, straddle) =>
+              smallBlind={this.state.smallBlind}
+              bigBlind={this.state.bigBlind}
+              straddle={this.state.straddle}
+              handleGameChange={(smallBlind, bigBlind, straddle) =>
                 this.setState({
                   smallBlind: smallBlind,
                   bigBlind: bigBlind,
                   straddle: straddle
                 })
               }
-              smallBlind={this.state.samllBlind}
-              bigBlind={this.state.bigBlind}
-              straddle={this.state.straddle}
             />
           )}
         </BottomTab.Screen>
