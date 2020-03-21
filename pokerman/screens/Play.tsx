@@ -246,7 +246,6 @@ export default class Play extends Component<
   };
   private getSeatsInPlay = (round: Round) => {
     let seats = this.props.seats;
-    console.log("pres", seats);
 
     if (round === Round.Preflop) {
       seats = seats.map((s, index) => ({
@@ -304,12 +303,13 @@ export default class Play extends Component<
         modalVisible={this.state.callerModalVisible}
         raiserSeatNumber={
           (this.state.actions[this.state.currentRound] &&
-            this.state.actions[
-              this.state.currentRound
-            ].raiser.seatNumber.toString()) ||
-          ""
+            this.state.actions[this.state.currentRound].raiser.seatNumber) ||
+          0
         }
         seats={this.getSeatsInPlay(this.state.currentRound)}
+        callers={this.state.actions[this.state.currentRound].callers.map(
+          c => c.seatNumber
+        )}
         callersSelected={this.handleCallers}
       ></Caller>
     ) : (

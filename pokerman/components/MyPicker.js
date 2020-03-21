@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "react-native-elements";
 import { Modal, Picker, Text, TouchableHighlight, View } from "react-native";
+import i18n from "../i18n";
 
 export default class MyPicker extends React.Component {
   constructor(props) {
@@ -11,7 +12,7 @@ export default class MyPicker extends React.Component {
         props.value === ""
           ? 0
           : this.props.listItems.findIndex(x => x.value === props.value),
-      itemValue: props.value !== "" ? props.value : props.listItems[0].value
+      itemValue: (props.value !== "" && props.value) || props.listItems[0].value
     };
   }
   render() {
@@ -61,7 +62,7 @@ export default class MyPicker extends React.Component {
             buttonStyle={{
               backgroundColor: "#D1D1D1"
             }}
-            title="Done"
+            title={i18n.t("button.done")}
             onPress={() =>
               this.props.itemSelected(
                 this.state.itemIndex,

@@ -2,24 +2,24 @@ import React from "react";
 import { Button } from "react-native-elements";
 import { Modal, Text, View } from "react-native";
 import CheckBox from "./CheckBox";
+import i18n from "../i18n";
 
 export default class MyMultiPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: props.listItems.map(item => false)
+      selected: props.listItems.map(item => props.values.includes(item.value))
     };
   }
   onChange = index => {
     if (
       this.props.hightlightValue &&
-      this.props.listItems[index].value == this.props.hightlightValue
+      this.props.listItems[index].value === this.props.hightlightValue
     )
       return;
 
     const selected = this.state.selected;
-    selected[index] =
-      this.state.selected[index] == null ? true : !this.state.selected[index];
+    selected[index] = !this.state.selected[index];
 
     this.setState({ selected: selected });
   };
@@ -50,7 +50,7 @@ export default class MyMultiPicker extends React.Component {
             value={this.props.listItems[i].value}
             textStyle={
               this.props.hightlightValue &&
-              this.props.listItems[i].value == this.props.hightlightValue
+              this.props.listItems[i].value === this.props.hightlightValue
                 ? { color: "#ff0000" }
                 : {}
             }
@@ -85,7 +85,7 @@ export default class MyMultiPicker extends React.Component {
             buttonStyle={{
               backgroundColor: "#D1D1D1"
             }}
-            title="Done"
+            title={i18n.t("button.done")}
             onPress={this.submitItems}
           />
         </Modal>

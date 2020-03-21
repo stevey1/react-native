@@ -123,7 +123,7 @@ export default class Game extends Component<
           </View>
           <Button
             buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            title="Done"
+            title={i18n.t("button.done")}
             onPress={this.handleFinishSetup}
           />
         </View>

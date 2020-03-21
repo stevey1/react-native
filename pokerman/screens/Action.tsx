@@ -29,8 +29,7 @@ export class Action extends Component<
   };
 
   handleChange = e => {
-    const value = e.nativeEvent.text;
-    const amount = parseInt(value);
+    const amount = parseInt(e.nativeEvent.text);
     this.setState({ amount: amount });
 
     if (this.state.raiser && amount) {
@@ -59,11 +58,10 @@ export class Action extends Component<
       text: seat.player.name,
       value: seat.seatNumber.toString()
     }));
-  showSeatDropDown = () => {
-    if (!this.state.seatModalVisible) {
-      return <View></View>;
-    }
-    return (
+  showSeatDropDown = () =>
+    !this.state.seatModalVisible ? (
+      <View></View>
+    ) : (
       <MyPicker
         modalVisible={this.state.seatModalVisible}
         value={this.state.raiser?.seatNumber.toString() ?? ""}
@@ -71,7 +69,7 @@ export class Action extends Component<
         listItems={this.getSeatList()}
       ></MyPicker>
     );
-  };
+
   mapToSeatIndex = (seatNumber: number) =>
     this.props.seats.findIndex(seat => seat.seatNumber === seatNumber);
 

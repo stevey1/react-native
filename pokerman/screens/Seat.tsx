@@ -51,7 +51,6 @@ export default class Seat extends Component<
   }
 
   handleFinishSeating = () => {
-    console.log("dealerSeatIndex", this.state.dealerSeatIndex);
     const seatSelected = this.state.seatedPlayers
       .map((p, index) => ({
         seatNumber: index,
@@ -67,7 +66,6 @@ export default class Seat extends Component<
             : index - this.state.dealerSeatIndex + seats.length - 1
       }))
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
-    console.log("seatSelected", seatSelected);
     this.props.handleSeatsChange(seatSelected);
     this.props.navigation.navigate("play");
   };
@@ -198,7 +196,7 @@ export default class Seat extends Component<
             buttonStyle={{
               backgroundColor: "#D1D1D1"
             }}
-            title="Done"
+            title={i18n.t("button.done")}
             onPress={this.handleFinishSeating}
           />
         </View>

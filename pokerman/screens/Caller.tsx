@@ -4,8 +4,9 @@ import { ISeat } from "./../constants/DataTypes";
 import MyMultiPicker from "../components/MyMultiPicker";
 export class Caller extends Component<{
   modalVisible: boolean;
-  raiserSeatNumber: string;
+  raiserSeatNumber: number;
   seats: ISeat[];
+  callers: number[];
   callersSelected: (callers: ISeat[]) => void;
 }> {
   handleItemsSelected = (indexes: number[]) => {
@@ -26,6 +27,7 @@ export class Caller extends Component<{
           modalVisible={this.props.modalVisible}
           hightlightValue={this.props.raiserSeatNumber}
           listItems={this.getListItems()}
+          values={this.props.callers}
           itemsSelected={this.handleItemsSelected}
         />
       </View>
