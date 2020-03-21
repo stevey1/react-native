@@ -33,7 +33,7 @@ export class Action extends Component<
     const amount = parseInt(value);
     this.setState({ amount: amount });
 
-    if (this.state.raiser && amount > 0) {
+    if (this.state.raiser && amount) {
       this.props.handleAction({
         raiser: this.state.raiser,
         amount: amount,
@@ -52,15 +52,6 @@ export class Action extends Component<
       seatModalVisible: false,
       raiserSelected: raiser.player.name
     });
-    if (this.state.amount > 0) {
-      this.props.handleAction({
-        raiser: raiser,
-        amount: this.state.amount,
-        callers: [],
-        checkRaise: false,
-        raises: 1
-      });
-    }
   };
 
   getSeatList = () =>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { Text, View, TextInput } from "react-native";
 import { Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
@@ -48,13 +48,16 @@ export default class Game extends Component<
               </Text>
               <TextInput
                 key="tis"
-                onChange={e => {
-                  if (e.nativeEvent.text)
-                    this.setState({ smallBlind: parseInt(e.nativeEvent.text) });
-                }}
-                value={this.state.smallBlind.toString()}
+                onChange={e =>
+                  this.setState({
+                    smallBlind: e.nativeEvent.text
+                      ? parseInt(e.nativeEvent.text)
+                      : null
+                  })
+                }
+                value={this.state.smallBlind?.toString() ?? ""}
                 keyboardType={"numeric"}
-                maxLength={1}
+                maxLength={3}
                 selectTextOnFocus={true}
                 style={{
                   width: 50,
@@ -71,13 +74,16 @@ export default class Game extends Component<
               </Text>
               <TextInput
                 key="bigBlind"
-                onChange={e => {
-                  if (e.nativeEvent.text)
-                    this.setState({ bigBlind: parseInt(e.nativeEvent.text) });
-                }}
-                value={this.state.bigBlind.toString()}
+                onChange={e =>
+                  this.setState({
+                    bigBlind: e.nativeEvent.text
+                      ? parseInt(e.nativeEvent.text)
+                      : null
+                  })
+                }
+                value={this.state.bigBlind?.toString() ?? ""}
                 keyboardType={"numeric"}
-                maxLength={1}
+                maxLength={3}
                 selectTextOnFocus={true}
                 style={{
                   width: 50,
@@ -94,13 +100,16 @@ export default class Game extends Component<
               </Text>
               <TextInput
                 key="straddle"
-                onChange={e => {
-                  if (e.nativeEvent.text)
-                    this.setState({ straddle: parseInt(e.nativeEvent.text) });
-                }}
-                value={this.state.straddle.toString()}
+                onChange={e =>
+                  this.setState({
+                    straddle: e.nativeEvent.text
+                      ? parseInt(e.nativeEvent.text)
+                      : null
+                  })
+                }
+                value={this.state.straddle?.toString() ?? ""}
                 keyboardType={"numeric"}
-                maxLength={1}
+                maxLength={3}
                 selectTextOnFocus={true}
                 style={{
                   width: 50,

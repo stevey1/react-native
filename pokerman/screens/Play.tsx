@@ -216,7 +216,7 @@ export default class Play extends Component<
           action.callers.reduce(
             (p, c) =>
               p +
-              ((!p && ",") || "") +
+              ((p !== " - " && ", ") || "") +
               c.player.name +
               (c.player.isMe ? "" : "_" + CallType[c.player.callType]),
             " - "
