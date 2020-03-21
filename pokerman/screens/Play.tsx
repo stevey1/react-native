@@ -387,13 +387,8 @@ export default class Play extends Component<
           <Card
             key="m0"
             handleCard={(c: ICard) => this.handleMyHand(c, 0)}
-            style={{ margin: 3 }}
           ></Card>
-          <Card
-            key="m1"
-            handleCard={c => this.handleMyHand(c, 1)}
-            style={{ margin: 3 }}
-          ></Card>
+          <Card key="m1" handleCard={c => this.handleMyHand(c, 1)}></Card>
         </View>
         <View style={styles.control}>
           <Text key="p" style={styles.label}>
