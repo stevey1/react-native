@@ -1,6 +1,7 @@
 {
   "appName": "扑克",
   "navigation": {
+    "game": "牌局设置",
     "seat": "座位",
     "player": "选手",
     "play": "牌局",
@@ -21,17 +22,21 @@
   "action": {
     "amount": "量",
     "seat": "座位",
-    "pot": "Pot: ",
-    "raise": "B",
+    "pot": "锅 ",
+    "raise": "涨",
     "by": "by ",
-    "checkRaise": "Check Raise",
-    "players": "Players: "
+    "checkRaise": "陷阱",
+    "players": "人数"
   },
   "seat": {
-    "dealer": "Dealer",
-    "bigBlind": "Big Blind"
+    "dealer": "庄"
+  },
+  "game": {
+    "smallBlind": "小瞎",
+    "bigBlind": "大瞎",
+    "straddle": "盲打"
   },
   "button": {
-    "done": "Done"
+    "done": "完成"
   }
 }

@@ -13,8 +13,7 @@ export default class Seat extends Component<
   {
     navigation: any;
     existingSeats: ISeat[];
-    bigBlind: number;
-    handleSeatsChange: (seats: ISeat[], bigBlind: number) => void;
+    handleSeatsChange: (seats: ISeat[]) => void;
   },
   {
     seatedPlayers: IPlayer[];
@@ -61,7 +60,7 @@ export default class Seat extends Component<
       }))
       .filter(s => s.player)
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
-    this.props.handleSeatsChange(seatSelected, this.state.bigBlind);
+    this.props.handleSeatsChange(seatSelected);
     this.props.navigation.navigate("play");
   };
 
@@ -179,28 +178,6 @@ export default class Seat extends Component<
                 seatedPlayers[this.state.dealerSeatIndex].name
               }
               onPress={() => this.setState({ seatModalVisible: true })}
-            />
-          </View>
-          <View style={styles.control}>
-            <Text key="tb" style={styles.label}>
-              {i18n.t("seat.bigBlind") + ":"}
-            </Text>
-            <TextInput
-              key="bigBlind"
-              onChange={e =>
-                this.setState({ bigBlind: parseInt(e.nativeEvent.text) })
-              }
-              value={this.state.bigBlind.toString()}
-              keyboardType={"numeric"}
-              maxLength={1}
-              selectTextOnFocus={true}
-              style={{
-                width: 50,
-                marginLeft: 5,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
-              }}
             />
           </View>
         </View>

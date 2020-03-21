@@ -1,7 +1,8 @@
 {
   "appName": "Pokerman",
   "navigation": {
-    "seat": "Seat Setup",
+    "game": "Game Setup",
+    "seat": "Seating",
     "player": "Player Setup",
     "play": "Play",
     "timers": "Settings"
@@ -28,8 +29,12 @@
     "players": "Players"
   },
   "seat": {
-    "dealer": "Dealer",
-    "bigBlind": "Big Blind"
+    "dealer": "Dealer"
+  },
+  "game": {
+    "smallBlind": "Small Blind",
+    "bigBlind": "Big Blind",
+    "straddle": "straddle"
   },
   "button": {
     "done": "Done"

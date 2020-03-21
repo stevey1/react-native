@@ -10,22 +10,21 @@ import { seats as defaultSeats } from "../constants/helper";
 import { ISeat } from "../constants/DataTypes";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = "seat";
+const INITIAL_ROUTE_NAME = "game";
 
 export default class BottomTabNavigator extends Component {
   constructor(props) {
     super(props);
     const { navigation, route } = props;
     navigation.setOptions({ headerTitle: this.getHeaderTitle(route) });
-    this.state = { seats: defaultSeats, bigBlind: 2 };
+    this.state = {
+      seats: defaultSeats,
+      smallBlind: 1,
+      bigBlind: 2,
+      straddle: 5
+    };
   }
   playKey = 1;
-  handleSeatsSetup = (seats, bigBlind) => {
-    this.setState({
-      seats: seats,
-      bigBlind: bigBlind
-    });
-  };
   getHeaderTitle = route => {
     const routeName =
       route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
@@ -36,6 +35,33 @@ export default class BottomTabNavigator extends Component {
     this.playKey += 1;
     return (
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+        <BottomTab.Screen
+          name="game"
+          game
+          options={{
+            title: i18n.t("navigation.game"), //"Seat Setup",
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} name="md-person-add" />
+            )
+          }}
+        >
+          {props => (
+            <Seat
+              {...props}
+              existingSeats={this.state.seats}
+              handleSeatsChange={(smallBlind, bigBlind, straddle) =>
+                this.setState({
+                  smallBlind: smallBlind,
+                  bigBlind: bigBlind,
+                  straddle: straddle
+                })
+              }
+              smallBlind={this.state.samllBlind}
+              bigBlind={this.state.bigBlind}
+              straddle={this.state.straddle}
+            />
+          )}
+        </BottomTab.Screen>
         <BottomTab.Screen
           name="seat"
           options={{
@@ -49,8 +75,11 @@ export default class BottomTabNavigator extends Component {
             <Seat
               {...props}
               existingSeats={this.state.seats}
-              handleSeatsChange={this.handleSeatsSetup}
-              bigBlind={this.state.bigBlind}
+              handleSeatsChange={s =>
+                this.setState({
+                  seats: s
+                })
+              }
             />
           )}
         </BottomTab.Screen>
