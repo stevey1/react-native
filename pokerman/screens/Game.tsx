@@ -39,7 +39,7 @@ export default class Game extends Component<
   render() {
     return (
       <ScrollView>
-        <View style={{ flex: 1 }}>
+        <View>
           <View key="s" style={styles.control}>
             <Text key="s" style={styles.label}>
               {i18n.t("game.smallBlind") + ":"}
@@ -106,11 +106,10 @@ export default class Game extends Component<
               }}
             />
           </View>
+          <View style={{ flex: 1 }}></View>
         </View>
         <Button
-          buttonStyle={{
-            backgroundColor: "#D1D1D1"
-          }}
+          buttonStyle={{ marginTop: 200, backgroundColor: "#D1D1D1" }}
           title="Done"
           onPress={this.handleFinishSetup}
         />
