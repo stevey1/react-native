@@ -8,6 +8,7 @@ import { getSeatText } from "../constants/helper";
 import { Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
+import styles from "./styles";
 
 export default class Seat extends Component<
   {
@@ -160,46 +161,46 @@ export default class Seat extends Component<
   render() {
     const seatedPlayers = this.state.seatedPlayers.filter(p => p != null);
     return (
-      <ScrollView>
-        <View style={{ flex: 1 }}>
-          <View>{this.setUpSeats()}</View>
-          <View style={styles.control}>
-            <Text key="td" style={styles.label}>
-              {i18n.t("seat.dealer") + ":"}
-            </Text>
-            <MyButton
-              key={"dealer"}
-              style={{
-                width: 150
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View style={styles.container}>
+          <View style={styles.bigContainer}>
+            <View>{this.setUpSeats()}</View>
+            <View style={styles.control}>
+              <Text key="td" style={styles.label}>
+                {i18n.t("seat.dealer") + ":"}
+              </Text>
+              <MyButton
+                key={"dealer"}
+                style={{
+                  width: 150
+                }}
+                label={
+                  seatedPlayers.length > 0 &&
+                  seatedPlayers[this.state.dealerSeatIndex] &&
+                  seatedPlayers[this.state.dealerSeatIndex].name
+                }
+                onPress={() => this.setState({ seatModalVisible: true })}
+              />
+            </View>
+            {this.showPlayerDropDown()}
+
+            {this.showSeatDropDown()}
+          </View>
+
+          <View>
+            <Button
+              buttonStyle={{
+                backgroundColor: "#D1D1D1"
               }}
-              label={
-                seatedPlayers.length > 0 &&
-                seatedPlayers[this.state.dealerSeatIndex] &&
-                seatedPlayers[this.state.dealerSeatIndex].name
-              }
-              onPress={() => this.setState({ seatModalVisible: true })}
+              title="Done"
+              onPress={this.handleFinishSeating}
             />
           </View>
         </View>
-        <Button
-          buttonStyle={{
-            backgroundColor: "#D1D1D1"
-          }}
-          title="Done"
-          onPress={this.handleFinishSeating}
-        />
-        {this.showPlayerDropDown()}
-
-        {this.showSeatDropDown()}
       </ScrollView>
     );
   }
 }
-const styles = StyleSheet.create({
-  label: {
-    paddingRight: 7,
-    textAlign: "right",
-    width: 85
-  },
-  control: { flex: 1, flexDirection: "row", margin: 1, height: 40 }
-});

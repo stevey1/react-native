@@ -8,6 +8,8 @@ import i18n from "../i18n";
 import { getRoundText, getCardColor, getCardText } from "../constants/helper";
 import { RaiseType, CallType } from "../constants/DataTypes";
 import MyButton from "../components/MyButton";
+import styles from "./styles";
+
 import {
   ISeat,
   ICard,
@@ -395,12 +397,3 @@ export default class Play extends Component<
     );
   }
 }
-
-const styles = StyleSheet.create({
-  label: {
-    paddingRight: 7,
-    textAlign: "right",
-    width: 85
-  },
-  control: { flex: 1, flexDirection: "row", margin: 1 }
-});

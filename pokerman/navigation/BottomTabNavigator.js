@@ -8,7 +8,6 @@ import Timer from "../screens/Timer";
 import Player from "../screens/Player";
 import i18n from "../i18n";
 import { seats as defaultSeats } from "../constants/helper";
-import { ISeat } from "../constants/DataTypes";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "game";
