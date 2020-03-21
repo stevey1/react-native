@@ -32,16 +32,8 @@ export default class Play extends Component<
     callerModalVisible: boolean;
   }
 > {
-  state = {
-    myHand: [] as ICard[],
-    board: [] as ICard[],
-    actions: [] as IAction[],
-    allActions: [] as IActionHistory[],
-    currentRound: Round.Preflop,
-    callerModalVisible: false
-  };
-
-  componentDidMount = () => {
+  constructor(props: { bigBlind: number; seats: ISeat[] }) {
+    super(props);
     const raiser = this.getBigBlindSeat();
     const action: IAction = {
       raiser: raiser,
@@ -57,8 +49,17 @@ export default class Play extends Component<
     allActions.push({ action: action, round: Round.Preflop });
     // don't need to call this; be carefull when using object or object arry in props and stats, it update them
     // this.props.seat.seatNumber+1, seatNumber get updated, crazy!!!
-    this.setState({ actions: actions, allActions: allActions });
-  };
+
+    this.state = {
+      myHand: [] as ICard[],
+      board: [] as ICard[],
+      actions: actions,
+      allActions: allActions,
+      currentRound: Round.Preflop,
+      callerModalVisible: false
+    };
+  }
+
   handleMyHand = (card: ICard, cardId: number) => {
     const cards = this.state.myHand || [];
     cards[cardId] = card;

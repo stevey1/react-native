@@ -19,7 +19,6 @@ export default class Seat extends Component<
   {
     seatedPlayers: IPlayer[];
     dealerSeatIndex: number;
-    bigBlind: number;
 
     playerModalVisible: boolean;
     modalForSeatNumber: number;
@@ -28,27 +27,29 @@ export default class Seat extends Component<
     redirectToPlay: boolean;
   }
 > {
-  state = {
-    seatedPlayers: [] as IPlayer[],
-    dealerSeatIndex: 0,
-    bigBlind: this.props.bigBlind,
-
-    playerModalVisible: false,
-    modalForSeatNumber: -1,
-    seatModalVisible: false,
-
-    redirectToPlay: false
-  };
-  componentDidMount = () => {
+  constructor(props: {
+    navigation: any;
+    existingSeats: ISeat[];
+    handleSeatsChange: (seats: ISeat[]) => void;
+  }) {
+    super(props);
     let players = [] as IPlayer[];
     this.props.existingSeats.forEach(seat => {
       players[seat.seatNumber] = seat.player;
     });
-    this.setState({
+
+    this.state = {
       seatedPlayers: players,
-      dealerSeatIndex: this.props.existingSeats.length - 1
-    });
-  };
+      dealerSeatIndex: this.props.existingSeats.length - 1,
+
+      playerModalVisible: false,
+      modalForSeatNumber: -1,
+      seatModalVisible: false,
+
+      redirectToPlay: false
+    };
+  }
+
   handleFinishSeating = () => {
     const seatSelected = this.state.seatedPlayers
       .map((p, index) => ({
