@@ -22,10 +22,10 @@
   "action": {
     "amount": "量",
     "seat": "座位",
-    "pot": "锅 ",
-    "raise": "涨",
-    "by": "by ",
-    "checkRaise": "陷阱",
+    "pot": "锅",
+    "raise": "B",
+    "by": "by",
+    "checkRaise": "CR 陷阱",
     "players": "人数"
   },
   "seat": {

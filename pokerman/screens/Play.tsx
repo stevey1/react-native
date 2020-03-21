@@ -179,44 +179,53 @@ export default class Play extends Component<
   };
   displayRoundAction = (round: Round) => {
     const action = this.state.actions[round];
-    return (
-      <Text
-        key={"a" + round}
-        style={
-          action.checkRaise && !action.raiser.player.isMe
-            ? { color: "#ff0000", fontSize: 18 }
-            : action.raises > 1 && !action.raiser.player.isMe
-            ? { color: "#ff0000", fontSize: 16 }
-            : { fontSize: 14 }
-        }
-      >
-        {(action.checkRaise && !action.raiser.player.isMe
-          ? "***" + i18n.t("action.checkRaise") + "***"
-          : "") +
-          action.raiser.player.name +
-          ((!action.raiser.player.isMe &&
-            "_" + RaiseType[action.raiser.player.raiseType]) ||
-            "") +
-          " " +
-          action.raises +
-          i18n.t("action.raise") +
-          " " +
-          i18n.t("action.by") +
-          " " +
-          action.amount +
-          "$. " +
-          i18n.t("action.players") +
-          ": " +
-          (action.callers.length + 1) +
-          action.callers.reduce(
-            (p, c) =>
-              p +
-              ((p !== " - " && ", ") || "") +
-              c.player.name +
-              (c.player.isMe ? "" : "_" + CallType[c.player.callType]),
-            " - "
-          )}
-      </Text>
+    return action ? (
+      <View>
+        <Text
+          key={"c" + round}
+          style={
+            action.checkRaise && !action.raiser.player.isMe
+              ? { color: "#ff0000", fontSize: 16 }
+              : {}
+          }
+        >
+          {action.checkRaise && !action.raiser.player.isMe
+            ? "***" + i18n.t("action.checkRaise") + "***"
+            : ""}
+        </Text>
+        <Text
+          key={"a" + round}
+          style={
+            action.raises > 1 && !action.raiser.player.isMe
+              ? { color: "#ff0000", fontSize: 16 }
+              : { fontSize: 14 }
+          }
+        >
+          {action.raiser.player.name +
+            ((!action.raiser.player.isMe &&
+              "_" + RaiseType[action.raiser.player.raiseType]) ||
+              "") +
+            " " +
+            action.raises +
+            i18n.t("action.raise") +
+            " " +
+            action.amount +
+            "$; " +
+            i18n.t("action.players") +
+            ": " +
+            (action.callers.length + 1) +
+            action.callers.reduce(
+              (p, c) =>
+                p +
+                ((p !== " - " && ", ") || "") +
+                c.player.name +
+                (c.player.isMe ? "" : "_" + CallType[c.player.callType]),
+              " - "
+            )}
+        </Text>
+      </View>
+    ) : (
+      <View></View>
     );
   };
   displayPot = () => {
@@ -351,6 +360,7 @@ export default class Play extends Component<
             handleAction={a => this.handleAction(a, round)}
           ></Action>
         </View>
+        {this.displayRoundAction(round)}
       </View>
     );
   };
@@ -378,6 +388,8 @@ export default class Play extends Component<
             handleAction={a => this.handleAction(a, Round.Preflop)}
           ></Action>
         </View>
+        {this.displayRoundAction(Round.Preflop)}
+
         {this.showCurrentRound()}
         {this.showCallerButton()}
         {this.showCaller()}
@@ -389,7 +401,6 @@ export default class Play extends Component<
           <Text>{i18n.t("play.flop")}:</Text>
           {this.displayCards(this.state.board)}
         </View>
-        <View>{this.displayAction()}</View>
         <View>{this.displayPot()}</View>
       </ScrollView>
     );
