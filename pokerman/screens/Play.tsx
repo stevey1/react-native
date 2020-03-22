@@ -12,7 +12,12 @@ import {
   getSuitText
 } from "../constants/helper";
 import { PlayType } from "../constants/DataTypes";
-import { getMyHandTip, getBoardTip, getActionTip } from "../constants/master";
+import {
+  getMyHandPreflop,
+  checkBoard,
+  checkMyHand,
+  getActionTip
+} from "../constants/master";
 import MyButton from "../components/MyButton";
 import styles from "./styles";
 
@@ -385,6 +390,14 @@ export default class Play extends Component<
       </View>
     );
   };
+  checkTips = () => {
+    const myHand = this.state.myHand.sort(
+      (c1, c2) => c1.cardNumber - c2.cardNumber
+    );
+    if (myHand.length < 2) return <View></View>;
+
+    return <Text>{getMyHandPreflop(myHand)}</Text>;
+  };
   render() {
     return (
       <ScrollView>
@@ -423,6 +436,7 @@ export default class Play extends Component<
           {this.displayCards(this.state.board)}
         </View>
         <View>{this.displayPot()}</View>
+        {this.checkTips()}
       </ScrollView>
     );
   }

@@ -15,73 +15,120 @@ export const getMyHandPreflop = (cards: ICard[]) => {
       case 10:
       case 9:
       case 8:
-        return "Raise or Call; 50%->A*";
+        return "Raise or call; 50%->A*";
       default:
         return "Only call to grow to bird";
     }
   }
-  if (cards[0].cardNumber === 14) {
-    switch (cards[1].cardNumber) {
+  const isSuited = cards[0].suit === cards[1].suit;
+
+  if (cards[1].cardNumber === 14) {
+    switch (cards[0].cardNumber) {
       case 13:
       case 12:
-        return "Raise or call; 50%-Pokcet";
+        return (
+          "Raise or call; 50%-Pokcet" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       case 11:
       case 10:
-        return "Raise or call; Bigger A?";
+        return (
+          "Raise or call; Bigger A?" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       case 9:
       case 8:
-        return "Small/Raise with postion or call to JJ/QQ bet not bigger A?";
+        return (
+          "Small/Raise with postion or call to JJ/QQ bet not bigger A?" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       default:
-        return "small/raise with position; good to call against JJ/QQ bet";
+        return (
+          "small/raise with position; good to call against JJ/QQ bet" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
     }
   }
-  if (cards[0].cardNumber === 13) {
-    switch (cards[1].cardNumber) {
+  if (cards[1].cardNumber === 13) {
+    switch (cards[0].cardNumber) {
       case 12:
-        return "Raise or call";
+        return (
+          "Raise or call" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       case 11:
-        return "Raise or call medium";
+        return (
+          "Raise or call medium" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       case 10:
-        return "Raise or call small";
+        return (
+          "Raise or call small" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       default:
-        return "call big blind with position";
+        return (
+          "call big blind with position" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
     }
   }
-  if (cards[0].cardNumber === 12) {
-    switch (cards[1].cardNumber) {
+  if (cards[1].cardNumber === 12) {
+    switch (cards[0].cardNumber) {
       case 11:
-        return "rasie or call";
+        return (
+          "rasie or call" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       case 10:
-        return "small rasie or call";
+        return (
+          "small rasie or call" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       case 9:
-        return "call big blind";
+        return (
+          "call big blind" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       default:
         return "";
     }
   }
-  if (cards[0].cardNumber === 11) {
-    switch (cards[1].cardNumber) {
+  if (cards[1].cardNumber === 11) {
+    switch (cards[0].cardNumber) {
       case 10:
-        return "small rasie or call";
+        return (
+          "small rasie or call" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       case 9:
-        return "call big blind";
+        return (
+          "call big blind" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       default:
         return "";
     }
   }
-  if (cards[0].cardNumber === 10) {
-    switch (cards[1].cardNumber) {
+  if (cards[1].cardNumber === 10) {
+    switch (cards[0].cardNumber) {
       case 9:
-        return "call big blind";
+        return (
+          "call big blind" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
 
       default:
         return "";
     }
   }
-  if (cards[0].cardNumber === 9) {
-    switch (cards[1].cardNumber) {
+  if (cards[1].cardNumber === 9) {
+    switch (cards[0].cardNumber) {
       case 8:
-        return "call big blind";
+        return (
+          "call big blind" +
+          ((isSuited && "; with suited preflop potential") || "")
+        );
       default:
         return "";
     }
@@ -95,6 +142,7 @@ export const checkBoard = (cards: ICard[], round: Round) => {
   if (result) results.push(result);
   result = checkBoardStaight(cards);
   if (result) results.push(result);
+  return results;
 };
 export const checkMyHand = (cards: ICard[], myHand: ICard[], round: Round) => {
   let results = [];
