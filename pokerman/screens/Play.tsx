@@ -12,6 +12,7 @@ import {
   getSuitText
 } from "../constants/helper";
 import { PlayType } from "../constants/DataTypes";
+import { getMyHandTip, getBoardTip, getActionTip } from "../constants/master";
 import MyButton from "../components/MyButton";
 import styles from "./styles";
 
@@ -418,7 +419,7 @@ export default class Play extends Component<
           {this.displayCards(this.state.myHand)}
         </View>
         <View style={{ flexDirection: "row" }}>
-          <Text>{i18n.t("play.flop")}:</Text>
+          <Text>{i18n.t("play.board")}:</Text>
           {this.displayCards(this.state.board)}
         </View>
         <View>{this.displayPot()}</View>
