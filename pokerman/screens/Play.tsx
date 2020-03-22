@@ -395,8 +395,19 @@ export default class Play extends Component<
       (c1, c2) => c1.cardNumber - c2.cardNumber
     );
     if (myHand.length < 2) return <View></View>;
+    let tips = [];
+    let result = getMyHandPreflop(myHand);
+    if (result) {
+      tips.push(<Text>{result}</Text>);
+    }
 
-    return <Text>{getMyHandPreflop(myHand)}</Text>;
+    const board = this.state.board;
+    if (board.length < 3) return <View key="p">{tips}</View>;
+    let results = checkBoard(board, this.state.currentRound);
+    results.forEach((r, index) =>
+      tips.push(<Text key={"b" + index}>{r}</Text>)
+    );
+    return <View>{tips}</View>;
   };
   render() {
     return (

@@ -135,11 +135,14 @@ export const getMyHandPreflop = (cards: ICard[]) => {
   }
 };
 export const checkBoard = (cards: ICard[], round: Round) => {
+  cards = cards.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
   let results = [];
   let result = checkBoardPair(cards);
   if (result) results.push(result);
   result = checkBoardFlush(cards, round);
   if (result) results.push(result);
+  if (cards[cards.length - 1].cardNumber === 14)
+    cards = [{ cardNumber: 1, suit: Suit.unknow }, ...cards];
   result = checkBoardStaight(cards);
   if (result) results.push(result);
   return results;
@@ -181,9 +184,9 @@ const checkBoardPair = (cards: ICard[]) => {
   for (let i = cards.length - 2; i >= 0; i--) {
     if (i === 0) {
       if (cards[i].cardNumber === cards[i + 1].cardNumber)
-        return `${
-          cards[cards.length - 1]
-        } Full house - prepare to fold, don't draw`;
+        return `${getNumberText(
+          cards[cards.length - 1].cardNumber
+        )} Full house - prepare to fold, don't draw`;
       break;
     }
 
@@ -193,9 +196,9 @@ const checkBoardPair = (cards: ICard[]) => {
     )
       return "Four kind - prepare to fold.";
     if (cards[i].cardNumber === cards[i + 1].cardNumber)
-      return `${
-        cards[cards.length - 1]
-      } Full house - prepare to fold, don't draw`;
+      return `${getNumberText(
+        cards[cards.length - 1].cardNumber
+      )} Full house - prepare to fold, don't draw`;
   }
 };
 const checkBoardStaight = (cards: ICard[]) => {
@@ -205,7 +208,7 @@ const checkBoardStaight = (cards: ICard[]) => {
   }
 };
 
-const checkBoardStraightType = (cards: ICard[], howMany: number, i: number) => {
+const checkBoardStraightType = (cards: ICard[], i: number, howMany: number) => {
   let result: string;
   let cardGap: number;
   switch (howMany) {
@@ -217,16 +220,18 @@ const checkBoardStraightType = (cards: ICard[], howMany: number, i: number) => {
         return (
           result ||
           `${getNumberText(
-            (cards[i + 2].cardNumber > 14 && 14) || cards[i + 2].cardNumber
+            (cards[i + 2].cardNumber + 2 > 14 && 14) ||
+              cards[i + 2].cardNumber + 2
           )} high easy straight `
         );
       }
       if (cardGap === 3) {
-        result = checkBoardStraightType(cards, 4, i - 1);
+        result = checkBoardStraightType(cards, i - 1, 4);
         return (
           result ||
           `${getNumberText(
-            (cards[i + 1].cardNumber > 14 && 14) || cards[i + 1].cardNumber
+            (cards[i + 2].cardNumber + 1 > 14 && 14) ||
+              cards[i + 2].cardNumber + 1
           )} high easier straight`
         );
       }
@@ -237,14 +242,16 @@ const checkBoardStraightType = (cards: ICard[], howMany: number, i: number) => {
         ""
       );
     case 4:
+      const highNumber = cards[i + 3].cardNumber;
+
       if (i < 0 || i > cards.length - 4) return "";
-      cardGap = cards[i + 3].cardNumber - cards[i].cardNumber;
+      cardGap = highNumber - cards[i].cardNumber;
       if (cardGap === 3) {
-        result = checkBoardStraightType(cards, 5, i - 1);
+        result = checkBoardStraightType(cards, i - 1, 5);
         return (
           result ||
           `${getNumberText(
-            (cards[i + 2].cardNumber > 14 && 14) || cards[i + 2].cardNumber
+            (highNumber + 2 > 14 && 14) || highNumber + 2
           )} high straight-4`
         );
       }
@@ -252,7 +259,10 @@ const checkBoardStraightType = (cards: ICard[], howMany: number, i: number) => {
       return (
         (cardGap === 4 &&
           `${getNumberText(
-            (cards[i + 1].cardNumber > 14 && 14) || cards[i + 1].cardNumber
+            (highNumber + (highNumber - cards[i + 1].cardNumber === 2 ? 2 : 1) >
+              14 &&
+              14) ||
+              highNumber + (highNumber - cards[i + 1].cardNumber === 2 ? 2 : 1)
           )} high straight-4`) ||
         ""
       );
@@ -262,7 +272,8 @@ const checkBoardStraightType = (cards: ICard[], howMany: number, i: number) => {
       return (
         (cardGap === 5 &&
           `${getNumberText(
-            (cards[i + 1].cardNumber > 14 && 14) || cards[i + 1].cardNumber
+            (cards[i + 4].cardNumber + 2 > 14 && 14) ||
+              cards[i + 4].cardNumber + 2
           )} high straight-5`) ||
         ""
       );
@@ -423,10 +434,10 @@ const checkMyStraightDraw = (cards: ICard[], myHand: ICard[], i: number) => {
 
   if (i < 0 || i > cards.length - 4) return "";
 
-  cardGap = cards[i + 3].cardNumber - cards[i].cardNumber;
+  cardGap = highNumber - cards[i].cardNumber;
   if (cardGap === 3) {
     if (i === cards.length - 4) {
-      if (cards[i + 3].cardNumber === myHand[1].cardNumber) {
+      if (highNumber === myHand[1].cardNumber) {
         if (cards[i + 2].cardNumber === myHand[0].cardNumber)
           return `draw 28% straight/top pair(2) draw `;
         else return `22% O/E straight/top pair draw `;
