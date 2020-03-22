@@ -414,13 +414,15 @@ export default class Play extends Component<
           <Text>{"Board: " + result}</Text>
         </View>
       );
-    result = checkMyHand(board, myHand, this.state.currentRound).join(";");
-    if (result)
-      tips.push(
-        <View key="m">
-          <Text>{"I have: " + result}</Text>
-        </View>
-      );
+    if (myHand.length == 2) {
+      result = checkMyHand(board, myHand, this.state.currentRound).join("; ");
+      if (result)
+        tips.push(
+          <View key="m">
+            <Text>{"I have: " + result}</Text>
+          </View>
+        );
+    }
     return <View>{tips}</View>;
   };
   render() {

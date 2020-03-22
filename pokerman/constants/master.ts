@@ -399,9 +399,9 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[], round: Round) => {
           return myHand[0].cardNumber === cards[cards.length - 2].cardNumber
             ? `30% flush/top pair(2) draw `
             : `24% flush/top pair draw`;
-        else return `flush draw 18%`;
+        else return `18% flush draw`;
       } else if (suit === myHand[0].suit || suit === myHand[1].suit) {
-        return "4 cards flush draw 18%";
+        return "18% 4 cards flush draw";
       }
       return "";
   }
@@ -425,25 +425,33 @@ const checkMyStraightFrom = (cards: ICard[], i: number) => {
   if (i < 0 || i > cards.length - 5) return "";
 
   cardGap = cards[i + 4].cardNumber - cards[i].cardNumber;
-  if (cardGap === 4) return `${cards[i + 4].cardNumber} high straight`;
+  if (cardGap === 4)
+    return `${getNumberText(cards[i + 4].cardNumber)} high straight`;
   return "";
 };
 const checkMyStraightDraw = (cards: ICard[], myHand: ICard[], i: number) => {
   let cardGap: number;
 
   if (i < 0 || i > cards.length - 4) return "";
-
+  const highNumber = cards[i + 3].cardNumber;
   cardGap = highNumber - cards[i].cardNumber;
   if (cardGap === 3) {
-    if (i === cards.length - 4) {
-      if (highNumber === myHand[1].cardNumber) {
-        if (cards[i + 2].cardNumber === myHand[0].cardNumber)
-          return `draw 28% straight/top pair(2) draw `;
-        else return `22% O/E straight/top pair draw `;
-      } else return `16% O/E straight draw `;
-    } else return `16% O/E straight draw`;
+    if (cards[cards.length - 1].cardNumber === myHand[1].cardNumber) {
+      if (cards[cards.length - 2].cardNumber === myHand[0].cardNumber)
+        return `draw 28% O/E straight/top pair(2) draw `;
+      else return `22% O/E straight/top pair draw `;
+    }
+    return `16% O/E straight draw `;
   }
-  if (cardGap === 4) return `8% straight draw`;
+  if (cardGap === 4) {
+    if (cards[cards.length - 1].cardNumber === myHand[1].cardNumber) {
+      if (cards[cards.length - 2].cardNumber === myHand[0].cardNumber)
+        return `draw 20% straight/top pair(2) draw `;
+      else return `14% straight/top pair draw `;
+    }
+    return `8% straight draw`;
+  }
+
   return "";
 };
 
