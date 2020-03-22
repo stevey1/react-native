@@ -242,9 +242,8 @@ const checkBoardStraightType = (cards: ICard[], i: number, howMany: number) => {
         ""
       );
     case 4:
-      const highNumber = cards[i + 3].cardNumber;
-
       if (i < 0 || i > cards.length - 4) return "";
+      const highNumber = cards[i + 3].cardNumber;
       cardGap = highNumber - cards[i].cardNumber;
       if (cardGap === 3) {
         result = checkBoardStraightType(cards, i - 1, 5);
@@ -268,7 +267,7 @@ const checkBoardStraightType = (cards: ICard[], i: number, howMany: number) => {
       );
     case 5:
       if (i < 0 || i > cards.length - 5) return "";
-      cardGap = cards[i].cardNumber - cards[i + 4].cardNumber;
+      cardGap = cards[i + 4].cardNumber - cards[i].cardNumber;
       return (
         (cardGap === 5 &&
           `${getNumberText(
