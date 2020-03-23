@@ -7,17 +7,17 @@ export const getMyHandPreflop = (cards: ICard[]) => {
       case 14:
         return "3XPot+";
       case 13:
-        return "Big fire 3XPot+ and fold; 80%->A*; Not call all in->AA";
+        return "Big fire 3XPot+ and fold on A; 80%->A*; Not call all in->AA";
       case 12:
-        return "Fire 55-75 and fold; 50%->AK and prepair to fold; Not call in->AA/KK";
+        return "Fire 55-75 and fold on A; 50%->AK and prepair to fold; Not call in->AA/KK";
       case 11:
-        return "Fire 55 and fold; 50%->A*; Not call in";
+        return "Fire 55 and fold on AK; 50%->A*; Not call in";
       case 10:
       case 9:
       case 8:
         return "Raise or call; 50%->A*";
       default:
-        return "Only call to grow to bird";
+        return "call to grow to bird";
     }
   }
   const isSuited = cards[0].suit === cards[1].suit;
@@ -141,8 +141,6 @@ export const checkBoard = (cards: ICard[], round: Round) => {
   if (result) results.push(result);
   result = checkBoardFlush(cards, round);
   if (result) results.push(result);
-  if (cards[cards.length - 1].cardNumber === 14)
-    cards = [{ cardNumber: 1, suit: Suit.unknow }, ...cards];
   result = checkBoardStaight(cards);
   if (result) results.push(result);
   return results;
@@ -202,51 +200,56 @@ const checkBoardPair = (cards: ICard[]) => {
   }
 };
 const checkBoardStaight = (cards: ICard[]) => {
+  let cardNumbers = [...new Set(cards.map(c => c.cardNumber))];
+  if (cards[cards.length - 1].cardNumber === 14)
+    cardNumbers = [1, ...cardNumbers];
   for (let i = cards.length - 3; i >= 0; i--) {
-    const result = checkBoardStraightType(cards, i, 3);
+    const result = checkBoardStraightType(cardNumbers, i, 3);
     if (result) return result;
   }
 };
 
-const checkBoardStraightType = (cards: ICard[], i: number, howMany: number) => {
+const checkBoardStraightType = (
+  carNumbers: number[],
+  i: number,
+  howMany: number
+) => {
   let result: string;
   let cardGap: number;
   switch (howMany) {
     case 3:
-      if (i < 0 || i > cards.length - 3) return "";
+      if (i < 0 || i > carNumbers.length - 3) return "";
 
-      cardGap = cards[i + 2].cardNumber - cards[i].cardNumber;
+      cardGap = carNumbers[i + 2] - carNumbers[i];
       if (cardGap === 2) {
         return (
           result ||
           `${getNumberText(
-            (cards[i + 2].cardNumber + 2 > 14 && 14) ||
-              cards[i + 2].cardNumber + 2
+            (carNumbers[i + 2] + 2 > 14 && 14) || carNumbers[i + 2] + 2
           )} high easy straight `
         );
       }
       if (cardGap === 3) {
-        result = checkBoardStraightType(cards, i - 1, 4);
+        result = checkBoardStraightType(carNumbers, i - 1, 4);
         return (
           result ||
           `${getNumberText(
-            (cards[i + 2].cardNumber + 1 > 14 && 14) ||
-              cards[i + 2].cardNumber + 1
+            (carNumbers[i + 2] + 1 > 14 && 14) || carNumbers[i + 2] + 1
           )} high easier straight`
         );
       }
 
       return (
         (cardGap === 4 &&
-          `${getNumberText(cards[i].cardNumber)} high harder(3) straight`) ||
+          `${getNumberText(carNumbers[i])} high harder(3) straight`) ||
         ""
       );
     case 4:
-      if (i < 0 || i > cards.length - 4) return "";
-      const highNumber = cards[i + 3].cardNumber;
-      cardGap = highNumber - cards[i].cardNumber;
+      if (i < 0 || i > carNumbers.length - 4) return "";
+      const highNumber = carNumbers[i + 3];
+      cardGap = highNumber - carNumbers[i];
       if (cardGap === 3) {
-        result = checkBoardStraightType(cards, i - 1, 5);
+        result = checkBoardStraightType(carNumbers, i - 1, 5);
         return (
           result ||
           `${getNumberText(
@@ -258,21 +261,19 @@ const checkBoardStraightType = (cards: ICard[], i: number, howMany: number) => {
       return (
         (cardGap === 4 &&
           `${getNumberText(
-            (highNumber + (highNumber - cards[i + 1].cardNumber === 2 ? 2 : 1) >
-              14 &&
+            (highNumber + (highNumber - carNumbers[i + 1] === 2 ? 2 : 1) > 14 &&
               14) ||
-              highNumber + (highNumber - cards[i + 1].cardNumber === 2 ? 2 : 1)
+              highNumber + (highNumber - carNumbers[i + 1] === 2 ? 2 : 1)
           )} high straight-4`) ||
         ""
       );
     case 5:
-      if (i < 0 || i > cards.length - 5) return "";
-      cardGap = cards[i + 4].cardNumber - cards[i].cardNumber;
+      if (i < 0 || i > carNumbers.length - 5) return "";
+      cardGap = carNumbers[i + 4] - carNumbers[i];
       return (
         (cardGap === 5 &&
           `${getNumberText(
-            (cards[i + 4].cardNumber + 2 > 14 && 14) ||
-              cards[i + 4].cardNumber + 2
+            (carNumbers[i + 4] + 2 > 14 && 14) || carNumbers[i + 4] + 2
           )} high straight-5`) ||
         ""
       );
@@ -387,7 +388,7 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[], round: Round) => {
     case 7:
       return `flush board, A?`;
     case 5:
-      if (suit === myHand[0].suit && myHand[0].suit === myHand[1].suit)
+      if (suit === myHand[0].suit && suit === myHand[1].suit)
         return `flush, I don't fold`;
       else if (suit === myHand[0].suit || suit === myHand[1].suit)
         return `4 cards flush, A?`;
@@ -404,48 +405,55 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[], round: Round) => {
         return "18% 4 cards flush draw";
       }
       return "";
+    default:
+      return;
   }
 };
 const checkMyStraight = (cards: ICard[], myHand: ICard[]) => {
-  if (cards[cards.length - 1].cardNumber === 14)
-    cards = [{ cardNumber: 1, suit: Suit.unknow }, ...cards];
-  for (let i = cards.length - 5; i >= 0; i--) {
-    const result = checkMyStraightFrom(cards, i);
+  let cardNumbers = [...new Set(cards.map(c => c.cardNumber))];
+  if (cardNumbers[cards.length - 1] === 14) cardNumbers = [1, ...cardNumbers];
+  for (let i = cardNumbers.length - 5; i >= 0; i--) {
+    const result = checkMyStraightFrom(cardNumbers, i);
     if (result) return result;
   }
-  for (let i = cards.length - 4; i >= 0; i--) {
-    const result = checkMyStraightDraw(cards, myHand, i);
+  for (let i = cardNumbers.length - 4; i >= 0; i--) {
+    const result = checkMyStraightDraw(cardNumbers, myHand, i);
     if (result) return result;
   }
-};
-
-const checkMyStraightFrom = (cards: ICard[], i: number) => {
-  let cardGap: number;
-
-  if (i < 0 || i > cards.length - 5) return "";
-
-  cardGap = cards[i + 4].cardNumber - cards[i].cardNumber;
-  if (cardGap === 4)
-    return `${getNumberText(cards[i + 4].cardNumber)} high straight`;
   return "";
 };
-const checkMyStraightDraw = (cards: ICard[], myHand: ICard[], i: number) => {
+
+const checkMyStraightFrom = (cardNumbers: number[], i: number) => {
   let cardGap: number;
 
-  if (i < 0 || i > cards.length - 4) return "";
-  const highNumber = cards[i + 3].cardNumber;
-  cardGap = highNumber - cards[i].cardNumber;
+  if (i < 0 || i > cardNumbers.length - 5) return "";
+
+  cardGap = cardNumbers[i + 4] - cardNumbers[i];
+  if (cardGap === 4)
+    return `${getNumberText(cardNumbers[i + 4])} high straight`;
+  return "";
+};
+const checkMyStraightDraw = (
+  cardNumbers: number[],
+  myHand: ICard[],
+  i: number
+) => {
+  let cardGap: number;
+
+  if (i < 0 || i > cardNumbers.length - 4) return "";
+  const highNumber = cardNumbers[i + 3];
+  cardGap = highNumber - cardNumbers[i];
   if (cardGap === 3) {
-    if (cards[cards.length - 1].cardNumber === myHand[1].cardNumber) {
-      if (cards[cards.length - 2].cardNumber === myHand[0].cardNumber)
+    if (cardNumbers[cardNumbers.length - 1] === myHand[1].cardNumber) {
+      if (cardNumbers[cardNumbers.length - 2] === myHand[0].cardNumber)
         return `draw 28% O/E straight/top pair(2) draw `;
       else return `22% O/E straight/top pair draw `;
     }
     return `16% O/E straight draw `;
   }
   if (cardGap === 4) {
-    if (cards[cards.length - 1].cardNumber === myHand[1].cardNumber) {
-      if (cards[cards.length - 2].cardNumber === myHand[0].cardNumber)
+    if (cardNumbers[cardNumbers.length - 1] === myHand[1].cardNumber) {
+      if (cardNumbers[cardNumbers.length - 2] === myHand[0].cardNumber)
         return `draw 20% straight/top pair(2) draw `;
       else return `14% straight/top pair draw `;
     }
