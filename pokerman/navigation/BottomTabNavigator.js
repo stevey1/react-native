@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBarIcon from "../components/TabBarIcon";
 import Seat from "../screens/Seat";
@@ -10,19 +10,120 @@ import i18n from "../i18n";
 import { seats as defaultSeats } from "../constants/helper";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = "game";
+const INITIAL_ROUTE_NAME = "player";
+let playKey = 1;
 
-export default class BottomTabNavigator extends Component {
-  constructor(props) {
-    super(props);
-    const { navigation, route } = props;
-    navigation.setOptions({
-      headerTitle: this.getHeaderTitle(route),
-      headerStyle: {
-        height: 40
-      }
-      // headerShown: false
-    });
+export default function BottomTabNavigator({ navigation, route }) {
+  // Set the header title on the parent stack navigator depending on the
+  // currently active tab. Learn more in the documentation:
+  // https://reactnavigation.org/docs/en/screen-options-resolution.html
+  const [seats, setSeats] = useState(defaultSeats);
+  const [smallBlind, setSmallBlind] = useState(1);
+  const [bigBlind, setBigBlind] = useState(2);
+  const [straddle, setStraddle] = useState(5);
+  navigation.setOptions({
+    headerTitle: getHeaderTitle(route),
+    headerStyle: {
+      height: 40
+    },
+    headerShown: false
+  });
+  playKey++;
+
+  return (
+    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+      <BottomTab.Screen
+        name="game"
+        options={({ route }) => ({
+          //title: route.params.name,
+          title: i18n.t("navigation.game"), //"Seat Setup",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-person-add" />
+          )
+        })}
+      >
+        {props => (
+          <Game
+            {...props}
+            smallBlind={smallBlind}
+            bigBlind={bigBlind}
+            straddle={straddle}
+            handleGameChange={(smallBlind, bigBlind, straddle) => {
+              setSmallBlind(smallBlind);
+              setBigBlind(bigBlind);
+              setStraddle(straddle);
+            }}
+          />
+        )}
+      </BottomTab.Screen>
+      <BottomTab.Screen
+        name="seat"
+        options={({ route }) => ({
+          title: i18n.t("navigation.seat"), //"Seat Setup",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-person-add" />
+          )
+        })}
+      >
+        {props => (
+          <Seat
+            {...props}
+            existingSeats={seats}
+            handleSeatsChange={seats => setSetSeats(seats)}
+          />
+        )}
+      </BottomTab.Screen>
+
+      <BottomTab.Screen
+        name="play"
+        options={{
+          title: i18n.t("navigation.play"),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-headset" />
+          )
+        }}
+      >
+        {props => (
+          <Play
+            key={playKey.toString()}
+            {...props}
+            bigBlind={bigBlind}
+            seats={seats}
+          />
+        )}
+      </BottomTab.Screen>
+
+      <BottomTab.Screen
+        name="player"
+        component={Player}
+        options={{
+          title: i18n.t("navigation.player"),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-person" />
+          )
+        }}
+      />
+
+      <BottomTab.Screen
+        name="timer"
+        component={Timer}
+        options={{
+          title: i18n.t("navigation.timer"),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-clock" />
+          )
+        }}
+      />
+    </BottomTab.Navigator>
+  );
+}
+
+function getHeaderTitle(route) {
+  const routeName =
+    route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+  return i18n.t("navigation." + routeName);
+}
+/*
     this.state = {
       seats: defaultSeats,
       smallBlind: 1,
@@ -31,103 +132,9 @@ export default class BottomTabNavigator extends Component {
     };
   }
   playKey = 1;
-  getHeaderTitle = route => {
-    const routeName =
-      route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-    return i18n.t("navigation." + routeName);
-  };
 
   render() {
     this.playKey += 1;
-    return (
-      <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-        <BottomTab.Screen
-          name="game"
-          options={({ route }) => ({
-            //title: route.params.name,
-            title: i18n.t("navigation.game"), //"Seat Setup",
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} name="md-person-add" />
-            )
-          })}
-        >
-          {props => (
-            <Game
-              {...props}
-              smallBlind={this.state.smallBlind}
-              bigBlind={this.state.bigBlind}
-              straddle={this.state.straddle}
-              handleGameChange={(smallBlind, bigBlind, straddle) =>
-                this.setState({
-                  smallBlind: smallBlind,
-                  bigBlind: bigBlind,
-                  straddle: straddle
-                })
-              }
-            />
-          )}
-        </BottomTab.Screen>
-        <BottomTab.Screen
-          name="seat"
-          options={({ route }) => ({
-            title: i18n.t("navigation.seat"), //"Seat Setup",
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} name="md-person-add" />
-            )
-          })}
-        >
-          {props => (
-            <Seat
-              {...props}
-              existingSeats={this.state.seats}
-              handleSeatsChange={s =>
-                this.setState({
-                  seats: s
-                })
-              }
-            />
-          )}
-        </BottomTab.Screen>
-        <BottomTab.Screen
-          name="player"
-          component={Player}
-          options={{
-            title: i18n.t("navigation.player"),
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} name="md-person" />
-            )
-          }}
-        />
-        <BottomTab.Screen
-          name="play"
-          options={{
-            title: i18n.t("navigation.play"),
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} name="md-headset" />
-            )
-          }}
-        >
-          {props => (
-            <Play
-              key={this.playKey.toString()}
-              {...props}
-              bigBlind={this.state.bigBlind}
-              seats={this.state.seats}
-            />
-          )}
-        </BottomTab.Screen>
 
-        <BottomTab.Screen
-          name="timer"
-          component={Timer}
-          options={{
-            title: i18n.t("navigation.timer"),
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} name="md-clock" />
-            )
-          }}
-        />
-      </BottomTab.Navigator>
-    );
-  }
-}
+
+*/
