@@ -1,13 +1,56 @@
 import { ICard, Round, IAction, Suit } from "./DataTypes";
 import { getSuitText, getNumberText } from "./helper";
-export const getMyHandPreflop = (cards: ICard[]) => {
+export const getMyHandPreflop = (
+  cards: ICard[],
+  betOrder: number,
+  players: number,
+  bigBlind: number,
+  action: IAction
+) => {
   //Pocket pair
   if (cards[0].cardNumber === cards[1].cardNumber) {
     switch (cards[0].cardNumber) {
       case 14:
-        return "3XPot+";
+        if (betOrder === 0)
+          return `try check raise or raise ${bigBlind *
+            (players - 1) *
+            2}-${bigBlind * (players - 1) * 3}`;
+        if (action.raises > 0)
+          return `you have raiser, need to re-raise to kill bird: ${action.amount *
+            (action.callers.length + 1) *
+            4},  more if you have calling machine`;
+        else if (betOrder >= (players + 1) / 2)
+          return `seem table is tight. raise: ${action.amount *
+            (action.callers.length + 1) *
+            4}`;
+        else
+          return `try check raise or raise ${bigBlind *
+            (players - 1) *
+            2}-${bigBlind * (players - 1) * 3}`;
       case 13:
-        return "Big fire 3XPot+ and fold on A; 80%->A*; Not call all in->AA";
+        if (betOrder === 0)
+          return `try check raise or raise ${bigBlind *
+            (players - 1) *
+            2}-${bigBlind * (players - 1) * 3}`;
+        if (action.raises > 0)
+          if (
+            action.raises > 2 ||
+            action.checkRaise ||
+            action.amount > 40 * bigBlind
+          )
+            return "seams AA on board, call to see";
+          else
+            return `you have raiser, need to re-raise to kill bird: ${action.amount *
+              (action.callers.length + 1) *
+              4},  more if you have calling machine`;
+        else if (betOrder >= (players + 1) / 2)
+          return `seem table is tight. raise: ${action.amount *
+            (action.callers.length + 1) *
+            4}`;
+        else
+          return `try check raise or raise ${bigBlind *
+            (players - 1) *
+            2}-${bigBlind * (players - 1) * 3}`;
       case 12:
         return "Fire 55-75 and fold on A; 50%->AK and prepair to fold; Not call in->AA/KK";
       case 11:

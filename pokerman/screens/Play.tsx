@@ -41,6 +41,7 @@ export default class Play extends Component<
     allActions: IActionHistory[];
     currentRound: Round;
     callerModalVisible: boolean;
+    myPreFlopBetOrder: number;
   }
 > {
   state = {
@@ -49,7 +50,8 @@ export default class Play extends Component<
     actions: [] as IAction[],
     allActions: [] as IActionHistory[],
     currentRound: Round.Preflop,
-    callerModalVisible: false
+    callerModalVisible: false,
+    myPreFlopBetOrder: 0
   };
   constructor(props: { bigBlind: number; seats: ISeat[] }) {
     super(props);
@@ -75,7 +77,8 @@ export default class Play extends Component<
       actions: actions,
       allActions: allActions,
       currentRound: Round.Preflop,
-      callerModalVisible: false
+      callerModalVisible: false,
+      myPreFlopBetOrder: 0
     };
   }
 
@@ -398,7 +401,16 @@ export default class Play extends Component<
     const board = this.state.board;
     let result = "";
     if (board.length < 3) {
-      result = myHand.length < 2 ? "" : getMyHandPreflop(myHand);
+      result =
+        myHand.length < 2
+          ? ""
+          : getMyHandPreflop(
+              myHand,
+              this.state.myPreFlopBetOrder,
+              this.props.seats.length,
+              this.props.bigBlind,
+              this.state.actions[Round.Preflop]
+            );
       return (
         <View key="p">
           <Text>{result}</Text>
