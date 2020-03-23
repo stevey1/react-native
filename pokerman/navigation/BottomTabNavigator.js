@@ -16,7 +16,13 @@ export default class BottomTabNavigator extends Component {
   constructor(props) {
     super(props);
     const { navigation, route } = props;
-    navigation.setOptions({ headerTitle: this.getHeaderTitle(route) });
+    navigation.setOptions({
+      headerTitle: this.getHeaderTitle(route),
+      headerStyle: {
+        height: 40
+      }
+      // headerShown: false
+    });
     this.state = {
       seats: defaultSeats,
       smallBlind: 1,
@@ -37,12 +43,13 @@ export default class BottomTabNavigator extends Component {
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
         <BottomTab.Screen
           name="game"
-          options={{
+          options={({ route }) => ({
+            //title: route.params.name,
             title: i18n.t("navigation.game"), //"Seat Setup",
             tabBarIcon: ({ focused }) => (
               <TabBarIcon focused={focused} name="md-person-add" />
             )
-          }}
+          })}
         >
           {props => (
             <Game
@@ -62,12 +69,12 @@ export default class BottomTabNavigator extends Component {
         </BottomTab.Screen>
         <BottomTab.Screen
           name="seat"
-          options={{
+          options={({ route }) => ({
             title: i18n.t("navigation.seat"), //"Seat Setup",
             tabBarIcon: ({ focused }) => (
               <TabBarIcon focused={focused} name="md-person-add" />
             )
-          }}
+          })}
         >
           {props => (
             <Seat
