@@ -1,5 +1,7 @@
 import { ICard, Round, IAction, Suit } from "./DataTypes";
 import { getSuitText, getNumberText } from "./helper";
+import i18n from "../i18n";
+
 export const getMyHandPreflop = (
   cards: ICard[],
   betOrder: number,
@@ -11,56 +13,62 @@ export const getMyHandPreflop = (
   if (cards[0].cardNumber === cards[1].cardNumber) {
     switch (cards[0].cardNumber) {
       case 14:
-        if (betOrder === 0)
-          return `try check raise or raise ${bigBlind *
-            (players - 1) *
-            2}-${bigBlind * (players - 1) * 3}`;
-        if (action.raises > 0)
-          return `you have raiser, need to re-raise to kill bird: ${action.amount *
-            (action.callers.length + 1) *
-            4},  more if you have calling machine`;
-        else if (betOrder >= (players + 1) / 2)
-          return `seem table is tight. raise: ${action.amount *
-            (action.callers.length + 1) *
-            4}`;
-        else
-          return `try check raise or raise ${bigBlind *
-            (players - 1) *
-            2}-${bigBlind * (players - 1) * 3}`;
-      case 13:
-        if (betOrder === 0)
-          return `try check raise or raise ${bigBlind *
-            (players - 1) *
-            2}-${bigBlind * (players - 1) * 3}`;
-        if (action.raises > 0)
-          if (
-            action.raises > 2 ||
-            action.checkRaise ||
-            action.amount > 40 * bigBlind
-          )
-            return "seams AA on board, call to see";
+        if (action.raises === 0) {
+          if (betOrder <= (players - 1) / 2)
+            return i18n.t("aa-early-position", {
+              amount1: bigBlind * (players - 1) * 2,
+              amount2: bigBlind * (players - 1) * 3
+            });
           else
-            return `you have raiser, need to re-raise to kill bird: ${action.amount *
-              (action.callers.length + 1) *
-              4},  more if you have calling machine`;
-        else if (betOrder >= (players + 1) / 2)
-          return `seem table is tight. raise: ${action.amount *
-            (action.callers.length + 1) *
-            4}`;
-        else
-          return `try check raise or raise ${bigBlind *
-            (players - 1) *
-            2}-${bigBlind * (players - 1) * 3}`;
+            return i18n.t("aa-later-position", {
+              amount: bigBlind * (players - 1) * 2
+            });
+        }
+        return i18n.t("claim-my-pot", {
+          amount: action.amount * (action.callers.length + 1) * 4
+        });
+      case 13:
+        if (action.raises === 0) {
+          if (betOrder <= (players - 1) / 2)
+            return i18n.t("kk-early-position", {
+              amount1: bigBlind * (players - 1) * 2,
+              amount2: bigBlind * (players - 1) * 3
+            });
+          else
+            return i18n.t("kk-later-position", {
+              amount1: bigBlind * (players - 1) * 2
+            });
+        }
+        if (
+          action.raises > 2 ||
+          action.checkRaise ||
+          action.amount > 40 * bigBlind
+        )
+          return i18n.t("check-or-fight");
+        return i18n.t("claim-my-pot", {
+          amount: action.amount * (action.callers.length + 1) * 4
+        });
+
       case 12:
-        return "Fire 55-75 and fold on A; 50%->AK and prepair to fold; Not call in->AA/KK";
+        if (action.raises === 0) {
+          return i18n.t("qq-no-raiser");
+        }
+        if (action.amount > 35) return i18n.t("call-to-see");
+        if (action.amount > 75) return i18n.t("big-pair-bet");
+        return i18n.t("raise-to", { amount: 75 });
       case 11:
-        return "Fire 55 and fold on AK; 50%->A*; Not call in";
+        if (action.raises === 0) {
+          return i18n.t("jj-no-raiser");
+        }
+        if (action.amount > 35) return i18n.t("call-to-see");
+        if (action.amount > 75) return i18n.t("big-pair-bet");
+        return i18n.t("raise-to", { amount: 55 });
       case 10:
       case 9:
       case 8:
-        return "Raise or call; 50%->A*";
+        return i18n.t("pocket-middle-pair");
       default:
-        return "call to grow to bird";
+        return i18n.t("pocket-middle-pair");
     }
   }
   const isSuited = cards[0].suit === cards[1].suit;
@@ -69,47 +77,39 @@ export const getMyHandPreflop = (
     switch (cards[0].cardNumber) {
       case 13:
       case 12:
-        return (
-          "Raise or call; 50%-Pokcet" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
+        return i18n.t("big-a", (isSuited && i18n.t("suited")) || "");
       case 11:
       case 10:
-        return (
-          "Raise or call; Bigger A?" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
+        return i18n.t("medium-a-1", (isSuited && i18n.t("suited")) || "");
       case 9:
       case 8:
-        return (
-          "Small/Raise with postion or call to JJ/QQ bet not bigger A?" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
+        return i18n.t("medium-a-2", (isSuited && i18n.t("suited")) || "");
       default:
-        return (
-          "small/raise with position; good to call against JJ/QQ bet" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
+        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
     }
   }
   if (cards[1].cardNumber === 13) {
     switch (cards[0].cardNumber) {
       case 12:
+        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
         return (
           "Raise or call" +
           ((isSuited && "; with suited preflop potential") || "")
         );
       case 11:
+        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
         return (
           "Raise or call medium" +
           ((isSuited && "; with suited preflop potential") || "")
         );
       case 10:
+        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
         return (
           "Raise or call small" +
           ((isSuited && "; with suited preflop potential") || "")
         );
       default:
+        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
         return (
           "call big blind with position" +
           ((isSuited && "; with suited preflop potential") || "")
