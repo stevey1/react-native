@@ -39,8 +39,9 @@ export default function MainNavigator(props) {
   if (error) return <Text>Error</Text>;
   let defaultSeats = [];
   for (let i = 0; i < players.length - 1 && i < 6; i++) {
-    defaultSeats.push({ player: players[i], seatId: i, betOrder: i });
+    defaultSeats.push({ player: players[i], id: i, betOrder: i });
   }
+  console.log(defaultSeats);
   const [Seats, setSeats] = useState(defaultSeats);
 
   return (

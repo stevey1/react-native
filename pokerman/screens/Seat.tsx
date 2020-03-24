@@ -108,7 +108,7 @@ export default function Seat(props: IProps) {
     );
   const handleFinishSeating = () => {
     const seatSelected = Seats.map((p, index) => ({
-      seatId: index,
+      id: index,
       player: p,
       betOrder: 0
     }))
