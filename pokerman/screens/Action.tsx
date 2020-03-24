@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { TextInput, Text, View } from "react-native";
-import { ISeat, Nullable, IAction } from "./../constants/DataTypes";
+import { ISeat } from "./../constants/DataTypes";
 import i18n from "../i18n";
 import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
 interface IProps {
   bigBlind?: number;
   seats: ISeat[];
-  handleAction: (action: IAction) => void;
+  handleAction: (raiser: ISeat, amount: number) => void;
 }
 export default function Action(props: IProps) {
   const [SeatModalVisible, setSeatModalVisible] = useState(false);
@@ -24,13 +24,7 @@ export default function Action(props: IProps) {
     setAmount(amount);
 
     if (Raiser && amount) {
-      props.handleAction({
-        raiser: Raiser,
-        amount: amount,
-        callers: [] as ISeat[],
-        checkRaise: false,
-        raises: 1
-      });
+      props.handleAction(Raiser, amount);
     }
   };
 

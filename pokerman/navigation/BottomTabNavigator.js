@@ -82,11 +82,7 @@ export default function BottomTabNavigator(props) {
         })}
       >
         {props => (
-          <Seat
-            {...props}
-            existingSeats={Seats}
-            handleSeatsChange={s => setSeats(s)}
-          />
+          <Seat {...props} seats={Seats} handleSeatsChange={s => setSeats(s)} />
         )}
       </BottomTab.Screen>
 

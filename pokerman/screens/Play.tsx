@@ -83,11 +83,17 @@ export default function Play(props: IProps) {
     cards[cardId] = card;
     setBoard(cards);
   };
-  const handleAction = (action: IAction, round: Round) => {
+  const handleAction = (raiser: ISeat, amount: number, round: Round) => {
+    let action = {
+      raiser: raiser,
+      amount: amount,
+      raises: 0,
+      checkRaise: false,
+      callers: []
+    };
     let allActions = AllActions;
     let actions = Actions;
     const lastAction = actions[round];
-
     if (lastAction) {
       if (
         lastAction.raiser.seatNumber === action.raiser.seatNumber &&
@@ -215,7 +221,7 @@ export default function Play(props: IProps) {
           <Action
             key="a"
             seats={getSeatsInPlay(round)}
-            handleAction={a => handleAction(a, round)}
+            handleAction={(r, a) => handleAction(r, a, round)}
           ></Action>
         </View>
         {displayRoundAction(Action[round], round)}
@@ -282,7 +288,7 @@ export default function Play(props: IProps) {
           key="pre"
           bigBlind={props.bigBlind}
           seats={preFlopSeats}
-          handleAction={a => handleAction(a, Round.Preflop)}
+          handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
         ></Action>
       </View>
       {

@@ -13,48 +13,48 @@ import { GET_PLAYERS } from "../constants/apolloQuery";
 
 interface IProps {
   navigation: any;
-  existingSeats: ISeat[];
+  seats: ISeat[];
   handleSeatsChange: (seats: ISeat[]) => void;
 }
 export default function Seat(props: IProps) {
   const [DealerSeatIndex, setDealerSeatIndex] = useState(
-    props.existingSeats.length - 1
+    props.seats.length - 1
   );
   const [PlayerModalVisible, setPlayerModalVisible] = useState(false);
   const [ModalForSeatNumber, setModalForSeatNumber] = useState(-1);
   const [SeatModalVisible, setSeatModalVisible] = useState(false);
-  let players = [] as IPlayer[];
-  props.existingSeats.forEach(seat => {
-    players[seat.seatNumber] = seat.player;
+  let seats = [] as IPlayer[];
+  props.seats.forEach(seat => {
+    seats[seat.seatNumber] = seat.player;
   });
-  const [SeatedPlayers, setSeatedPlayers] = useState(players);
+  const [Seats, setSeats] = useState(seats);
 
   const { error, loading, data, client } = useQuery(GET_PLAYERS);
   if (loading) return <Text>Loading</Text>;
   if (error) return <Text>Error</Text>;
   const AllPlayers = data.players;
-  const seatedPlayers = SeatedPlayers.filter(p => p != null);
+  const occupiedSeats = Seats.filter(p => p != null);
 
   const handlePlayerSelected = (
     index: number,
     value: number,
     seatNumber: number
   ) => {
-    let players = SeatedPlayers;
+    let seats = Seats;
     const player = AllPlayers.find(p => p.id === value);
-    players[seatNumber] = player;
+    seats[seatNumber] = player;
     let dealerSeatIndex = DealerSeatIndex;
-    const playerCount = players.filter(p => p).length;
+    const playerCount = seats.filter(p => p).length;
     if (playerCount - 1 < dealerSeatIndex) {
       dealerSeatIndex = playerCount - 1;
     }
-    setSeatedPlayers(players);
+    setSeats(seats);
     setPlayerModalVisible(false);
     setModalForSeatNumber(-1);
     setDealerSeatIndex(dealerSeatIndex);
   };
 
-  const setUpSeats = () => {
+  const showAll10Seats = () => {
     const maxSeats = 10;
     let seatList = [];
     for (let i = 0; i < maxSeats; i++) {
@@ -68,7 +68,7 @@ export default function Seat(props: IProps) {
             style={{
               width: 150
             }}
-            label={SeatedPlayers[i]?.name || ""}
+            label={Seats[i]?.name || ""}
             onPress={() => {
               setPlayerModalVisible(true);
               setModalForSeatNumber(i);
@@ -79,37 +79,15 @@ export default function Seat(props: IProps) {
     }
     return seatList;
   };
-  const getPlayerList = (seatNumber: number) => {
-    const playersList = AllPlayers.filter(
-      p => p.id === seatNumber + 1 || p.id > 10
-    ).map(p => ({
-      text: p.name,
-      value: p.id
-    }));
-    return [
-      ...playersList,
-      { text: "{Empty}", value: -1 },
-      { text: "{Seat Out}", value: -2 }
-    ];
-  };
-  const getSeatList = () =>
-    SeatedPlayers.filter(p => p).map((p, index) => ({
-      text: p.name,
-      value: index
-    }));
   const showPlayerDropDown = () =>
     PlayerModalVisible ? (
       <MyPicker
         modalVisible={PlayerModalVisible}
-        value={
-          (SeatedPlayers[ModalForSeatNumber] &&
-            SeatedPlayers[ModalForSeatNumber].id) ||
-          ""
-        }
+        value={Seats[ModalForSeatNumber]?.id || ""}
         itemSelected={(index, value) =>
           handlePlayerSelected(index, value, ModalForSeatNumber)
         }
-        listItems={getPlayerList(ModalForSeatNumber)}
+        listItems={getPlayerList(AllPlayers, ModalForSeatNumber)}
       ></MyPicker>
     ) : (
       <View></View>
@@ -123,13 +101,13 @@ export default function Seat(props: IProps) {
           setDealerSeatIndex(index);
           setSeatModalVisible(false);
         }}
-        listItems={getSeatList()}
+        listItems={getSeatList(Seats)}
       ></MyPicker>
     ) : (
       <View></View>
     );
   const handleFinishSeating = () => {
-    const seatSelected = SeatedPlayers.map((p, index) => ({
+    const seatSelected = Seats.map((p, index) => ({
       seatNumber: index,
       player: p,
       betOrder: 0
@@ -138,9 +116,9 @@ export default function Seat(props: IProps) {
       .map((s, index, seats) => ({
         ...s,
         betOrder:
-          index > DealerSeatIndex
-            ? index - DealerSeatIndex
-            : index - DealerSeatIndex + seats.length - 1
+          index -
+          DealerSeatIndex +
+          (index > DealerSeatIndex ? 0 : seats.length - 1)
       }))
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
     props.handleSeatsChange(seatSelected);
@@ -151,7 +129,7 @@ export default function Seat(props: IProps) {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
         <View style={{ padding: 10 }}>
-          <View>{setUpSeats()}</View>
+          <View>{showAll10Seats()}</View>
           <View style={styles.control}>
             <Text key="td" style={styles.label}>
               {i18n.t("seat.dealer") + ":"}
@@ -162,9 +140,9 @@ export default function Seat(props: IProps) {
                 width: 150
               }}
               label={
-                seatedPlayers.length > 0 &&
-                seatedPlayers[DealerSeatIndex] &&
-                seatedPlayers[DealerSeatIndex].name
+                occupiedSeats.length > 0 &&
+                occupiedSeats[DealerSeatIndex] &&
+                occupiedSeats[DealerSeatIndex].name
               }
               onPress={() => setSeatModalVisible(true)}
             />
@@ -185,3 +163,23 @@ export default function Seat(props: IProps) {
     </ScrollView>
   );
 }
+const getPlayerList = (allPlayers: IPlayer[], seatNumber: number) => {
+  const playersList = allPlayers
+    .filter(p => p.id === seatNumber + 1 || p.id > 10)
+    .map(p => ({
+      text: p.name,
+      value: p.id
+    }));
+  return [
+    ...playersList,
+    { text: "{Empty}", value: -1 },
+    { text: "{Seat Out}", value: -2 }
+  ];
+};
+const getSeatList = (players: IPlayer[]) =>
+  players
+    .filter(p => p)
+    .map((p, index) => ({
+      text: p.name,
+      value: index
+    }));
