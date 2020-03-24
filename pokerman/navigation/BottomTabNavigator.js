@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { Text } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import TabBarIcon from "../components/TabBarIcon";
 import Seat from "../screens/Seat";
 import Play from "../screens/Play";
 import Game from "../screens/Game";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
 import i18n from "../i18n";
-// import { seats as defaultSeats } from "../constants/helper";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_PLAYERS } from "../constants/apolloQuery";
 
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import TabBarIcon from "../components/TabBarIcon";
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "game";
 let playKey = 1;
@@ -31,12 +30,17 @@ export default function BottomTabNavigator(props) {
     }
     //headerShown: false
   });
-  const { error, loading, data, client } = useQuery(GET_PLAYERS);
+  const {
+    error,
+    loading,
+    data: { players },
+    client
+  } = useQuery(GET_PLAYERS);
   if (loading) return <Text>Loading</Text>;
   if (error) return <Text>Error</Text>;
   let defaultSeats = [];
-  for (let i = 0; i < data.players.length - 1 && i < 4; i++) {
-    defaultSeats.push({ player: data.players[i], seatNumber: i, betOrder: i });
+  for (let i = 0; i < players.length - 1 && i < 6; i++) {
+    defaultSeats.push({ player: players[i], seatNumber: i, betOrder: i });
   }
   const [Seats, setSeats] = useState(defaultSeats);
 
@@ -99,7 +103,8 @@ export default function BottomTabNavigator(props) {
           <Play
             key={playKey.toString()}
             {...props}
-            bigBlind={bigBlind}
+            bigBlind={BigBlind}
+            straddle={Straddle}
             seats={Seats}
           />
         )}
