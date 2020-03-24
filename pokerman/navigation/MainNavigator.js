@@ -6,7 +6,7 @@ import Game from "../screens/Game";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
 import i18n from "../i18n";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useApolloClient } from "@apollo/react-hooks";
 import { GET_PLAYERS } from "../constants/apolloQuery";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -21,7 +21,6 @@ export default function MainNavigator(props) {
   const [SmallBlind, setSmallBlind] = useState(1);
   const [BigBlind, setBigBlind] = useState(2);
   const [Straddle, setStraddle] = useState(5);
-
   props.navigation.setOptions({
     headerTitle: getHeaderTitle(props.route),
     headerStyle: {
@@ -29,20 +28,6 @@ export default function MainNavigator(props) {
     }
     //headerShown: false
   });
-  const {
-    error,
-    loading,
-    data: { players },
-    client
-  } = useQuery(GET_PLAYERS);
-  if (loading) return <Text>Loading</Text>;
-  if (error) return <Text>Error</Text>;
-  let defaultSeats = [];
-  for (let i = 0; i < players.length - 1 && i < 6; i++) {
-    defaultSeats.push({ player: players[i], id: i, betOrder: i });
-  }
-  console.log(defaultSeats);
-  const [Seats, setSeats] = useState(defaultSeats);
 
   return (
     <Tab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
@@ -80,7 +65,9 @@ export default function MainNavigator(props) {
         })}
       >
         {props => (
-          <Seat {...props} seats={Seats} handleSeatsChange={s => setSeats(s)} />
+          <Seat
+            {...props}
+          />
         )}
       </Tab.Screen>
 

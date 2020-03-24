@@ -1,4 +1,13 @@
 import gql from "graphql-tag";
+export const GET_SEATS = gql`
+  query getSeats {
+    seats @client {
+      id
+      betOrder
+      player
+    }
+  }
+`;
 
 export const GET_PLAYERS = gql`
   query getPlayers {

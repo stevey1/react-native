@@ -12,7 +12,7 @@ import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { GET_PLAYER, GET_PLAYERS, ADD_PLAYER } from "./constants/apolloQuery";
+import { GET_PLAYER, GET_PLAYERS, GET_SEATS } from "./constants/apolloQuery";
 import { AllPlayers } from "./constants/helper";
 
 const Stack = createStackNavigator();
@@ -131,9 +131,24 @@ export default function App(props) {
       }
     }
   });
-  cache.writeData({
+  const players = AllPlayers.map(player => ({
+    __typename: "Player",
+    ...player
+  }));
+  let seats = [];
+  for (let i = 0; i < AllPlayers.length - 1 && i < 6; i++) {
+    seats.push({
+      __typename: "Seat",
+      player: players[i],
+      id: i,
+      betOrder: i
+    });
+  }
+
+  client.writeData({
     data: {
-      players: AllPlayers.map(player => ({ __typename: "Player", ...player }))
+      seats: seats,
+      players: players
     }
   });
 

@@ -9,30 +9,33 @@ import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
 import styles from "./styles";
 import { useQuery } from "@apollo/react-hooks";
-import { GET_PLAYERS } from "../constants/apolloQuery";
+import { GET_PLAYERS, GET_SEATS } from "../constants/apolloQuery";
 
-interface IProps {
-  navigation: any;
-  seats: ISeat[];
-  handleSeatsChange: (seats: ISeat[]) => void;
-}
-export default function Seat(props: IProps) {
-  const [DealerSeatIndex, setDealerSeatIndex] = useState(
-    props.seats.length - 1
-  );
+//            handleSeatsChange={s => client.writeData({ data: { s } })}
+
+export default function Seat(props) {
   const [PlayerModalVisible, setPlayerModalVisible] = useState(false);
   const [ModalForSeatId, setModalForSeatId] = useState(-1);
   const [SeatModalVisible, setSeatModalVisible] = useState(false);
+
+  var { error, loading, data, client } = useQuery(GET_PLAYERS);
+  if (loading) return <Text>Loading</Text>;
+  if (error) return <Text>Error</Text>;
+  const AllPlayers = data.players;
+
+  var { error, loading, data, client } = useQuery(GET_SEATS);
+  if (loading) return <Text>Loading</Text>;
+  if (error) return <Text>Error</Text>;
+  const cachedSeats = data.seats;
+  const [DealerSeatIndex, setDealerSeatIndex] = useState(
+    cachedSeats.length - 1
+  );
   let seats = [] as IPlayer[];
-  props.seats.forEach(seat => {
+  cachedSeats.forEach(seat => {
     seats[seat.id] = seat.player;
   });
   const [Seats, setSeats] = useState(seats);
 
-  const { error, loading, data, client } = useQuery(GET_PLAYERS);
-  if (loading) return <Text>Loading</Text>;
-  if (error) return <Text>Error</Text>;
-  const AllPlayers = data.players;
   const occupiedSeats = Seats.filter(p => p != null);
 
   const handlePlayerSelected = (
@@ -118,10 +121,11 @@ export default function Seat(props: IProps) {
         betOrder:
           index -
           DealerSeatIndex +
-          (index > DealerSeatIndex ? 0 : seats.length - 1)
+          (index > DealerSeatIndex ? 0 : seats.length - 1),
+        __typename: "Seat"
       }))
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
-    props.handleSeatsChange(seatSelected);
+    client.writeData({ data: { seatSelected } });
     props.navigation.navigate("play");
   };
 
