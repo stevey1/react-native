@@ -13,36 +13,56 @@ export const GET_PLAYERS = gql`
     }
   }
 `;
+export const GET_PLAYER = gql`
+  query getPlayer($id: Int!) {
+    player(id: $id) @client {
+      id
+      name
+      preflopRaiseType
+      preflopCallType
+      raiseType
+      callType
+      isMe
+    }
+  }
+`;
 export const UPDATE_PLAYER = gql`
-    mutation update(
-      $id:Int!
-      $name: string!
-      $preflopRaiseType: Int!
-      $preflopCallType:Int!
-      $raiseType:Int!
-      $callType:Int!
-      $isMe:boolean!) {
-      updatePlayer(id:@id
-        name:@name
-        preflopRaiseType:$preflopRaiseType
-        preflopCallType:$preflopCallType
-        raiseType:$raiseType
-        callType:$callType
-        isMe:$isMe) @client
-    }
-  `;
+  mutation update(
+    $id: Int!
+    $name: string!
+    $preflopRaiseType: Int!
+    $preflopCallType: Int!
+    $raiseType: Int!
+    $callType: Int!
+    $isMe: boolean!
+  ) {
+    updatePlayer(
+      id: $id
+      name: $name
+      preflopRaiseType: $preflopRaiseType
+      preflopCallType: $preflopCallType
+      raiseType: $raiseType
+      callType: $callType
+      isMe: $isMe
+    ) @client
+  }
+`;
 export const ADD_PLAYER = gql`
-    mutation add($name: string!           
-      $preflopRaiseType: Int!
-      $preflopCallType:Int!
-      $raiseType:Int!
-      $callType:Int!
-      $isMe:boolean!) {
-      addPlayer(name:@name
-        preflopRaiseType:$preflopRaiseType
-        preflopCallType:$preflopCallType
-        raiseType:$raiseType
-        callType:$callType
-        isMe:$isMe) @client
-    }
-  `;
+  mutation add(
+    $name: string!
+    $preflopRaiseType: Int!
+    $preflopCallType: Int!
+    $raiseType: Int!
+    $callType: Int!
+    $isMe: boolean!
+  ) {
+    addPlayer(
+      name: $name
+      preflopRaiseType: $preflopRaiseType
+      preflopCallType: $preflopCallType
+      raiseType: $raiseType
+      callType: $callType
+      isMe: $isMe
+    ) @client
+  }
+`;

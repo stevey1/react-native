@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBarIcon from "../components/TabBarIcon";
 import Seat from "../screens/Seat";
@@ -7,27 +8,38 @@ import Game from "../screens/Game";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
 import i18n from "../i18n";
-import { seats as defaultSeats } from "../constants/helper";
+// import { seats as defaultSeats } from "../constants/helper";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_PLAYERS } from "../constants/apolloQuery";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "game";
 let playKey = 1;
 
-export default function BottomTabNavigator({ navigation, route }) {
+export default function BottomTabNavigator(props) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  const [seats, setSeats] = useState(defaultSeats);
-  const [smallBlind, setSmallBlind] = useState(1);
-  const [bigBlind, setBigBlind] = useState(2);
-  const [straddle, setStraddle] = useState(5);
-  navigation.setOptions({
-    headerTitle: getHeaderTitle(route),
+  const [SmallBlind, setSmallBlind] = useState(1);
+  const [BigBlind, setBigBlind] = useState(2);
+  const [Straddle, setStraddle] = useState(5);
+  const { error, loading, data, client } = useQuery(GET_PLAYERS);
+
+  props.navigation.setOptions({
+    headerTitle: getHeaderTitle(props.route),
     headerStyle: {
       height: 40
     }
     //headerShown: false
   });
+  if (loading) return <Text>Loading</Text>;
+  if (error) return <Text>Error</Text>;
+  let defaultSeats = [];
+  for (let i = 0; i < data.players.length - 1 && i < 4; i++) {
+    defaultSeats.push({ player: data.players[i], seatNumber: i, betOrder: i });
+  }
+  const [Seats, setSeats] = useState(defaultSeats);
+
   playKey++;
 
   return (
@@ -45,9 +57,9 @@ export default function BottomTabNavigator({ navigation, route }) {
         {props => (
           <Game
             {...props}
-            smallBlind={smallBlind}
-            bigBlind={bigBlind}
-            straddle={straddle}
+            smallBlind={SmallBlind}
+            bigBlind={BigBlind}
+            straddle={Straddle}
             handleGameChange={(smallBlind, bigBlind, straddle) => {
               setSmallBlind(smallBlind);
               setBigBlind(bigBlind);
@@ -68,8 +80,8 @@ export default function BottomTabNavigator({ navigation, route }) {
         {props => (
           <Seat
             {...props}
-            existingSeats={seats}
-            handleSeatsChange={seats => setSeats(seats)}
+            existingSeats={Seats}
+            handleSeatsChange={s => setSeats(s)}
           />
         )}
       </BottomTab.Screen>
@@ -88,7 +100,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             key={playKey.toString()}
             {...props}
             bigBlind={bigBlind}
-            seats={seats}
+            seats={Seats}
           />
         )}
       </BottomTab.Screen>
@@ -123,18 +135,3 @@ function getHeaderTitle(route) {
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
   return i18n.t("navigation." + routeName);
 }
-/*
-    this.state = {
-      seats: defaultSeats,
-      smallBlind: 1,
-      bigBlind: 2,
-      straddle: 5
-    };
-  }
-  playKey = 1;
-
-  render() {
-    this.playKey += 1;
-
-
-*/

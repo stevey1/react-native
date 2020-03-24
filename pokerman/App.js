@@ -5,15 +5,17 @@ import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { HttpLink } from "apollo-link-http";
-import { ApolloClient } from "apollo-client";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import useLinking from "./navigation/useLinking";
-import { GET_PLAYERS, ADD_PLAYER } from "./constants/apolloQuery";
-import { AllPlayers } from "./constants/helper";
-const Stack = createStackNavigator();
 
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { ApolloProvider } from "@apollo/react-hooks";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { GET_PLAYER, GET_PLAYERS, ADD_PLAYER } from "./constants/apolloQuery";
+import { AllPlayers } from "./constants/helper";
+
+const Stack = createStackNavigator();
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
@@ -47,7 +49,7 @@ export default function App(props) {
   }, []);
   let nextTodoId = 1;
 
-  const [addPlayer] = useMutation(ADD_PLAYER); // useMutation(ADD_TODO, { variables: { text: "asdfas" } });
+  //const [addPlayer] = useMutation(ADD_PLAYER); // useMutation(ADD_TODO, { variables: { text: "asdfas" } });
   const cache = new InMemoryCache();
   const client = new ApolloClient({
     link: new HttpLink(),
@@ -75,7 +77,7 @@ export default function App(props) {
           `;
           const player = cache.readFragment({ fragment, id: `Player:${id}` });*/
           const player = cache.readQuery(
-            { GET_PLAYERS },
+            { GET_PLAYER },
             { variables: { id: id } }
           );
           const data = {
@@ -130,26 +132,28 @@ export default function App(props) {
     }
   });
   cache.writeData({
-    data: { players: [] }
+    data: {
+      players: AllPlayers.map(player => ({ __typename: "Player", ...player }))
+    }
   });
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {
-    const [addPlayer] = useMutation(ADD_PLAYER); // useMutation(ADD_TODO, { variables: { text: "asdfas" } });
-    AllPlayers.forEach(player => addPlayer({ variables: { AllPlayers } }));
     return (
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <NavigationContainer
-          ref={containerRef}
-          initialState={initialNavigationState}
-        >
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <ApolloProvider client={client}>
+        <View style={styles.container}>
+          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+          <NavigationContainer
+            ref={containerRef}
+            initialState={initialNavigationState}
+          >
+            <Stack.Navigator>
+              <Stack.Screen name="Root" component={BottomTabNavigator} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </ApolloProvider>
     );
   }
 }
