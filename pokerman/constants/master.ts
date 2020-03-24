@@ -15,27 +15,27 @@ export const getMyHandPreflop = (
       case 14:
         if (action.raises === 0) {
           if (betOrder <= (players - 1) / 2)
-            return i18n.t("aa-early-position", {
+            return i18n.t("pre.aa-early-position", {
               amount1: bigBlind * (players - 1) * 2,
               amount2: bigBlind * (players - 1) * 3
             });
           else
-            return i18n.t("aa-later-position", {
+            return i18n.t("pre.aa-later-position", {
               amount: bigBlind * (players - 1) * 2
             });
         }
-        return i18n.t("claim-my-pot", {
+        return i18n.t("pre.claim-my-pot", {
           amount: action.amount * (action.callers.length + 1) * 4
         });
       case 13:
         if (action.raises === 0) {
           if (betOrder <= (players - 1) / 2)
-            return i18n.t("kk-early-position", {
+            return i18n.t("pre.kk-early-position", {
               amount1: bigBlind * (players - 1) * 2,
               amount2: bigBlind * (players - 1) * 3
             });
           else
-            return i18n.t("kk-later-position", {
+            return i18n.t("pre.kk-later-position", {
               amount1: bigBlind * (players - 1) * 2
             });
         }
@@ -44,31 +44,31 @@ export const getMyHandPreflop = (
           action.checkRaise ||
           action.amount > 40 * bigBlind
         )
-          return i18n.t("check-or-fight");
-        return i18n.t("claim-my-pot", {
+          return i18n.t("pre.check-or-fight");
+        return i18n.t("pre.claim-my-pot", {
           amount: action.amount * (action.callers.length + 1) * 4
         });
 
       case 12:
         if (action.raises === 0) {
-          return i18n.t("qq-no-raiser");
+          return i18n.t("pre.qq-no-raiser");
         }
-        if (action.amount > 35) return i18n.t("call-to-see");
-        if (action.amount > 75) return i18n.t("big-pair-bet");
-        return i18n.t("raise-to", { amount: 75 });
+        if (action.amount > 35) return i18n.t("pre.call-to-see");
+        if (action.amount > 75) return i18n.t("pre.big-pair-bet");
+        return i18n.t("pre.raise-to", { amount: 75 });
       case 11:
         if (action.raises === 0) {
-          return i18n.t("jj-no-raiser");
+          return i18n.t("pre.jj-no-raiser");
         }
-        if (action.amount > 35) return i18n.t("call-to-see");
-        if (action.amount > 75) return i18n.t("big-pair-bet");
-        return i18n.t("raise-to", { amount: 55 });
+        if (action.amount > 35) return i18n.t("pre.call-to-see");
+        if (action.amount > 75) return i18n.t("pre.big-pair-bet");
+        return i18n.t("pre.raise-to", { amount: 55 });
       case 10:
       case 9:
       case 8:
-        return i18n.t("pocket-middle-pair");
+        return i18n.t("pre.pocket-middle-pair");
       default:
-        return i18n.t("pocket-middle-pair");
+        return i18n.t("pre.pocket-middle-pair");
     }
   }
   const isSuited = cards[0].suit === cards[1].suit;
@@ -77,39 +77,45 @@ export const getMyHandPreflop = (
     switch (cards[0].cardNumber) {
       case 13:
       case 12:
-        return i18n.t("big-a", (isSuited && i18n.t("suited")) || "");
+        return i18n.t("pre.big-a", (isSuited && i18n.t("pre.suited")) || "");
       case 11:
       case 10:
-        return i18n.t("medium-a-1", (isSuited && i18n.t("suited")) || "");
+        return i18n.t(
+          "pre.medium-a-1",
+          (isSuited && i18n.t("pre.suited")) || ""
+        );
       case 9:
       case 8:
-        return i18n.t("medium-a-2", (isSuited && i18n.t("suited")) || "");
+        return i18n.t(
+          "pre.medium-a-2",
+          (isSuited && i18n.t("pre.suited")) || ""
+        );
       default:
-        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
+        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
     }
   }
   if (cards[1].cardNumber === 13) {
     switch (cards[0].cardNumber) {
       case 12:
-        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
+        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
         return (
           "Raise or call" +
           ((isSuited && "; with suited preflop potential") || "")
         );
       case 11:
-        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
+        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
         return (
           "Raise or call medium" +
           ((isSuited && "; with suited preflop potential") || "")
         );
       case 10:
-        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
+        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
         return (
           "Raise or call small" +
           ((isSuited && "; with suited preflop potential") || "")
         );
       default:
-        return i18n.t("small-a", (isSuited && i18n.t("suited")) || "");
+        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
         return (
           "call big blind with position" +
           ((isSuited && "; with suited preflop potential") || "")

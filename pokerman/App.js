@@ -5,7 +5,10 @@ import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { HttpLink } from "apollo-link-http";
+import { ApolloClient } from "apollo-client";
+import { players } from "./constants/helper";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import useLinking from "./navigation/useLinking";
 
@@ -42,6 +45,14 @@ export default function App(props) {
 
     loadResourcesAndDataAsync();
   }, []);
+  const cache = new InMemoryCache();
+  const client = new ApolloClient({
+    link: new HttpLink(),
+    cache: cache
+  });
+  cache.writeData({
+    data: { players }
+  });
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;

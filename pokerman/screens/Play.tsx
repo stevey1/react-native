@@ -291,11 +291,14 @@ export default class Play extends Component<
       }));
       return this.sortSeats(seats);
     }
-    const action = this.state.actions[round - 1];
+    const action = this.state.actions[
+      Math.min(this.state.actions.length - 1, round - 1)
+    ];
     return this.sortSeats([action.raiser, ...action.callers]);
   };
   sortSeats = (seats: ISeat[]) =>
     seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
+
   private showCallerButton = () => (
     <View style={styles.control}>
       <Text key="p" style={styles.label}>
@@ -337,14 +340,11 @@ export default class Play extends Component<
         {this.getRoundData(0, 3, getRoundText(Round.Flop), Round.Flop)}
       </View>
     ];
-    if (this.state.currentRound === Round.Flop) return <View>{roundData}</View>;
-
     roundData.push(
       <View key="r2">
         {this.getRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
       </View>
     );
-    if (this.state.currentRound === Round.Turn) return <View>{roundData}</View>;
 
     roundData.push(
       <View key="r3">
@@ -461,7 +461,9 @@ export default class Play extends Component<
             handleAction={a => this.handleAction(a, Round.Preflop)}
           ></Action>
         </View>
-        {this.displayRoundAction(Round.Preflop)}
+        {
+          //this.displayRoundAction(Round.Preflop)
+        }
 
         {this.showCurrentRound()}
         {this.showCallerButton()}

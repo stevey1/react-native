@@ -40,7 +40,7 @@
   "button": {
     "done": "完成"
   },
-  "message": {
+  "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
     "aa-late-position": "Prefer 1 caller: raise: {{amount}}",
     "claim-my-pot": "Claim it: All in or big raise 3B+ {{amount}} and all in after flop",
@@ -56,6 +56,6 @@
     "big-a": "{{suited}} big A, regular raise or call; 50%->pocket",
     "medium-a-1": "{{suited}} medium A, regular raise or call; 50%->pocket",
     "medium-a-2": "{{suited}} medium A, small raise/regular raise with position or call; 50%->pocket",
-    "samll-a": "{{suited}} medium A, small raise or call; 50%->pocket",
+    "samll-a": "{{suited}} medium A, small raise or call; 50%->pocket"
   }
 }

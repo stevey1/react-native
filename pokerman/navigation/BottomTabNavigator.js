@@ -25,8 +25,8 @@ export default function BottomTabNavigator({ navigation, route }) {
     headerTitle: getHeaderTitle(route),
     headerStyle: {
       height: 40
-    },
-    headerShown: false
+    }
+    //headerShown: false
   });
   playKey++;
 

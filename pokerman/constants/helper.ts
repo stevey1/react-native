@@ -290,3 +290,105 @@ const rules = {
     "Don't call all in, unless he has short stack(losing), impatient, or I have the nuts!!!",
   allIn: "I all in. With J+ pair A kicker/overpair/2 pairs, "
 };
+export const players: [
+  {
+    __typename: "player";
+    id: 1;
+    name: "Me";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: true;
+  },
+  {
+    __typename: "player";
+    id: 2;
+    name: "P2";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 3;
+    name: "P3";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 4;
+    name: "P4";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 5;
+    name: "P5";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 6;
+    name: "P6";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 7;
+    name: "P7";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 8;
+    name: "P8";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 9;
+    name: "P9";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  },
+  {
+    __typename: "player";
+    id: 10;
+    name: "P10";
+    preflopRaiseType: PlayType.M;
+    preflopCallType: PlayType.L;
+    raiseType: PlayType.M;
+    callType: PlayType.M;
+    isMe: false;
+  }
+];
