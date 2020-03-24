@@ -8,10 +8,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import { ApolloClient } from "apollo-client";
-import { players } from "./constants/helper";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import useLinking from "./navigation/useLinking";
-
+import { GET_PLAYERS, ADD_PLAYER } from "./constants/apolloQuery";
+import { AllPlayers } from "./constants/helper";
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -45,18 +45,99 @@ export default function App(props) {
 
     loadResourcesAndDataAsync();
   }, []);
+  let nextTodoId = 1;
+
+  const [addPlayer] = useMutation(ADD_PLAYER); // useMutation(ADD_TODO, { variables: { text: "asdfas" } });
   const cache = new InMemoryCache();
   const client = new ApolloClient({
     link: new HttpLink(),
-    cache: cache
+    cache: cache,
+    resolvers: {
+      Mutation: {
+        updatePlayer: (
+          _,
+          {
+            id,
+            name,
+            preflopRaiseType,
+            preflopCallType,
+            raiseType,
+            callType,
+            isMe
+          },
+          { cache }
+        ) => {
+          /*
+          const fragment = gql`
+            fragment f on Player {
+              completed
+            }
+          `;
+          const player = cache.readFragment({ fragment, id: `Player:${id}` });*/
+          const player = cache.readQuery(
+            { GET_PLAYERS },
+            { variables: { id: id } }
+          );
+          const data = {
+            ...player,
+            name: name,
+            preflopRaiseType: preflopRaiseType,
+            preflopCallType: preflopCallType,
+            raiseType: raiseType,
+            callType: callType,
+            isMe: isMe
+          };
+
+          //cache.writeFragment({ fragment, id, data });
+          // you can also do cache.writeData({ data, id }) here if you prefer
+          cache.writeData({ data, id: id });
+          return null;
+        },
+
+        addPlayer: (
+          _,
+          {
+            name,
+            preflopRaiseType,
+            preflopCallType,
+            raiseType,
+            callType,
+            isMe
+          },
+          { cache }
+        ) => {
+          const previous = cache.readQuery({ GET_PLAYERS });
+          const newPlayer = {
+            id: nextPlayer++,
+            name,
+            preflopRaiseType,
+            preflopCallType,
+            raiseType,
+            callType,
+            isMe,
+            __typename: "Player"
+          };
+          const data = {
+            players: [...previous.players, newPlayer]
+          };
+
+          // you can also do cache.writeData({ data }) here if you prefer
+          //cache.writeQuery({ query, data });
+          cache.writeData({ data });
+          return newPlayer;
+        }
+      }
+    }
   });
   cache.writeData({
-    data: { players }
+    data: { players: [] }
   });
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {
+    const [addPlayer] = useMutation(ADD_PLAYER); // useMutation(ADD_TODO, { variables: { text: "asdfas" } });
+    AllPlayers.forEach(player => addPlayer({ variables: { AllPlayers } }));
     return (
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="default" />}
