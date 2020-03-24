@@ -23,7 +23,6 @@ export default function BottomTabNavigator(props) {
   const [SmallBlind, setSmallBlind] = useState(1);
   const [BigBlind, setBigBlind] = useState(2);
   const [Straddle, setStraddle] = useState(5);
-  const { error, loading, data, client } = useQuery(GET_PLAYERS);
 
   props.navigation.setOptions({
     headerTitle: getHeaderTitle(props.route),
@@ -32,6 +31,7 @@ export default function BottomTabNavigator(props) {
     }
     //headerShown: false
   });
+  const { error, loading, data, client } = useQuery(GET_PLAYERS);
   if (loading) return <Text>Loading</Text>;
   if (error) return <Text>Error</Text>;
   let defaultSeats = [];

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
-import { AllPlayers } from "../constants/helper";
 import { ISeat, IPlayer } from "../constants/DataTypes";
 import MyButton from "../components/MyButton";
 import MyPicker from "../components/MyPicker";
@@ -9,6 +8,9 @@ import { Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
 import styles from "./styles";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_PLAYERS } from "../constants/apolloQuery";
+
 interface IProps {
   navigation: any;
   existingSeats: ISeat[];
@@ -45,6 +47,10 @@ export default function Seat(props: IProps) {
     props.handleSeatsChange(seatSelected);
     props.navigation.navigate("play");
   };
+  const { error, loading, data, client } = useQuery(GET_PLAYERS);
+  if (loading) return <Text>Loading</Text>;
+  if (error) return <Text>Error</Text>;
+  const AllPlayers = data.players;
 
   const handlePlayerSelected = (
     index: number,
