@@ -29,28 +29,11 @@ export default function Seat(props: IProps) {
   });
   const [SeatedPlayers, setSeatedPlayers] = useState(players);
 
-  const handleFinishSeating = () => {
-    const seatSelected = SeatedPlayers.map((p, index) => ({
-      seatNumber: index,
-      player: p,
-      betOrder: 0
-    }))
-      .filter(s => s.player)
-      .map((s, index, seats) => ({
-        ...s,
-        betOrder:
-          index > DealerSeatIndex
-            ? index - DealerSeatIndex
-            : index - DealerSeatIndex + seats.length - 1
-      }))
-      .sort((s1, s2) => s1.betOrder - s2.betOrder);
-    props.handleSeatsChange(seatSelected);
-    props.navigation.navigate("play");
-  };
   const { error, loading, data, client } = useQuery(GET_PLAYERS);
   if (loading) return <Text>Loading</Text>;
   if (error) return <Text>Error</Text>;
   const AllPlayers = data.players;
+  const seatedPlayers = SeatedPlayers.filter(p => p != null);
 
   const handlePlayerSelected = (
     index: number,
@@ -145,8 +128,25 @@ export default function Seat(props: IProps) {
     ) : (
       <View></View>
     );
+  const handleFinishSeating = () => {
+    const seatSelected = SeatedPlayers.map((p, index) => ({
+      seatNumber: index,
+      player: p,
+      betOrder: 0
+    }))
+      .filter(s => s.player)
+      .map((s, index, seats) => ({
+        ...s,
+        betOrder:
+          index > DealerSeatIndex
+            ? index - DealerSeatIndex
+            : index - DealerSeatIndex + seats.length - 1
+      }))
+      .sort((s1, s2) => s1.betOrder - s2.betOrder);
+    props.handleSeatsChange(seatSelected);
+    props.navigation.navigate("play");
+  };
 
-  const seatedPlayers = SeatedPlayers.filter(p => p != null);
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>

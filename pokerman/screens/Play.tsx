@@ -21,7 +21,13 @@ import {
 import MyButton from "../components/MyButton";
 import styles from "./styles";
 
-import { ISeat, ICard, IAction, Round } from "../constants/DataTypes";
+import {
+  ISeat,
+  ICard,
+  IAction,
+  IActionHistory,
+  Round
+} from "../constants/DataTypes";
 
 interface IProps {
   bigBlind: number;
@@ -29,32 +35,8 @@ interface IProps {
   seats: ISeat[];
 }
 export default function Play(props: IProps) {
-  const getBigBlindSeat = () => {
-    const bigBlindSeatIndex = (props.seats.length - 1 + 2) % props.seats.length;
-    return props.seats[bigBlindSeatIndex];
-  };
-  const sortSeats = (seats: ISeat[]) =>
-    seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
-
-  const getSeatsInPlay = (round: Round) => {
-    if (round === Round.Preflop) {
-      const totalSeats = props.seats.length;
-      const seats = props.seats.map((s, index) => ({
-        ...s,
-        betOrder:
-          index === 0
-            ? totalSeats - 2
-            : index === 1
-            ? totalSeats - 1
-            : s.betOrder - 2
-      }));
-      return sortSeats(seats);
-    }
-    const action = Actions[Math.min(Actions.length - 1, round - 1)];
-    return sortSeats([action.raiser, ...action.callers]);
-  };
-
-  const raiser = getBigBlindSeat();
+  const preFlopSeats = getSeatsInPlay(Round.Preflop);
+  const raiser = preFlopSeats[preFlopSeats.length - 1];
   const action: IAction = {
     raiser: raiser,
     amount: props.bigBlind,
@@ -70,17 +52,34 @@ export default function Play(props: IProps) {
   ]);
   const [CurrentRound, setCurrentRound] = useState(Round.Preflop);
   const [CallerModalVisible, setCallerModalVisible] = useState(false);
-  const preFlopSeats = getSeatsInPlay(Round.Preflop);
   const myBetOrder = preFlopSeats.findIndex(s => s.player.isMe);
   const [MyPreFlopBetOrder] = useState(myBetOrder);
 
+  function getSeatsInPlay(round: Round) {
+    if (round === Round.Preflop) {
+      const totalSeats = props.seats.length;
+      const seats = props.seats.map((s, index) => ({
+        ...s,
+        betOrder:
+          index === 0
+            ? totalSeats - 2
+            : index === 1
+            ? totalSeats - 1
+            : s.betOrder - 2
+      }));
+      return sortSeats(seats);
+    }
+    const action = Actions[Math.min(Actions.length - 1, round - 1)];
+    return sortSeats([action.raiser, ...action.callers]);
+  }
+
   const handleMyHand = (card: ICard, cardId: number) => {
-    const cards = MyHand || [];
+    const cards = MyHand;
     cards[cardId] = card;
     setMyHand(cards);
   };
   const handleBoard = (card: ICard, cardId: number) => {
-    let cards = Board || [];
+    let cards = Board;
     cards[cardId] = card;
     setBoard(cards);
   };
@@ -102,11 +101,8 @@ export default function Play(props: IProps) {
         action.raises = lastAction.raises + 1;
         action.checkRaise =
           action.raises > 1 &&
-          setCheckRaise(
-            lastAction.raiser.betOrder,
-            action.raiser.betOrder,
-            round
-          );
+          lastAction.raiser.betOrder > action.raiser.betOrder;
+
         allActions.push({ action: action, round: round });
       }
     } else {
@@ -137,130 +133,6 @@ export default function Play(props: IProps) {
       currentRound++;
       setCurrentRound(currentRound);
     }
-  };
-
-  const setCheckRaise = (
-    betOrder1: number,
-    betOrder2: number,
-    round: Round
-  ) => {
-    return getBetOrder(betOrder2, round) < getBetOrder(betOrder1, round);
-  };
-
-  const getBetOrder = (betOrder: number, round: Round) => {
-    if (round !== Round.Preflop) return betOrder;
-    const seatIndex = props.seats.findIndex(s => s.betOrder === betOrder);
-    const indexFromDealer = props.seats.length - 1 - seatIndex;
-    if (indexFromDealer === 1 || indexFromDealer == 2) {
-      return betOrder + props.seats.length;
-    }
-    return betOrder;
-  };
-
-  const displayCards = (cards: ICard[]) => {
-    const suitDisplay = cards
-      .sort((a, b) => a.cardNumber - b.cardNumber)
-      .map(card => (
-        <Text
-          key={"s" + card.cardNumber.toString() + card.suit.toString()}
-          style={getCardColor(card.suit)}
-        >
-          {getSuitText(card.suit)}
-        </Text>
-      ));
-    const cardDisplay = cards
-      .sort((a, b) => a.cardNumber - b.cardNumber)
-      .map(card => (
-        <Text
-          key={"c" + card.cardNumber.toString() + card.suit.toString()}
-          style={getCardColor(card.suit)}
-        >
-          {getNumberText(card.cardNumber)}
-        </Text>
-      ));
-    return (
-      <View style={{ flexDirection: "row" }}>
-        {suitDisplay}
-        {cardDisplay}
-      </View>
-    );
-  };
-
-  const displayRoundAction = (round: Round) => {
-    const action = Actions[round];
-    return action ? (
-      <View>
-        <Text
-          key={"c" + round}
-          style={
-            action.checkRaise && !action.raiser.player.isMe
-              ? { color: "#ff0000", fontSize: 16 }
-              : {}
-          }
-        >
-          {action.checkRaise && !action.raiser.player.isMe
-            ? "***" + i18n.t("action.checkRaise") + "***"
-            : ""}
-        </Text>
-        <Text
-          key={"a" + round}
-          style={
-            action.raises > 1 && !action.raiser.player.isMe
-              ? { color: "#ff0000", fontSize: 16 }
-              : { fontSize: 14 }
-          }
-        >
-          {action.raiser.player.name +
-            ((!action.raiser.player.isMe &&
-              "_" +
-                PlayType[
-                  (round === Round.Preflop &&
-                    action.raiser.player.preflopRaiseType) ||
-                    action.raiser.player.raiseType
-                ]) ||
-              "") +
-            " " +
-            action.raises +
-            i18n.t("action.raise") +
-            " " +
-            action.amount +
-            "$; " +
-            i18n.t("action.players") +
-            ": " +
-            (action.callers.length + 1) +
-            action.callers.reduce(
-              (p, c) =>
-                p +
-                ((p !== " - " && ", ") || "") +
-                c.player.name +
-                (c.player.isMe
-                  ? ""
-                  : "_" +
-                    PlayType[
-                      (round === Round.Preflop &&
-                        action.raiser.player.preflopCallType) ||
-                        action.raiser.player.callType
-                    ]),
-              " - "
-            )}
-        </Text>
-      </View>
-    ) : (
-      <View></View>
-    );
-  };
-  const displayPot = () => {
-    const pot = AllActions.reduce(
-      (preAction, currentAction) =>
-        preAction +
-        currentAction.action.amount * (currentAction.action.callers.length + 1),
-      0
-    );
-    return (
-      <Text style={{ fontSize: 14 }}>
-        {i18n.t("action.pot") + ":" + pot.toString()}$
-      </Text>
-    );
   };
 
   const showCallerButton = () => (
@@ -297,23 +169,23 @@ export default function Play(props: IProps) {
     if (CurrentRound === Round.Preflop) return <View></View>;
     let roundData = [
       <View key="r1">
-        {getRoundData(0, 3, getRoundText(Round.Flop), Round.Flop)}
+        {showRoundData(0, 3, getRoundText(Round.Flop), Round.Flop)}
       </View>
     ];
     roundData.push(
       <View key="r2">
-        {getRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
+        {showRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
       </View>
     );
 
     roundData.push(
       <View key="r3">
-        {getRoundData(4, 1, getRoundText(Round.River), Round.River)}
+        {showRoundData(4, 1, getRoundText(Round.River), Round.River)}
       </View>
     );
     return <View>{roundData}</View>;
   };
-  const getCards = (start: number, totalCards: number) => {
+  const showCards = (start: number, totalCards: number) => {
     let cards = [];
     for (let i = start; i < start + totalCards; i++) {
       cards.push(
@@ -322,7 +194,7 @@ export default function Play(props: IProps) {
     }
     return <View style={styles.control}>{cards}</View>;
   };
-  const getRoundData = (
+  const showRoundData = (
     start: number,
     totalCards: number,
     label: string,
@@ -334,7 +206,7 @@ export default function Play(props: IProps) {
           <Text key="f" style={styles.label}>
             {label}:
           </Text>
-          {getCards(start, totalCards)}
+          {showCards(start, totalCards)}
         </View>
         <View key="c" style={styles.control}>
           <Text key="t" style={styles.label}>
@@ -346,11 +218,11 @@ export default function Play(props: IProps) {
             handleAction={a => handleAction(a, round)}
           ></Action>
         </View>
-        {displayRoundAction(round)}
+        {displayRoundAction(Action[round], round)}
       </View>
     );
   };
-  const checkTips = () => {
+  const showTips = () => {
     const myHand = MyHand.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
 
     const board = Board;
@@ -428,8 +300,114 @@ export default function Play(props: IProps) {
         <Text>{i18n.t("play.board")}:</Text>
         {displayCards(Board)}
       </View>
-      <View>{displayPot()}</View>
-      {checkTips()}
+      <View>{displayPot(AllActions)}</View>
+      {showTips()}
     </ScrollView>
   );
 }
+const displayCards = (cards: ICard[]) => {
+  const suitDisplay = cards
+    .sort((a, b) => a.cardNumber - b.cardNumber)
+    .map(card => (
+      <Text
+        key={"s" + card.cardNumber.toString() + card.suit.toString()}
+        style={getCardColor(card.suit)}
+      >
+        {getSuitText(card.suit)}
+      </Text>
+    ));
+  const cardDisplay = cards
+    .sort((a, b) => a.cardNumber - b.cardNumber)
+    .map(card => (
+      <Text
+        key={"c" + card.cardNumber.toString() + card.suit.toString()}
+        style={getCardColor(card.suit)}
+      >
+        {getNumberText(card.cardNumber)}
+      </Text>
+    ));
+  return (
+    <View style={{ flexDirection: "row" }}>
+      {suitDisplay}
+      {cardDisplay}
+    </View>
+  );
+};
+const sortSeats = (seats: ISeat[]) =>
+  seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
+
+const displayPot = (allActions: IActionHistory[]) => {
+  const pot = allActions.reduce(
+    (preAction, currentAction) =>
+      preAction +
+      currentAction.action.amount * (currentAction.action.callers.length + 1),
+    0
+  );
+  return (
+    <Text style={{ fontSize: 14 }}>
+      {i18n.t("action.pot") + ":" + pot.toString()}$
+    </Text>
+  );
+};
+const displayRoundAction = (action: IAction, round: Round) => {
+  return action ? (
+    <View>
+      <Text
+        key={"c" + round}
+        style={
+          action.checkRaise && !action.raiser.player.isMe
+            ? { color: "#ff0000", fontSize: 16 }
+            : {}
+        }
+      >
+        {action.checkRaise && !action.raiser.player.isMe
+          ? "***" + i18n.t("action.checkRaise") + "***"
+          : ""}
+      </Text>
+      <Text
+        key={"a" + round}
+        style={
+          action.raises > 1 && !action.raiser.player.isMe
+            ? { color: "#ff0000", fontSize: 16 }
+            : { fontSize: 14 }
+        }
+      >
+        {action.raiser.player.name +
+          ((!action.raiser.player.isMe &&
+            "_" +
+              PlayType[
+                (round === Round.Preflop &&
+                  action.raiser.player.preflopRaiseType) ||
+                  action.raiser.player.raiseType
+              ]) ||
+            "") +
+          " " +
+          action.raises +
+          i18n.t("action.raise") +
+          " " +
+          action.amount +
+          "$; " +
+          i18n.t("action.players") +
+          ": " +
+          (action.callers.length + 1) +
+          action.callers.reduce(
+            (p, c) =>
+              p +
+              ((p !== " - " && ", ") || "") +
+              c.player.name +
+              (c.player.isMe
+                ? ""
+                : "_" +
+                  PlayType[
+                    (round === Round.Preflop &&
+                      action.raiser.player.preflopCallType) ||
+                      action.raiser.player.callType
+                  ]),
+            " - "
+          )}
+      </Text>
+    </View>
+  ) : (
+    <View></View>
+  );
+};
