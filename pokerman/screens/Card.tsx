@@ -58,6 +58,7 @@ export default class Card extends Component<
   showSuitDropDown = () => (
     <MyPicker
       key="suit"
+      value={this.state.suit >= 0 ? this.state.suit.toString() : null}
       style={getCardColor(this.state.suit)}
       modalVisible={this.state.suitVisible}
       itemSelected={this.handleSuitSelected}
@@ -67,6 +68,9 @@ export default class Card extends Component<
   showCardDropDown = () => (
     <MyPicker
       key="card"
+      value={
+        this.state.cardNumber >= 0 ? this.state.cardNumber.toString() : null
+      }
       style={getCardColor(this.state.suit)}
       modalVisible={this.state.cardVisible}
       itemSelected={this.handleCardSelected}

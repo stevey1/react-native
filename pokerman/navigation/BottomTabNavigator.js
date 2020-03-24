@@ -10,7 +10,7 @@ import i18n from "../i18n";
 import { seats as defaultSeats } from "../constants/helper";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = "player";
+const INITIAL_ROUTE_NAME = "game";
 let playKey = 1;
 
 export default function BottomTabNavigator({ navigation, route }) {
