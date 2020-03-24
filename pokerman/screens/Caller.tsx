@@ -1,10 +1,12 @@
 import React from "react";
 import { View } from "react-native";
+import { getSeatList } from "./../constants/helper";
 import { ISeat } from "./../constants/DataTypes";
 import MyMultiPicker from "../components/MyMultiPicker";
+
 interface IProps {
   modalVisible: boolean;
-  raiserSeatNumber: number;
+  raiserSeatId: number;
   seats: ISeat[];
   callers: number[];
   callersSelected: (callers: ISeat[]) => void;
@@ -15,18 +17,12 @@ export default function Caller(props: IProps) {
     props.callersSelected(callers);
   };
 
-  const getListItems = () =>
-    props.seats.map((seat, i) => ({
-      text: seat.player.name,
-      value: seat.seatNumber
-    }));
-
   return (
     <View>
       <MyMultiPicker
         modalVisible={props.modalVisible}
-        hightlightValue={props.raiserSeatNumber}
-        listItems={getListItems()}
+        hightlightValue={props.raiserSeatId}
+        listItems={getSeatList(props.seats)}
         values={props.callers}
         itemsSelected={handleItemsSelected}
       />

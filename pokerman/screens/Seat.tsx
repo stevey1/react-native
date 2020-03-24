@@ -21,11 +21,11 @@ export default function Seat(props: IProps) {
     props.seats.length - 1
   );
   const [PlayerModalVisible, setPlayerModalVisible] = useState(false);
-  const [ModalForSeatNumber, setModalForSeatNumber] = useState(-1);
+  const [ModalForSeatId, setModalForSeatId] = useState(-1);
   const [SeatModalVisible, setSeatModalVisible] = useState(false);
   let seats = [] as IPlayer[];
   props.seats.forEach(seat => {
-    seats[seat.seatNumber] = seat.player;
+    seats[seat.id] = seat.player;
   });
   const [Seats, setSeats] = useState(seats);
 
@@ -38,11 +38,11 @@ export default function Seat(props: IProps) {
   const handlePlayerSelected = (
     index: number,
     value: number,
-    seatNumber: number
+    seatId: number
   ) => {
     let seats = Seats;
     const player = AllPlayers.find(p => p.id === value);
-    seats[seatNumber] = player;
+    seats[seatId] = player;
     let dealerSeatIndex = DealerSeatIndex;
     const playerCount = seats.filter(p => p).length;
     if (playerCount - 1 < dealerSeatIndex) {
@@ -50,7 +50,7 @@ export default function Seat(props: IProps) {
     }
     setSeats(seats);
     setPlayerModalVisible(false);
-    setModalForSeatNumber(-1);
+    setModalForSeatId(-1);
     setDealerSeatIndex(dealerSeatIndex);
   };
 
@@ -71,7 +71,7 @@ export default function Seat(props: IProps) {
             label={Seats[i]?.name || ""}
             onPress={() => {
               setPlayerModalVisible(true);
-              setModalForSeatNumber(i);
+              setModalForSeatId(i);
             }}
           />
         </View>
@@ -83,11 +83,11 @@ export default function Seat(props: IProps) {
     PlayerModalVisible ? (
       <MyPicker
         modalVisible={PlayerModalVisible}
-        value={Seats[ModalForSeatNumber]?.id || ""}
+        value={Seats[ModalForSeatId]?.id || ""}
         itemSelected={(index, value) =>
-          handlePlayerSelected(index, value, ModalForSeatNumber)
+          handlePlayerSelected(index, value, ModalForSeatId)
         }
-        listItems={getPlayerList(AllPlayers, ModalForSeatNumber)}
+        listItems={getPlayerList(AllPlayers, ModalForSeatId)}
       ></MyPicker>
     ) : (
       <View></View>
@@ -101,14 +101,14 @@ export default function Seat(props: IProps) {
           setDealerSeatIndex(index);
           setSeatModalVisible(false);
         }}
-        listItems={getSeatList(Seats)}
+        listItems={getSeatedPlayerList(Seats)}
       ></MyPicker>
     ) : (
       <View></View>
     );
   const handleFinishSeating = () => {
     const seatSelected = Seats.map((p, index) => ({
-      seatNumber: index,
+      seatId: index,
       player: p,
       betOrder: 0
     }))
@@ -163,9 +163,9 @@ export default function Seat(props: IProps) {
     </ScrollView>
   );
 }
-const getPlayerList = (allPlayers: IPlayer[], seatNumber: number) => {
-  const playersList = allPlayers
-    .filter(p => p.id === seatNumber + 1 || p.id > 10)
+const getPlayerList = (players: IPlayer[], seatId: number) => {
+  const playersList = players
+    .filter(p => p.id === seatId + 1 || p.id > 10)
     .map(p => ({
       text: p.name,
       value: p.id
@@ -176,7 +176,7 @@ const getPlayerList = (allPlayers: IPlayer[], seatNumber: number) => {
     { text: "{Seat Out}", value: -2 }
   ];
 };
-const getSeatList = (players: IPlayer[]) =>
+const getSeatedPlayerList = (players: IPlayer[]) =>
   players
     .filter(p => p)
     .map((p, index) => ({

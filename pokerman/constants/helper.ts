@@ -1,4 +1,4 @@
-import { IPlayer, Suit, ICard, Round, PlayType } from "./DataTypes";
+import { IPlayer, ISeat, Suit, ICard, Round, PlayType } from "./DataTypes";
 import i18n from "../i18n";
 const numberMap =
   i18n.locale === "en"
@@ -59,10 +59,10 @@ export const getCardColor = (suit: Suit) =>
 
 export const getCardText = (card: ICard) =>
   getSuitText(card.suit) + getNumberText(card.cardNumber);
-export const getSeatText = (seatNumber: number) =>
+export const getSeatText = (seatId: number) =>
   i18n.t("action.seat") +
   (i18n.locale === "en" ? " " : "") +
-  getNumberText(seatNumber + 1) +
+  getNumberText(seatId + 1) +
   ":";
 
 export const getPlayerText = (player: IPlayer) => player.name;
@@ -70,6 +70,15 @@ export const getPlayerText = (player: IPlayer) => player.name;
 export const AllPlayers: IPlayer[] = [
   {
     id: 1,
+    name: "P1",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+  {
+    id: 11,
     name: "Me",
     preflopRaiseType: PlayType.M,
     preflopCallType: PlayType.L,
@@ -153,15 +162,6 @@ export const AllPlayers: IPlayer[] = [
   {
     id: 10,
     name: "P10",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    id: 11,
-    name: "Rock Player",
     preflopRaiseType: PlayType.M,
     preflopCallType: PlayType.L,
     raiseType: PlayType.M,
@@ -185,6 +185,15 @@ export const AllPlayers: IPlayer[] = [
     raiseType: PlayType.M,
     callType: PlayType.M,
     isMe: false
+  },
+  {
+    id: 14,
+    name: "Rock Player",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
   }
 ];
 
@@ -195,106 +204,8 @@ const ordinal_of = n =>
 
 export const getNumberOrdinal = n =>
   i18n.locale === "en" ? ordinal_of(n) : getNumberText(n);
-
-export const players = [
-  {
-    __typename: "player",
-    id: 1,
-    name: "Me",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: true
-  },
-  {
-    __typename: "player",
-    id: 2,
-    name: "P2",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 3,
-    name: "P3",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 4,
-    name: "P4",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 5,
-    name: "P5",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 6,
-    name: "P6",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 7,
-    name: "P7",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 8,
-    name: "P8",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 9,
-    name: "P9",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    __typename: "player",
-    id: 10,
-    name: "P10",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  }
-];
+export const getSeatList = (seats: ISeat[]) =>
+  seats.map((seat, i) => ({
+    text: seat.player.name,
+    value: seat.id
+  }));

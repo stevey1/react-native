@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text } from "react-native";
 import Seat from "../screens/Seat";
-import Play from "../screens/Play";
+import PlayNav from "../screens/PlayNav";
 import Game from "../screens/Game";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
@@ -11,11 +11,10 @@ import { GET_PLAYERS } from "../constants/apolloQuery";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBarIcon from "../components/TabBarIcon";
-const BottomTab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "game";
-let playKey = 1;
 
-export default function BottomTabNavigator(props) {
+export default function MainNavigator(props) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
@@ -40,15 +39,13 @@ export default function BottomTabNavigator(props) {
   if (error) return <Text>Error</Text>;
   let defaultSeats = [];
   for (let i = 0; i < players.length - 1 && i < 6; i++) {
-    defaultSeats.push({ player: players[i], seatNumber: i, betOrder: i });
+    defaultSeats.push({ player: players[i], seatId: i, betOrder: i });
   }
   const [Seats, setSeats] = useState(defaultSeats);
 
-  playKey++;
-
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-      <BottomTab.Screen
+    <Tab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+      <Tab.Screen
         name="game"
         options={({ route }) => ({
           //title: route.params.name,
@@ -71,8 +68,8 @@ export default function BottomTabNavigator(props) {
             }}
           />
         )}
-      </BottomTab.Screen>
-      <BottomTab.Screen
+      </Tab.Screen>
+      <Tab.Screen
         name="seat"
         options={({ route }) => ({
           title: i18n.t("navigation.seat"), //"Seat Setup",
@@ -84,29 +81,20 @@ export default function BottomTabNavigator(props) {
         {props => (
           <Seat {...props} seats={Seats} handleSeatsChange={s => setSeats(s)} />
         )}
-      </BottomTab.Screen>
+      </Tab.Screen>
 
-      <BottomTab.Screen
-        name="play"
+      <Tab.Screen
+        name="playNav"
+        component={PlayNav}
         options={{
-          title: i18n.t("navigation.play"),
+          title: i18n.t("navigation.playNav"),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-headset" />
           )
         }}
-      >
-        {props => (
-          <Play
-            key={playKey.toString()}
-            {...props}
-            bigBlind={BigBlind}
-            straddle={Straddle}
-            seats={Seats}
-          />
-        )}
-      </BottomTab.Screen>
+      ></Tab.Screen>
 
-      <BottomTab.Screen
+      <Tab.Screen
         name="player"
         component={Player}
         options={{
@@ -117,7 +105,7 @@ export default function BottomTabNavigator(props) {
         }}
       />
 
-      <BottomTab.Screen
+      <Tab.Screen
         name="timer"
         component={Timer}
         options={{
@@ -127,7 +115,7 @@ export default function BottomTabNavigator(props) {
           )
         }}
       />
-    </BottomTab.Navigator>
+    </Tab.Navigator>
   );
 }
 

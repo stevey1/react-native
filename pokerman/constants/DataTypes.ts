@@ -9,7 +9,7 @@ export interface IPlayer {
 }
 export interface ISeat {
   player: IPlayer;
-  seatNumber: number;
+  id: number;
   betOrder: number;
 }
 export interface IPlay {

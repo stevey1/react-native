@@ -5,7 +5,7 @@ import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import BottomTabNavigator from "./navigation/BottomTabNavigator";
+import MainNavigator from "./navigation/MainNavigator";
 import useLinking from "./navigation/useLinking";
 
 import { ApolloClient } from "apollo-client";
@@ -149,7 +149,7 @@ export default function App(props) {
             initialState={initialNavigationState}
           >
             <Stack.Navigator>
-              <Stack.Screen name="Root" component={BottomTabNavigator} />
+              <Stack.Screen name="Root" component={MainNavigator} />
             </Stack.Navigator>
           </NavigationContainer>
         </View>

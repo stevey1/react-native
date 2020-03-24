@@ -4,6 +4,8 @@ import { ISeat } from "./../constants/DataTypes";
 import i18n from "../i18n";
 import MyPicker from "../components/MyPicker";
 import MyButton from "../components/MyButton";
+import { getSeatList } from "./../constants/helper";
+
 interface IProps {
   bigBlind?: number;
   seats: ISeat[];
@@ -36,20 +38,15 @@ export default function Action(props: IProps) {
     setRaiserSelected(raiser.player.name);
   };
 
-  const getSeatList = () =>
-    props.seats.map(seat => ({
-      text: seat.player.name,
-      value: seat.seatNumber.toString()
-    }));
   const showSeatDropDown = () =>
     !SeatModalVisible ? (
       <View></View>
     ) : (
       <MyPicker
         modalVisible={SeatModalVisible}
-        value={Raiser?.seatNumber.toString() ?? ""}
+        value={Raiser?.id.toString() ?? ""}
         itemSelected={handleRaiserSelected}
-        listItems={getSeatList()}
+        listItems={getSeatList(props.seats)}
       ></MyPicker>
     );
 

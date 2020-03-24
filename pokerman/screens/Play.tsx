@@ -95,10 +95,7 @@ export default function Play(props: IProps) {
     let actions = Actions;
     const lastAction = actions[round];
     if (lastAction) {
-      if (
-        lastAction.raiser.seatNumber === action.raiser.seatNumber &&
-        lastAction.raises > 0
-      ) {
+      if (lastAction.raiser.id === action.raiser.id && lastAction.raises > 0) {
         // the same person
         action.raises = lastAction.raises;
         action.checkRaise = lastAction.checkRaise;
@@ -160,12 +157,11 @@ export default function Play(props: IProps) {
     CallerModalVisible ? (
       <Caller
         modalVisible={CallerModalVisible}
-        raiserSeatNumber={
-          (Actions[CurrentRound] && Actions[CurrentRound].raiser.seatNumber) ||
-          0
+        raiserSeatId={
+          (Actions[CurrentRound] && Actions[CurrentRound].raiser.id) || 0
         }
         seats={getSeatsInPlay(CurrentRound)}
-        callers={Actions[CurrentRound].callers.map(c => c.seatNumber)}
+        callers={Actions[CurrentRound].callers.map(c => c.id)}
         callersSelected={handleCallers}
       ></Caller>
     ) : (

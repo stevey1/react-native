@@ -8,7 +8,7 @@ export default function(containerRef) {
       Root: {
         path: "",
         screens: {
-          play: "play",
+          playNav: "playNav",
           player: "player",
           seat: "seat",
           game: "game",
