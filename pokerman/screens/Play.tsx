@@ -21,13 +21,7 @@ import {
 import MyButton from "../components/MyButton";
 import styles from "./styles";
 
-import {
-  ISeat,
-  ICard,
-  IAction,
-  IActionHistory,
-  Round
-} from "../constants/DataTypes";
+import { ISeat, ICard, IAction, Round } from "../constants/DataTypes";
 
 interface IProps {
   bigBlind: number;
@@ -39,6 +33,27 @@ export default function Play(props: IProps) {
     const bigBlindSeatIndex = (props.seats.length - 1 + 2) % props.seats.length;
     return props.seats[bigBlindSeatIndex];
   };
+  const sortSeats = (seats: ISeat[]) =>
+    seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
+
+  const getSeatsInPlay = (round: Round) => {
+    if (round === Round.Preflop) {
+      const totalSeats = props.seats.length;
+      const seats = props.seats.map((s, index) => ({
+        ...s,
+        betOrder:
+          index === 0
+            ? totalSeats - 2
+            : index === 1
+            ? totalSeats - 1
+            : s.betOrder - 2
+      }));
+      return sortSeats(seats);
+    }
+    const action = Actions[Math.min(Actions.length - 1, round - 1)];
+    return sortSeats([action.raiser, ...action.callers]);
+  };
+
   const raiser = getBigBlindSeat();
   const action: IAction = {
     raiser: raiser,
@@ -55,7 +70,9 @@ export default function Play(props: IProps) {
   ]);
   const [CurrentRound, setCurrentRound] = useState(Round.Preflop);
   const [CallerModalVisible, setCallerModalVisible] = useState(false);
-  const [MyPreFlopBetOrder, setMyPreFlopBetOrder] = useState(0);
+  const preFlopSeats = getSeatsInPlay(Round.Preflop);
+  const myBetOrder = preFlopSeats.findIndex(s => s.player.isMe);
+  const [MyPreFlopBetOrder] = useState(myBetOrder);
 
   const handleMyHand = (card: ICard, cardId: number) => {
     const cards = MyHand || [];
@@ -246,26 +263,6 @@ export default function Play(props: IProps) {
     );
   };
 
-  const getSeatsInPlay = (round: Round) => {
-    if (round === Round.Preflop) {
-      const totalSeats = props.seats.length;
-      const seats = props.seats.map((s, index) => ({
-        ...s,
-        betOrder:
-          index === 0
-            ? totalSeats - 2
-            : index === 1
-            ? totalSeats - 1
-            : s.betOrder - 2
-      }));
-      return sortSeats(seats);
-    }
-    const action = Actions[Math.min(Actions.length - 1, round - 1)];
-    return sortSeats([action.raiser, ...action.callers]);
-  };
-  const sortSeats = (seats: ISeat[]) =>
-    seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
-
   const showCallerButton = () => (
     <View style={styles.control}>
       <Text key="p" style={styles.label}>
@@ -412,7 +409,7 @@ export default function Play(props: IProps) {
         <Action
           key="pre"
           bigBlind={props.bigBlind}
-          seats={getSeatsInPlay(Round.Preflop)}
+          seats={preFlopSeats}
           handleAction={a => handleAction(a, Round.Preflop)}
         ></Action>
       </View>
