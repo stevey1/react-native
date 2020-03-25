@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { Button } from "react-native-elements";
 import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
@@ -30,41 +31,50 @@ import {
 } from "../constants/DataTypes";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_GAME_FORMAT, GET_SEATS } from "../constants/apolloQuery";
-
-export default function Play(props) {
-  const Seats = getSeats();
+interface IProps {
+  navigation: any;
+  straddles;
+  handleStraddlesChange: () => void;
+}
+export default function Play(props: IProps) {
+  const [CurrentRound, setCurrentRound] = useState(Round.Preflop);
+  const [MyHand, setMyHand] = useState([]);
+  const [Board, setBoard] = useState([]);
+  const [CallerModalVisible, setCallerModalVisible] = useState(false);
   const GameFormat = getGameFormat();
-  const preFlopSeats = getSeatsInPlay(Round.Preflop);
-  const raiser = preFlopSeats[preFlopSeats.length - 1];
+  const BigBlind =
+    props.straddles > 0
+      ? GameFormat.straddle * Math.pow(2, props.straddles - 1)
+      : GameFormat.bigBlind;
+  const Seats = getSeats();
+
+  const PreFlopSeats = getSeatsInPlay(Round.Preflop, props.straddles);
+
+  const raiser = PreFlopSeats[PreFlopSeats.length - 1];
   const action: IAction = {
     raiser: raiser,
-    amount: GameFormat.bigBlind,
+    amount: BigBlind,
     callers: [] as ISeat[],
     raises: 0,
     checkRaise: false
   };
-  const [MyHand, setMyHand] = useState([]);
-  const [Board, setBoard] = useState([]);
   const [Actions, setActions] = useState([action]);
   const [AllActions, setAllActions] = useState([
     { action: action, round: Round.Preflop }
   ]);
-  const [CurrentRound, setCurrentRound] = useState(Round.Preflop);
-  const [CallerModalVisible, setCallerModalVisible] = useState(false);
-  const myBetOrder = preFlopSeats.findIndex(s => s.player.isMe);
-  const [MyPreFlopBetOrder] = useState(myBetOrder);
+  const MyPreFlopBetOrder = PreFlopSeats.findIndex(s => s.player.isMe) ?? 0;
 
-  function getSeatsInPlay(round: Round) {
+  const handleStraddle = () => {
+    props.handleStraddlesChange();
+    props.navigation.navigate("playNav");
+  };
+
+  function getSeatsInPlay(round: Round, straddles = 0) {
     if (round === Round.Preflop) {
-      const totalSeats = Seats.length;
       const seats = Seats.map((s, index) => ({
         ...s,
         betOrder:
-          index === 0
-            ? totalSeats - 2
-            : index === 1
-            ? totalSeats - 1
-            : s.betOrder - 2
+          index - 2 - straddles + (index > 1 + straddles ? 0 : Seats.length)
       }));
       return sortSeats(seats);
     }
@@ -236,7 +246,7 @@ export default function Play(props) {
               myHand,
               MyPreFlopBetOrder,
               Seats.length,
-              GameFormat.bigBlind,
+              BigBlind,
               Actions[Round.Preflop]
             );
       return (
@@ -268,23 +278,32 @@ export default function Play(props) {
 
   return (
     <ScrollView>
-      <View style={styles.control}>
+      <View style={[styles.control]}>
         <Text key="my" style={styles.label}>
           {i18n.t("play.myHand")}:
         </Text>
         <Card key="m0" handleCard={(c: ICard) => handleMyHand(c, 0)}></Card>
         <Card key="m1" handleCard={c => handleMyHand(c, 1)}></Card>
       </View>
-      <View style={styles.control}>
-        <Text key="p" style={styles.label}>
-          {i18n.t("play.preFlop")}:
-        </Text>
-        <Action
-          key="pre"
-          bigBlind={GameFormat.bigBlind}
-          seats={preFlopSeats}
-          handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
-        ></Action>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={styles.control}>
+          <Text key="p" style={styles.label}>
+            {i18n.t("play.preFlop") + BigBlind.toString()}:
+          </Text>
+          <Action
+            key={"pre"}
+            bigBlind={BigBlind}
+            seats={PreFlopSeats}
+            handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
+          ></Action>
+        </View>
+
+        <Button
+          //buttonStyle={{ backgroundColor: "#D1D1D1"}}
+          style={{ width: 65, marginRight: 3 }}
+          title={i18n.t("button.done")}
+          onPress={handleStraddle}
+        />
       </View>
       {
         //displayRoundAction(Round.Preflop)

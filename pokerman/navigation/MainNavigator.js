@@ -11,14 +11,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBarIcon from "../components/TabBarIcon";
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "game";
-
+let playKey = 1;
 export default function MainNavigator(props) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  const [SmallBlind, setSmallBlind] = useState(1);
-  const [BigBlind, setBigBlind] = useState(2);
-  const [Straddle, setStraddle] = useState(5);
+  const [Straddles, setStraddles] = useState(0);
   props.navigation.setOptions({
     headerTitle: getHeaderTitle(props.route),
     headerStyle: {
@@ -53,14 +51,25 @@ export default function MainNavigator(props) {
 
       <Tab.Screen
         name="playNav"
-        component={Play}
         options={{
           title: i18n.t("navigation.playNav"),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-headset" />
           )
         }}
-      />
+      >
+        {props => (
+          <Play
+            {...props}
+            key={(++playKey).toString()}
+            straddles={Straddles}
+            handleStraddlesChange={() => {
+              const straddles = Straddles + 1;
+              setStraddles(straddles);
+            }}
+          />
+        )}
+      </Tab.Screen>
 
       <Tab.Screen
         name="player"

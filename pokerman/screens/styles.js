@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     width: 85
   },
-  control: { flex: 1, flexDirection: "row", margin: 1, height: 40 },
+  control: { flexDirection: "row", margin: 1, height: 40 },
 
   container: {
     flex: 1,
