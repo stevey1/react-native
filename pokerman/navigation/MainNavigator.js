@@ -63,10 +63,7 @@ export default function MainNavigator(props) {
             {...props}
             key={(++playKey).toString()}
             straddles={Straddles}
-            handleStraddlesChange={() => {
-              const straddles = Straddles + 1;
-              setStraddles(straddles);
-            }}
+            handleStraddlesChange={straddles => setStraddles(straddles)}
           />
         )}
       </Tab.Screen>

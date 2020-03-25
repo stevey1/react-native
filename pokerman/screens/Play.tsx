@@ -34,7 +34,7 @@ import { GET_GAME_FORMAT, GET_SEATS } from "../constants/apolloQuery";
 interface IProps {
   navigation: any;
   straddles;
-  handleStraddlesChange: () => void;
+  handleStraddlesChange: (straddles: number) => void;
 }
 export default function Play(props: IProps) {
   const [CurrentRound, setCurrentRound] = useState(Round.Preflop);
@@ -50,7 +50,7 @@ export default function Play(props: IProps) {
 
   const PreFlopSeats = getSeatsInPlay(Round.Preflop, props.straddles);
 
-  const raiser = PreFlopSeats[PreFlopSeats.length - 1];
+  const raiser = PreFlopSeats[Seats.length - 1];
   const action: IAction = {
     raiser: raiser,
     amount: BigBlind,
@@ -62,10 +62,10 @@ export default function Play(props: IProps) {
   const [AllActions, setAllActions] = useState([
     { action: action, round: Round.Preflop }
   ]);
-  const MyPreFlopBetOrder = PreFlopSeats.findIndex(s => s.player.isMe) ?? 0;
 
   const handleStraddle = () => {
-    props.handleStraddlesChange();
+    const straddles = (props.straddles + 1) % (Seats.length - 2);
+    props.handleStraddlesChange(straddles);
     props.navigation.navigate("playNav");
   };
 
@@ -244,7 +244,7 @@ export default function Play(props: IProps) {
           ? ""
           : getMyHandPreflop(
               myHand,
-              MyPreFlopBetOrder,
+              PreFlopSeats.findIndex(s => s.player.isMe) ?? 0,
               Seats.length,
               BigBlind,
               Actions[Round.Preflop]
@@ -288,7 +288,7 @@ export default function Play(props: IProps) {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View style={styles.control}>
           <Text key="p" style={styles.label}>
-            {i18n.t("play.preFlop") + BigBlind.toString()}:
+            {i18n.t("play.preFlop")}:
           </Text>
           <Action
             key={"pre"}
