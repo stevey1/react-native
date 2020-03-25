@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { IPlayer } from "../constants/DataTypes";
 import MyDropDownButton from "../components/MyDropDownButton";
 import MyPicker from "../components/MyPicker";
-import { getSeatText } from "../constants/helper";
+import { getSeatText, getPlayerList } from "../constants/helper";
 import { Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
@@ -85,7 +85,7 @@ export default function Seat(props) {
         itemSelected={(index, value) =>
           handlePlayerSelected(index, value, ModalForSeatId)
         }
-        listItems={getPlayerList(AllPlayers, ModalForSeatId)}
+        listItems={getFilteredPlayerList(AllPlayers, ModalForSeatId)}
       ></MyPicker>
     ) : (
       <View></View>
@@ -99,7 +99,7 @@ export default function Seat(props) {
           setDealerSeatIndex(index);
           setSeatModalVisible(false);
         }}
-        listItems={getSeatedPlayerList(Seating)}
+        listItems={getPlayerList(Seating)}
       ></MyPicker>
     ) : (
       <View></View>
@@ -163,7 +163,7 @@ export default function Seat(props) {
     </ScrollView>
   );
 }
-const getPlayerList = (players: IPlayer[], seatId: number) => {
+const getFilteredPlayerList = (players: IPlayer[], seatId: number) => {
   const playersList = players
     .filter(p => p.id === seatId + 1 || p.id > 10)
     .map(p => ({
@@ -176,10 +176,3 @@ const getPlayerList = (players: IPlayer[], seatId: number) => {
     { text: "{Seat Out}", value: -2 }
   ];
 };
-const getSeatedPlayerList = (players: IPlayer[]) =>
-  players
-    .filter(p => p)
-    .map((p, index) => ({
-      text: p.name,
-      value: index
-    }));

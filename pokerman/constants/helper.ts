@@ -186,7 +186,7 @@ export const AllPlayers: IPlayer[] = [
     callType: PlayType.M,
     isMe: false
   },
-  
+
   {
     id: 14,
     name: "Rock Player",
@@ -210,3 +210,10 @@ export const getSeatList = (seats: ISeat[]) =>
     text: seat.player.name,
     value: seat.id
   }));
+export const getPlayerList = (players: IPlayer[]) =>
+  players
+    .filter(p => p)
+    .map((p, index) => ({
+      text: p.name,
+      value: index
+    }));
