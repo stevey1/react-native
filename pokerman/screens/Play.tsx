@@ -277,59 +277,65 @@ export default function Play(props: IProps) {
   };
 
   return (
-    <ScrollView>
-      <View style={[styles.control]}>
-        <Text key="my" style={styles.label}>
-          {i18n.t("play.myHand")}:
-        </Text>
-        <Card key="m0" handleCard={(c: ICard) => handleMyHand(c, 0)}></Card>
-        <Card key="m1" handleCard={c => handleMyHand(c, 1)}></Card>
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <View style={styles.control}>
-          <Text key="p" style={styles.label}>
-            {i18n.t("play.preFlop")}:
-          </Text>
-          <Action
-            key={"pre"}
-            bigBlind={BigBlind}
-            seats={PreFlopSeats}
-            handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
-          ></Action>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={styles.container}>
+        <View>
+          <View style={[styles.control]}>
+            <Text key="my" style={styles.label}>
+              {i18n.t("play.myHand")}:
+            </Text>
+            <Card key="m0" handleCard={(c: ICard) => handleMyHand(c, 0)}></Card>
+            <Card key="m1" handleCard={c => handleMyHand(c, 1)}></Card>
+          </View>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <View style={styles.control}>
+              <Text key="p" style={styles.label}>
+                {i18n.t("play.preFlop")}:
+              </Text>
+              <Action
+                key={"pre"}
+                bigBlind={BigBlind}
+                seats={PreFlopSeats}
+                handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
+              ></Action>
+            </View>
+
+            <Button
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              style={{ width: 75, marginRight: 3 }}
+              title={i18n.t("button.straddle")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => handleStraddle(false)}
+            />
+          </View>
+          {
+            //displayRoundAction(Round.Preflop)
+          }
+
+          {showCurrentRound()}
+          {showCallerButton()}
+          {showCaller()}
+          <View style={{ flexDirection: "row" }}>
+            <Text>{i18n.t("play.myHand")}:</Text>
+            {displayCards(MyHand)}
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <Text>{i18n.t("play.board")}:</Text>
+            {displayCards(Board)}
+          </View>
+          <View>{displayPot(AllActions)}</View>
+          {showTips()}
+          <Button
+            buttonStyle={{ backgroundColor: "#D1D1D1" }}
+            style={{ width: 105, marginRight: 3 }}
+            title={i18n.t("button.new")}
+            titleStyle={{ color: "#000000" }}
+            onPress={() => handleStraddle(true)}
+          />
         </View>
-
-        <Button
-          buttonStyle={{ backgroundColor: "#D1D1D1" }}
-          style={{ width: 75, marginRight: 3 }}
-          title={i18n.t("button.straddle")}
-          titleStyle={{ color: "#000000" }}
-          onPress={() => handleStraddle(false)}
-        />
       </View>
-      {
-        //displayRoundAction(Round.Preflop)
-      }
-
-      {showCurrentRound()}
-      {showCallerButton()}
-      {showCaller()}
-      <View style={{ flexDirection: "row" }}>
-        <Text>{i18n.t("play.myHand")}:</Text>
-        {displayCards(MyHand)}
-      </View>
-      <View style={{ flexDirection: "row" }}>
-        <Text>{i18n.t("play.board")}:</Text>
-        {displayCards(Board)}
-      </View>
-      <View>{displayPot(AllActions)}</View>
-      {showTips()}
-      <Button
-        buttonStyle={{ backgroundColor: "#D1D1D1" }}
-        style={{ width: 105, marginRight: 3 }}
-        title={i18n.t("button.new")}
-        titleStyle={{ color: "#000000" }}
-        onPress={() => handleStraddle(true)}
-      />
     </ScrollView>
   );
 }

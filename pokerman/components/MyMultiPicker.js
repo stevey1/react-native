@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, Overlay } from "react-native-elements";
+import { CheckBox, Button, Overlay } from "react-native-elements";
 import { Modal, View } from "react-native";
-import CheckBox from "./CheckBox";
+// import CheckBox from "./CheckBox";
 import i18n from "../i18n";
 
 export default class MyMultiPicker extends React.Component {
@@ -44,17 +44,23 @@ export default class MyMultiPicker extends React.Component {
         row.push(
           <CheckBox
             key={"c" + i}
-            selected={this.state.selected[i] || false}
+            checked={this.state.selected[i] || false}
             onPress={() => this.onChange(i)}
-            text={this.props.listItems[i].text}
-            value={this.props.listItems[i].value}
-            textStyle={
-              this.props.hightlightValue &&
-              this.props.listItems[i].value === this.props.hightlightValue
-                ? { color: "#ff0000" }
-                : {}
-            }
-          />
+            title={this.props.listItems[i].text}
+          ></CheckBox>
+          // <CheckBox
+          //   key={"c" + i}
+          //   selected={this.state.selected[i] || false}
+          //   onPress={() => this.onChange(i)}
+          //   text={this.props.listItems[i].text}
+          //   value={this.props.listItems[i].value}
+          //   textStyle={
+          //     this.props.hightlightValue &&
+          //     this.props.listItems[i].value === this.props.hightlightValue
+          //       ? { color: "#ff0000" }
+          //       : {}
+          //   }
+          // />
         );
       }
       control.push(

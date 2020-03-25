@@ -127,7 +127,7 @@ export default function Seat(props) {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
-        <View style={{ padding: 10 }}>
+        <View>
           <View>{showAll10Seats()}</View>
           <View style={styles.control}>
             <Text key="td" style={styles.label}>

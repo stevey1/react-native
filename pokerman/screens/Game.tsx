@@ -25,7 +25,7 @@ export default function Game(props) {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
-        <View style={{ padding: 10 }}>
+        <View>
           <View key="vs" style={styles.control}>
             <Text key="ts" style={styles.label}>
               {i18n.t("game.smallBlind") + ":"}
