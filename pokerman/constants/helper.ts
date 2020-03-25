@@ -69,15 +69,6 @@ export const getPlayerText = (player: IPlayer) => player.name;
 
 export const AllPlayers: IPlayer[] = [
   {
-    id: 1,
-    name: "P1",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
     id: 11,
     name: "Me",
     preflopRaiseType: PlayType.M,
@@ -186,6 +177,16 @@ export const AllPlayers: IPlayer[] = [
     callType: PlayType.M,
     isMe: false
   },
+  {
+    id: 1,
+    name: "P1",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+  
   {
     id: 14,
     name: "Rock Player",

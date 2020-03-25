@@ -94,7 +94,7 @@ export default function Seat(props) {
     SeatModalVisible ? (
       <MyPicker
         modalVisible={SeatModalVisible}
-        value={DealerSeatIndex.toString()}
+        value={DealerSeatIndex}
         itemSelected={(index, value) => {
           setDealerSeatIndex(index);
           setSeatModalVisible(false);

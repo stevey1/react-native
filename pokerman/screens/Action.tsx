@@ -44,7 +44,7 @@ export default function Action(props: IProps) {
     ) : (
       <MyPicker
         modalVisible={SeatModalVisible}
-        value={Raiser?.id.toString() ?? ""}
+        value={Raiser?.id}
         itemSelected={handleRaiserSelected}
         listItems={getSeatList(props.seats)}
       ></MyPicker>
