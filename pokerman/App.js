@@ -136,7 +136,7 @@ export default function App(props) {
     ...player
   }));
   let seats = [];
-  for (let i = 0; i < AllPlayers.length - 1 && i < 6; i++) {
+  for (let i = 0; i < AllPlayers.length - 1 && i < 4; i++) {
     seats.push({
       __typename: "Seat",
       player: players[i],

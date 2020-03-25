@@ -4,7 +4,15 @@ export const GET_SEATS = gql`
     seats @client {
       id
       betOrder
-      player
+      player {
+        id
+        name
+        preflopRaiseType
+        preflopCallType
+        raiseType
+        callType
+        isMe
+      }
     }
   }
 `;
