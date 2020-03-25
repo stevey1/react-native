@@ -5,13 +5,19 @@ import { Button } from "react-native-elements";
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { GET_PLAYERS, ADD_PLAYER } from "../constants/apolloQuery";
+import { PlayType } from "../constants/DataTypes";
+import {
+  GET_PLAYERS,
+  UPDATE_PLAYER,
+  ADD_PLAYER
+} from "../constants/apolloQuery";
 
 export default function Player() {
   const [Name, setName] = useState("");
   const { data } = useQuery(GET_PLAYERS);
   const AllPlayers = data.players;
   const [addPlayer] = useMutation(ADD_PLAYER);
+  const [updatePlayer] = useMutation(UPDATE_PLAYER);
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
@@ -31,6 +37,16 @@ export default function Player() {
             onPress={() => {
               if (Name) {
                 addPlayer({ variables: { name: Name } });
+                // updatePlayer({
+                //   variables: {
+                //     id: 1,
+                //     name: "steve",
+                //     preflopRaiseType: PlayType.LL,
+                //     preflopCallType: PlayType.LL,
+                //     raiseType: PlayType.LL,
+                //     callType: PlayType.LL
+                //   }
+                // });
                 setName("");
               }
             }}

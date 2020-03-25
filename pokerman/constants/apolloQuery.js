@@ -26,7 +26,7 @@ export const GET_GAME_FORMAT = gql`
   }
 `;
 export const GET_PLAYERS = gql`
-  query getPlayers {
+  query players {
     players @client {
       id
       name
@@ -39,7 +39,7 @@ export const GET_PLAYERS = gql`
   }
 `;
 export const GET_PLAYER = gql`
-  query getPlayer($id: Int!) {
+  query player {
     player(id: $id) @client {
       id
       name
@@ -59,7 +59,6 @@ export const UPDATE_PLAYER = gql`
     $preflopCallType: Int!
     $raiseType: Int!
     $callType: Int!
-    $isMe: boolean!
   ) {
     updatePlayer(
       id: $id
@@ -68,7 +67,6 @@ export const UPDATE_PLAYER = gql`
       preflopCallType: $preflopCallType
       raiseType: $raiseType
       callType: $callType
-      isMe: $isMe
     ) @client
   }
 `;

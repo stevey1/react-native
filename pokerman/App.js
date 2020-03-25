@@ -12,12 +12,17 @@ import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { GET_PLAYER, GET_PLAYERS, GET_SEATS } from "./constants/apolloQuery";
+import gql from "graphql-tag";
+import {
+  GET_PLAYER,
+  GET_PLAYERS,
+  GET_GAME_FORMAT
+} from "./constants/apolloQuery";
 import { AllPlayers } from "./constants/helper";
 import { PlayType } from "./constants/DataTypes";
 
 const Stack = createStackNavigator();
-let nextPlayer = 15;
+let nextPlayerId = 15;
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
@@ -49,9 +54,7 @@ export default function App(props) {
 
     loadResourcesAndDataAsync();
   }, []);
-  let nextTodoId = 1;
-
-  //const [addPlayer] = useMutation(ADD_PLAYER); // useMutation(ADD_TODO, { variables: { text: "asdfas" } });
+  let nextPlayerId = 15;
   const client = InitializeApollo();
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
@@ -99,56 +102,52 @@ const getInitialData = () => {
   };
 };
 function InitializeApollo() {
-  const cache = new InMemoryCache();
   const client = new ApolloClient({
     link: new HttpLink(),
-    cache: cache,
+    cache: new InMemoryCache(),
     resolvers: {
       Mutation: {
         updatePlayer: (
           _,
-          {
-            id,
-            name,
-            preflopRaiseType,
-            preflopCallType,
-            raiseType,
-            callType,
-            isMe
-          },
+          { id, name, preflopRaiseType, preflopCallType, raiseType, callType },
           { cache }
         ) => {
-          /*
+          const fragmentId = `Player:${id}`;
           const fragment = gql`
-            fragment f on Player {
-              completed
+            fragment player on Player {
+              id
+              name
+              preflopRaiseType
+              preflopCallType
+              raiseType
+              callType
+              isMe
             }
           `;
-          const player = cache.readFragment({ fragment, id: `Player:${id}` });*/
-          const player = cache.readQuery(
-            { GET_PLAYER },
-            { variables: { id: id } }
-          );
+          const player = cache.readFragment({ fragment, id: fragmentId });
+          console.log(player);
+
+          //const todo = cache.readQuery({ query }, { variables: { id: id } });
           const data = {
             ...player,
             name: name,
             preflopRaiseType: preflopRaiseType,
             preflopCallType: preflopCallType,
             raiseType: raiseType,
-            callType: callType,
-            isMe: isMe
+            callType: callType
           };
-
-          //cache.writeFragment({ fragment, id, data });
+          console.log(data);
+          // cache.writeFragment({ fragment, fragmentId, data });
           // you can also do cache.writeData({ data, id }) here if you prefer
-          cache.writeData({ data, id: id });
+          cache.writeData({ data, id: fragmentId });
           return null;
         },
 
         addPlayer: (_, { name }, { cache }) => {
-          const previous = cache.readQuery({ GET_PLAYERS });
+          const query = GET_PLAYERS;
+          const previous = cache.readQuery({ query });
           const newPlayer = {
-            id: nextPlayer++,
+            id: nextPlayerId++,
             name,
             preflopRaiseType: PlayType.T,
             preflopCallType: PlayType.T,
@@ -157,9 +156,7 @@ function InitializeApollo() {
             isMe: false,
             __typename: "Player"
           };
-          const data = {
-            players: [...previous.players, newPlayer]
-          };
+          const data = { players: [...previous.players, newPlayer] };
 
           // you can also do cache.writeData({ data }) here if you prefer
           //cache.writeQuery({ query, data });
