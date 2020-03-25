@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { Text } from "react-native";
 import Seat from "../screens/Seat";
 import PlayNav from "../screens/PlayNav";
 import Game from "../screens/Game";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";
+import Play from "../screens/Play";
 import i18n from "../i18n";
-import { useQuery, useApolloClient } from "@apollo/react-hooks";
-import { GET_PLAYERS } from "../constants/apolloQuery";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBarIcon from "../components/TabBarIcon";
@@ -33,6 +31,7 @@ export default function MainNavigator(props) {
     <Tab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <Tab.Screen
         name="game"
+        component={Game}
         options={({ route }) => ({
           //title: route.params.name,
           title: i18n.t("navigation.game"), //"Seat Setup",
@@ -40,47 +39,28 @@ export default function MainNavigator(props) {
             <TabBarIcon focused={focused} name="md-person-add" />
           )
         })}
-      >
-        {props => (
-          <Game
-            {...props}
-            smallBlind={SmallBlind}
-            bigBlind={BigBlind}
-            straddle={Straddle}
-            handleGameChange={(smallBlind, bigBlind, straddle) => {
-              setSmallBlind(smallBlind);
-              setBigBlind(bigBlind);
-              setStraddle(straddle);
-            }}
-          />
-        )}
-      </Tab.Screen>
+      />
       <Tab.Screen
         name="seat"
+        component={Seat}
         options={({ route }) => ({
           title: i18n.t("navigation.seat"), //"Seat Setup",
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-person-add" />
           )
         })}
-      >
-        {props => (
-          <Seat
-            {...props}
-          />
-        )}
-      </Tab.Screen>
+      />
 
       <Tab.Screen
         name="playNav"
-        component={PlayNav}
+        component={Play}
         options={{
           title: i18n.t("navigation.playNav"),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-headset" />
           )
         }}
-      ></Tab.Screen>
+      />
 
       <Tab.Screen
         name="player"

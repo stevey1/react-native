@@ -16,7 +16,15 @@ export const GET_SEATS = gql`
     }
   }
 `;
-
+export const GET_GAME_FORMAT = gql`
+  query getGameFormat {
+    gameFormat @client {
+      smallBlind
+      bigBlind
+      straddle
+    }
+  }
+`;
 export const GET_PLAYERS = gql`
   query getPlayers {
     players @client {

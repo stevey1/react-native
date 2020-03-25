@@ -50,6 +50,53 @@ export default function App(props) {
   let nextTodoId = 1;
 
   //const [addPlayer] = useMutation(ADD_PLAYER); // useMutation(ADD_TODO, { variables: { text: "asdfas" } });
+  const client = InitializeApollo();
+  if (!isLoadingComplete && !props.skipLoadingScreen) {
+    return null;
+  } else {
+    return (
+      <ApolloProvider client={client}>
+        <View style={styles.container}>
+          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+          <NavigationContainer
+            ref={containerRef}
+            initialState={initialNavigationState}
+          >
+            <Stack.Navigator>
+              <Stack.Screen name="Root" component={MainNavigator} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </ApolloProvider>
+    );
+  }
+}
+const getInitialData = () => {
+  const players = AllPlayers.map(player => ({
+    __typename: "Player",
+    ...player
+  }));
+  let seats = [];
+  for (let i = 0; i < AllPlayers.length - 1 && i < 4; i++) {
+    seats.push({
+      __typename: "Seat",
+      player: players[i],
+      id: i,
+      betOrder: i
+    });
+  }
+  return {
+    seats: seats,
+    players: players,
+    gameFormat: {
+      __typename: "GameFormat",
+      smallBlind: 1,
+      bigBlind: 2,
+      straddle: 5
+    }
+  };
+};
+function InitializeApollo() {
   const cache = new InMemoryCache();
   const client = new ApolloClient({
     link: new HttpLink(),
@@ -131,46 +178,11 @@ export default function App(props) {
       }
     }
   });
-  const players = AllPlayers.map(player => ({
-    __typename: "Player",
-    ...player
-  }));
-  let seats = [];
-  for (let i = 0; i < AllPlayers.length - 1 && i < 4; i++) {
-    seats.push({
-      __typename: "Seat",
-      player: players[i],
-      id: i,
-      betOrder: i
-    });
-  }
-
+  const data = getInitialData();
   client.writeData({
-    data: {
-      seats: seats,
-      players: players
-    }
+    data: data
   });
-
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return null;
-  } else {
-    return (
-      <ApolloProvider client={client}>
-        <View style={styles.container}>
-          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <NavigationContainer
-            ref={containerRef}
-            initialState={initialNavigationState}
-          >
-            <Stack.Navigator>
-              <Stack.Screen name="Root" component={MainNavigator} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </View>
-      </ApolloProvider>
-    );
-  }
+  return client;
 }
 
 const styles = StyleSheet.create({

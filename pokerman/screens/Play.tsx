@@ -28,18 +28,17 @@ import {
   IActionHistory,
   Round
 } from "../constants/DataTypes";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_GAME_FORMAT, GET_SEATS } from "../constants/apolloQuery";
 
-interface IProps {
-  bigBlind: number;
-  straddle: number;
-  seats: ISeat[];
-}
-export default function Play(props: IProps) {
+export default function Play(props) {
+  const Seats = getSeats();
+  const GameFormat = getGameFormat();
   const preFlopSeats = getSeatsInPlay(Round.Preflop);
   const raiser = preFlopSeats[preFlopSeats.length - 1];
   const action: IAction = {
     raiser: raiser,
-    amount: props.bigBlind,
+    amount: GameFormat.bigBlind,
     callers: [] as ISeat[],
     raises: 0,
     checkRaise: false
@@ -57,8 +56,8 @@ export default function Play(props: IProps) {
 
   function getSeatsInPlay(round: Round) {
     if (round === Round.Preflop) {
-      const totalSeats = props.seats.length;
-      const seats = props.seats.map((s, index) => ({
+      const totalSeats = Seats.length;
+      const seats = Seats.map((s, index) => ({
         ...s,
         betOrder:
           index === 0
@@ -236,8 +235,8 @@ export default function Play(props: IProps) {
           : getMyHandPreflop(
               myHand,
               MyPreFlopBetOrder,
-              props.seats.length,
-              props.bigBlind,
+              Seats.length,
+              GameFormat.bigBlind,
               Actions[Round.Preflop]
             );
       return (
@@ -282,7 +281,7 @@ export default function Play(props: IProps) {
         </Text>
         <Action
           key="pre"
-          bigBlind={props.bigBlind}
+          bigBlind={GameFormat.bigBlind}
           seats={preFlopSeats}
           handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
         ></Action>
@@ -334,6 +333,14 @@ const displayCards = (cards: ICard[]) => {
       {cardDisplay}
     </View>
   );
+};
+const getSeats = () => {
+  const { data } = useQuery(GET_SEATS);
+  return data.seats;
+};
+const getGameFormat = () => {
+  const { data } = useQuery(GET_GAME_FORMAT);
+  return data.gameFormat;
 };
 const sortSeats = (seats: ISeat[]) =>
   seats.sort((s1, s2) => s1.betOrder - s2.betOrder);

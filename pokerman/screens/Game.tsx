@@ -4,23 +4,22 @@ import { Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
 import styles from "./styles";
-interface IProps {
-  smallBlind: number;
-  bigBlind: number;
-  straddle: number;
-  navigation: any;
-  handleGameChange: (
-    smallBlind: number,
-    bigBlind: number,
-    straddle: number
-  ) => void;
-}
-export default function Game(props: IProps) {
-  const [SmallBlind, setSmallBlind] = useState(props.smallBlind);
-  const [BigBlind, setBigBlind] = useState(props.bigBlind);
-  const [Straddle, setStraddle] = useState(props.straddle);
+import { useQuery } from "@apollo/react-hooks";
+import { GET_GAME_FORMAT } from "../constants/apolloQuery";
+
+export default function Game(props) {
+  const {
+    data: { gameFormat },
+    client
+  } = useQuery(GET_GAME_FORMAT);
+  const [SmallBlind, setSmallBlind] = useState(gameFormat.smallBlind);
+  const [BigBlind, setBigBlind] = useState(gameFormat.bigBlind);
+  const [Straddle, setStraddle] = useState(gameFormat.straddle);
   const handleFinishSetup = () => {
-    props.handleGameChange(SmallBlind, BigBlind, Straddle);
+    gameFormat.smallBlind = SmallBlind;
+    gameFormat.bigBlind = BigBlind;
+    gameFormat.straddle = Straddle;
+    client.writeData({ data: {} });
     props.navigation.navigate("seat");
   };
   return (

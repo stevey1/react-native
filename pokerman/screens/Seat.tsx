@@ -17,8 +17,9 @@ export default function Seat(props) {
   const [SeatModalVisible, setSeatModalVisible] = useState(false);
 
   const AllPlayers = getAllPlayers();
+  const { data, client } = useQuery(GET_SEATS);
+  const seats = data.seats;
 
-  const seats = getSeats();
   const [DealerSeatIndex, setDealerSeatIndex] = useState(seats.length - 1);
   let seating = [] as IPlayer[];
   seats.forEach(seat => {
@@ -31,10 +32,7 @@ export default function Seat(props) {
     const { data } = useQuery(GET_PLAYERS);
     return data.players;
   }
-  function getSeats() {
-    const { data } = useQuery(GET_SEATS);
-    return data.seats;
-  }
+
   const handlePlayerSelected = (
     index: number,
     value: number,
