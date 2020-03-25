@@ -205,7 +205,7 @@ const ordinal_of = n =>
 export const getNumberOrdinal = n =>
   i18n.locale === "en" ? ordinal_of(n) : getNumberText(n);
 export const getSeatList = (seats: ISeat[]) =>
-  seats.map((seat, i) => ({
+  seats.map(seat => ({
     text: seat.player.name,
     value: seat.id
   }));

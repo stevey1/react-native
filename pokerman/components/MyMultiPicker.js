@@ -6,16 +6,15 @@ import i18n from "../i18n";
 
 export default function MyMultiPicker(props) {
   const [Selected, setSelected] = useState(
-    props.listItems.map(item => props.values.includes(item.value))
+    props.listItems.map(item => props.values.findIndex(v => v == item.value))
   );
 
   const onChange = index => {
     if (
       props.hightlightValue &&
-      props.listItems[index].value === props.hightlightValue
+      props.listItems[index].value == props.hightlightValue
     )
       return;
-    console.log("asfdsadf");
     const selected = [...Selected];
     selected[index] = !selected[index];
 
@@ -53,7 +52,7 @@ export default function MyMultiPicker(props) {
           //   value={props.listItems[i].value}
           //   textStyle={
           //     props.hightlightValue &&
-          //     props.listItems[i].value === props.hightlightValue
+          //     props.listItems[i].value == props.hightlightValue
           //       ? { color: "#ff0000" }
           //       : {}
           //   }
