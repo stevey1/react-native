@@ -73,21 +73,7 @@ export const UPDATE_PLAYER = gql`
   }
 `;
 export const ADD_PLAYER = gql`
-  mutation add(
-    $name: string!
-    $preflopRaiseType: Int!
-    $preflopCallType: Int!
-    $raiseType: Int!
-    $callType: Int!
-    $isMe: boolean!
-  ) {
-    addPlayer(
-      name: $name
-      preflopRaiseType: $preflopRaiseType
-      preflopCallType: $preflopCallType
-      raiseType: $raiseType
-      callType: $callType
-      isMe: $isMe
-    ) @client
+  mutation add($name: string!) {
+    addPlayer(name: $name) @client
   }
 `;

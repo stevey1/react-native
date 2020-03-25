@@ -14,8 +14,10 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { GET_PLAYER, GET_PLAYERS, GET_SEATS } from "./constants/apolloQuery";
 import { AllPlayers } from "./constants/helper";
+import { PlayType } from "./constants/DataTypes";
 
 const Stack = createStackNavigator();
+let nextPlayer = 15;
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
@@ -143,27 +145,16 @@ function InitializeApollo() {
           return null;
         },
 
-        addPlayer: (
-          _,
-          {
-            name,
-            preflopRaiseType,
-            preflopCallType,
-            raiseType,
-            callType,
-            isMe
-          },
-          { cache }
-        ) => {
+        addPlayer: (_, { name }, { cache }) => {
           const previous = cache.readQuery({ GET_PLAYERS });
           const newPlayer = {
             id: nextPlayer++,
             name,
-            preflopRaiseType,
-            preflopCallType,
-            raiseType,
-            callType,
-            isMe,
+            preflopRaiseType: PlayType.T,
+            preflopCallType: PlayType.T,
+            raiseType: PlayType.T,
+            callType: PlayType.T,
+            isMe: false,
             __typename: "Player"
           };
           const data = {

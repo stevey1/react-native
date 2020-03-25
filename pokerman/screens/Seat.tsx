@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
-import { ISeat, IPlayer } from "../constants/DataTypes";
+import { IPlayer } from "../constants/DataTypes";
 import MyDropDownButton from "../components/MyDropDownButton";
 import MyPicker from "../components/MyPicker";
 import { getSeatText } from "../constants/helper";

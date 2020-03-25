@@ -15,6 +15,7 @@ export default function Game(props) {
   const [SmallBlind, setSmallBlind] = useState(gameFormat.smallBlind);
   const [BigBlind, setBigBlind] = useState(gameFormat.bigBlind);
   const [Straddle, setStraddle] = useState(gameFormat.straddle);
+
   const handleFinishSetup = () => {
     gameFormat.smallBlind = SmallBlind;
     gameFormat.bigBlind = BigBlind;

@@ -102,6 +102,7 @@ export default function Play(props: IProps) {
     };
     let allActions = [...AllActions];
     let actions = [...Actions];
+    
     const lastAction = actions[round];
     if (lastAction) {
       if (lastAction.raiser.id === action.raiser.id && lastAction.raises > 0) {
