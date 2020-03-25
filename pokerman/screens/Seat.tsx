@@ -11,47 +11,44 @@ import styles from "./styles";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_PLAYERS, GET_SEATS } from "../constants/apolloQuery";
 
-//            handleSeatsChange={s => client.writeData({ data: { s } })}
-
 export default function Seat(props) {
   const [PlayerModalVisible, setPlayerModalVisible] = useState(false);
   const [ModalForSeatId, setModalForSeatId] = useState(-1);
   const [SeatModalVisible, setSeatModalVisible] = useState(false);
 
-  var { error, loading, data, client } = useQuery(GET_PLAYERS);
-  if (loading) return <Text>Loading</Text>;
-  if (error) return <Text>Error</Text>;
-  const AllPlayers = data.players;
+  const AllPlayers = getAllPlayers();
 
-  var { error, loading, data, client } = useQuery(GET_SEATS);
-  if (loading) return <Text>Loading</Text>;
-  if (error) return <Text>Error</Text>;
-  const cachedSeats = data.seats;
-  const [DealerSeatIndex, setDealerSeatIndex] = useState(
-    cachedSeats.length - 1
-  );
-  let seats = [] as IPlayer[];
-  cachedSeats.forEach(seat => {
-    seats[seat.id] = seat.player;
+  const seats = getSeats();
+  const [DealerSeatIndex, setDealerSeatIndex] = useState(seats.length - 1);
+  let seating = [] as IPlayer[];
+  seats.forEach(seat => {
+    seating[seat.id] = seat.player;
   });
-  const [Seats, setSeats] = useState(seats);
+  const [Seating, setSeating] = useState(seating);
+  const seatedPlayers = Seating.filter(p => p != null);
 
-  const occupiedSeats = Seats.filter(p => p != null);
-
+  function getAllPlayers() {
+    const { data } = useQuery(GET_PLAYERS);
+    return data.players;
+  }
+  function getSeats() {
+    const { data } = useQuery(GET_SEATS);
+    return data.seats;
+  }
   const handlePlayerSelected = (
     index: number,
     value: number,
     seatId: number
   ) => {
-    let seats = Seats;
+    let seating = Seating;
     const player = AllPlayers.find(p => p.id === value);
-    seats[seatId] = player;
+    seating[seatId] = player;
     let dealerSeatIndex = DealerSeatIndex;
-    const playerCount = seats.filter(p => p).length;
+    const playerCount = seating.filter(p => p).length;
     if (playerCount - 1 < dealerSeatIndex) {
       dealerSeatIndex = playerCount - 1;
     }
-    setSeats(seats);
+    setSeating(seating);
     setPlayerModalVisible(false);
     setModalForSeatId(-1);
     setDealerSeatIndex(dealerSeatIndex);
@@ -71,7 +68,7 @@ export default function Seat(props) {
             style={{
               width: 150
             }}
-            label={Seats[i]?.name || ""}
+            label={Seating[i]?.name || ""}
             onPress={() => {
               setPlayerModalVisible(true);
               setModalForSeatId(i);
@@ -86,7 +83,7 @@ export default function Seat(props) {
     PlayerModalVisible ? (
       <MyPicker
         modalVisible={PlayerModalVisible}
-        value={Seats[ModalForSeatId]?.id || ""}
+        value={Seating[ModalForSeatId]?.id || ""}
         itemSelected={(index, value) =>
           handlePlayerSelected(index, value, ModalForSeatId)
         }
@@ -104,13 +101,13 @@ export default function Seat(props) {
           setDealerSeatIndex(index);
           setSeatModalVisible(false);
         }}
-        listItems={getSeatedPlayerList(Seats)}
+        listItems={getSeatedPlayerList(Seating)}
       ></MyPicker>
     ) : (
       <View></View>
     );
   const handleFinishSeating = () => {
-    const seatSelected = Seats.map((p, index) => ({
+    const seatSelected = Seating.map((p, index) => ({
       id: index,
       player: p,
       betOrder: 0
@@ -125,8 +122,8 @@ export default function Seat(props) {
         __typename: "Seat"
       }))
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
-    client.writeData({ data: { seatSelected } });
-    props.navigation.navigate("play");
+    client.writeData({ data: { seats: seatSelected } });
+    props.navigation.navigate("playNav");
   };
 
   return (
@@ -144,9 +141,9 @@ export default function Seat(props) {
                 width: 150
               }}
               label={
-                occupiedSeats.length > 0 &&
-                occupiedSeats[DealerSeatIndex] &&
-                occupiedSeats[DealerSeatIndex].name
+                seatedPlayers.length > 0 &&
+                seatedPlayers[DealerSeatIndex] &&
+                seatedPlayers[DealerSeatIndex].name
               }
               onPress={() => setSeatModalVisible(true)}
             />
