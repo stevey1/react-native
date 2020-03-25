@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { ISeat, IPlayer } from "../constants/DataTypes";
-import MyButton from "../components/MyButton";
+import MyDropDownButton from "../components/MyDropDownButton";
 import MyPicker from "../components/MyPicker";
 import { getSeatText } from "../constants/helper";
 import { Button } from "react-native-elements";
@@ -61,7 +61,7 @@ export default function Seat(props) {
           <Text key={"t" + i} style={styles.label}>
             {getSeatText(i)}
           </Text>
-          <MyButton
+          <MyDropDownButton
             key={"b" + i}
             style={{
               width: 150
@@ -133,7 +133,7 @@ export default function Seat(props) {
             <Text key="td" style={styles.label}>
               {i18n.t("seat.dealer") + ":"}
             </Text>
-            <MyButton
+            <MyDropDownButton
               key={"dealer"}
               style={{
                 width: 150
@@ -156,6 +156,7 @@ export default function Seat(props) {
             backgroundColor: "#D1D1D1"
           }}
           title={i18n.t("button.done")}
+          titleStyle={{ color: "#000000" }}
           onPress={handleFinishSeating}
         />
       </View>

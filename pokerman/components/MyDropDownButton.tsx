@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RectButton, ScrollView } from "react-native-gesture-handler";
+import { RectButton } from "react-native-gesture-handler";
 
-export default function MyButton(props: {
+export default function MyDropDownButton(props: {
   style: any;
   label: string;
   labelStyle?: any;

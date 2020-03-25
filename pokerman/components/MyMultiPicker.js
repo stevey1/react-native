@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "react-native-elements";
-import { Modal, Text, View } from "react-native";
+import { Button, Overlay } from "react-native-elements";
+import { Modal, View } from "react-native";
 import CheckBox from "./CheckBox";
 import i18n from "../i18n";
 
@@ -71,10 +71,11 @@ export default class MyMultiPicker extends React.Component {
   render() {
     return (
       <View>
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.props.modalVisible}
+        <Overlay
+          windowBackgroundColor="rgba(255, 255, 255, .5)"
+          width="auto"
+          height="auto"
+          isVisible={this.props.modalVisible}
         >
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -86,9 +87,10 @@ export default class MyMultiPicker extends React.Component {
               backgroundColor: "#D1D1D1"
             }}
             title={i18n.t("button.done")}
+            titleStyle={{ color: "#000000" }}
             onPress={this.submitItems}
           />
-        </Modal>
+        </Overlay>
       </View>
     );
   }

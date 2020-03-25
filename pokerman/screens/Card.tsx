@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Suit, ICard } from "../constants/DataTypes";
 import { getNumberText, getCardColor, getSuitText } from "../constants/helper";
 import MyPicker from "../components/MyPicker";
-import MyButton from "../components/MyButton";
+import MyDropDownButton from "../components/MyDropDownButton";
 export default class Card extends Component<
   { handleCard: (card: ICard) => void },
   {
@@ -80,7 +80,7 @@ export default class Card extends Component<
   render() {
     return (
       <View style={{ flexDirection: "row" }}>
-        <MyButton
+        <MyDropDownButton
           key="s"
           style={{
             width: 45,
@@ -90,7 +90,7 @@ export default class Card extends Component<
           labelStyle={getCardColor(this.state.suit)}
           onPress={() => this.setState({ suitVisible: true })}
         />
-        <MyButton
+        <MyDropDownButton
           key="c"
           style={{
             marginRight: 2,

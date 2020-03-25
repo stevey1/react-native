@@ -3,7 +3,7 @@ import { TextInput, Text, View } from "react-native";
 import { ISeat } from "./../constants/DataTypes";
 import i18n from "../i18n";
 import MyPicker from "../components/MyPicker";
-import MyButton from "../components/MyButton";
+import MyDropDownButton from "../components/MyDropDownButton";
 import { getSeatList } from "./../constants/helper";
 
 interface IProps {
@@ -52,7 +52,7 @@ export default function Action(props: IProps) {
 
   return (
     <View style={{ flexDirection: "row" }}>
-      <MyButton
+      <MyDropDownButton
         style={{
           width: 80
         }}

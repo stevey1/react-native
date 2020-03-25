@@ -101,6 +101,7 @@ export default function Game(props) {
         </View>
         <Button
           buttonStyle={{ backgroundColor: "#D1D1D1" }}
+          titleStyle={{ color: "#000000" }}
           title={i18n.t("button.done")}
           onPress={handleFinishSetup}
         />

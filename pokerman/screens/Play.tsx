@@ -19,7 +19,7 @@ import {
   checkMyHand,
   getActionTip
 } from "../constants/master";
-import MyButton from "../components/MyButton";
+import MyDropDownButton from "../components/MyDropDownButton";
 import styles from "./styles";
 
 import {
@@ -63,7 +63,7 @@ export default function Play(props: IProps) {
     { action: action, round: Round.Preflop }
   ]);
 
-  const handleStraddle = () => {
+  const handleStraddle = (newGame: boolean) => {
     const straddles = (props.straddles + 1) % (Seats.length - 2);
     props.handleStraddlesChange(straddles);
     props.navigation.navigate("playNav");
@@ -152,7 +152,7 @@ export default function Play(props: IProps) {
       <Text key="p" style={styles.label}>
         {i18n.t("play.callers")}:
       </Text>
-      <MyButton
+      <MyDropDownButton
         label=""
         onPress={() => {
           if (!Actions[CurrentRound]) setCurrentRound(CurrentRound - 1);
@@ -299,10 +299,11 @@ export default function Play(props: IProps) {
         </View>
 
         <Button
-          //buttonStyle={{ backgroundColor: "#D1D1D1"}}
-          style={{ width: 65, marginRight: 3 }}
-          title={i18n.t("button.done")}
-          onPress={handleStraddle}
+          buttonStyle={{ backgroundColor: "#D1D1D1" }}
+          style={{ width: 75, marginRight: 3 }}
+          title={i18n.t("button.straddle")}
+          titleStyle={{ color: "#000000" }}
+          onPress={() => handleStraddle(false)}
         />
       </View>
       {
@@ -322,6 +323,13 @@ export default function Play(props: IProps) {
       </View>
       <View>{displayPot(AllActions)}</View>
       {showTips()}
+      <Button
+        buttonStyle={{ backgroundColor: "#D1D1D1" }}
+        style={{ width: 105, marginRight: 3 }}
+        title={i18n.t("button.new")}
+        titleStyle={{ color: "#000000" }}
+        onPress={() => handleStraddle(true)}
+      />
     </ScrollView>
   );
 }

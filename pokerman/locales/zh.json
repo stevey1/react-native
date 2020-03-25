@@ -38,7 +38,9 @@
     "straddle": "盲打"
   },
   "button": {
-    "done": "完成"
+    "done": "完成",
+    "straddle": "Straddle",
+    "new": "New Game"
   },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
