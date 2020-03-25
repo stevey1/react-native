@@ -1,62 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { CheckBox, Button, Overlay } from "react-native-elements";
 import { Modal, View } from "react-native";
 // import CheckBox from "./CheckBox";
 import i18n from "../i18n";
 
-export default class MyMultiPicker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selected: props.listItems.map(item => props.values.includes(item.value))
-    };
-  }
-  onChange = index => {
+export default function MyMultiPicker(props) {
+  const [Selected, setSelected] = useState(
+    props.listItems.map(item => props.values.includes(item.value))
+  );
+  const onChange = index => {
     if (
-      this.props.hightlightValue &&
-      this.props.listItems[index].value === this.props.hightlightValue
+      props.hightlightValue &&
+      props.listItems[index].value === props.hightlightValue
     )
       return;
 
-    const selected = this.state.selected;
-    selected[index] = !this.state.selected[index];
+    const selected = Selected;
+    selected[index] = !Selected[index];
 
-    this.setState({ selected: selected });
+    setSelected(selected);
   };
-  submitItems = () => {
-    const selectedIndexes = this.state.selected
-      .map((value, index) => ({ value, index }))
+  const submitItems = () => {
+    const selectedIndexes = Selected.map((value, index) => ({ value, index }))
       .filter(item => item.value)
       .map(item => item.index);
-    this.props.itemsSelected(selectedIndexes);
+    props.itemsSelected(selectedIndexes);
   };
-  getCheckBoxes(countPerRow) {
+  const getCheckBoxes = countPerRow => {
     let control = [];
-    const rows = Math.ceil(this.props.listItems.length / countPerRow);
+    const rows = Math.ceil(props.listItems.length / countPerRow);
     for (let r = 0; r < rows; r++) {
       let row = [];
 
       for (
         let i = r * countPerRow;
-        i < (r + 1) * countPerRow && i < this.props.listItems.length;
+        i < (r + 1) * countPerRow && i < props.listItems.length;
         i++
       ) {
         row.push(
           <CheckBox
             key={"c" + i}
-            checked={this.state.selected[i] || false}
-            onPress={() => this.onChange(i)}
-            title={this.props.listItems[i].text}
+            checked={Selected[i] || false}
+            onPress={() => onChange(i)}
+            title={props.listItems[i].text}
           ></CheckBox>
           // <CheckBox
           //   key={"c" + i}
-          //   selected={this.state.selected[i] || false}
-          //   onPress={() => this.onChange(i)}
-          //   text={this.props.listItems[i].text}
-          //   value={this.props.listItems[i].value}
+          //   selected={Selected[i] || false}
+          //   onPress={() => onChange(i)}
+          //   text={props.listItems[i].text}
+          //   value={props.listItems[i].value}
           //   textStyle={
-          //     this.props.hightlightValue &&
-          //     this.props.listItems[i].value === this.props.hightlightValue
+          //     props.hightlightValue &&
+          //     props.listItems[i].value === props.hightlightValue
           //       ? { color: "#ff0000" }
           //       : {}
           //   }
@@ -73,31 +69,30 @@ export default class MyMultiPicker extends React.Component {
       );
     }
     return control;
-  }
-  render() {
-    return (
-      <View>
-        <Overlay
-          windowBackgroundColor="rgba(255, 255, 255, .5)"
-          width="auto"
-          height="auto"
-          isVisible={this.props.modalVisible}
+  };
+
+  return (
+    <View>
+      <Overlay
+        windowBackgroundColor="rgba(255, 255, 255, .5)"
+        width="auto"
+        height="auto"
+        isVisible={props.modalVisible}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            {this.getCheckBoxes(1)}
-          </View>
-          <Button
-            buttonStyle={{
-              backgroundColor: "#D1D1D1"
-            }}
-            title={i18n.t("button.done")}
-            titleStyle={{ color: "#000000" }}
-            onPress={this.submitItems}
-          />
-        </Overlay>
-      </View>
-    );
-  }
+          {getCheckBoxes(1)}
+        </View>
+        <Button
+          buttonStyle={{
+            backgroundColor: "#D1D1D1"
+          }}
+          title={i18n.t("button.done")}
+          titleStyle={{ color: "#000000" }}
+          onPress={submitItems}
+        />
+      </Overlay>
+    </View>
+  );
 }
