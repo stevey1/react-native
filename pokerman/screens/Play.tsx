@@ -83,12 +83,12 @@ export default function Play(props: IProps) {
   }
 
   const handleMyHand = (card: ICard, cardId: number) => {
-    const cards = MyHand;
+    const cards = [...MyHand];
     cards[cardId] = card;
     setMyHand(cards);
   };
   const handleBoard = (card: ICard, cardId: number) => {
-    let cards = Board;
+    let cards = [...Board];
     cards[cardId] = card;
     setBoard(cards);
   };
@@ -100,8 +100,8 @@ export default function Play(props: IProps) {
       checkRaise: false,
       callers: []
     };
-    let allActions = AllActions;
-    let actions = Actions;
+    let allActions = [...AllActions];
+    let actions = [...Actions];
     const lastAction = actions[round];
     if (lastAction) {
       if (lastAction.raiser.id === action.raiser.id && lastAction.raises > 0) {

@@ -38,7 +38,7 @@ export default function Seat(props) {
     value: number,
     seatId: number
   ) => {
-    let seating = Seating;
+    let seating = [...Seating];
     const player = AllPlayers.find(p => p.id === value);
     seating[seatId] = player;
     let dealerSeatIndex = DealerSeatIndex;
