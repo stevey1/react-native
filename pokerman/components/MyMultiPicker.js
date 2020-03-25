@@ -8,15 +8,16 @@ export default function MyMultiPicker(props) {
   const [Selected, setSelected] = useState(
     props.listItems.map(item => props.values.includes(item.value))
   );
+
   const onChange = index => {
     if (
       props.hightlightValue &&
       props.listItems[index].value === props.hightlightValue
     )
       return;
-
-    const selected = Selected;
-    selected[index] = !Selected[index];
+    console.log("asfdsadf");
+    const selected = [...Selected];
+    selected[index] = !selected[index];
 
     setSelected(selected);
   };
@@ -40,9 +41,9 @@ export default function MyMultiPicker(props) {
         row.push(
           <CheckBox
             key={"c" + i}
-            checked={Selected[i] || false}
+            checked={Selected[i]}
             onPress={() => onChange(i)}
-            title={props.listItems[i].text}
+            title={props.listItems[i].text + Selected[i]}
           ></CheckBox>
           // <CheckBox
           //   key={"c" + i}
@@ -79,19 +80,22 @@ export default function MyMultiPicker(props) {
         height="auto"
         isVisible={props.modalVisible}
       >
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          {getCheckBoxes(1)}
+        <View>
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            {getCheckBoxes(1)}
+          </View>
+          <Button
+            buttonStyle={{
+              backgroundColor: "#D1D1D1"
+            }}
+            title={i18n.t("button.done")}
+            titleStyle={{ color: "#000000" }}
+            onPres
+            s={submitItems}
+          />
         </View>
-        <Button
-          buttonStyle={{
-            backgroundColor: "#D1D1D1"
-          }}
-          title={i18n.t("button.done")}
-          titleStyle={{ color: "#000000" }}
-          onPress={submitItems}
-        />
       </Overlay>
     </View>
   );
