@@ -39,16 +39,14 @@ export default function Action(props: IProps) {
   };
 
   const showSeatDropDown = () =>
-    !SeatModalVisible ? (
-      <View></View>
-    ) : (
+    (SeatModalVisible && (
       <MyPicker
         modalVisible={SeatModalVisible}
         value={Raiser?.id}
         itemSelected={handleRaiserSelected}
         listItems={getSeatList(props.seats)}
       ></MyPicker>
-    );
+    )) || <View></View>;
 
   return (
     <View style={{ flexDirection: "row" }}>
@@ -62,7 +60,7 @@ export default function Action(props: IProps) {
       {showSeatDropDown()}
       <Text
         style={{
-          width: 70,
+          width: 45,
           textAlign: "right"
         }}
       >

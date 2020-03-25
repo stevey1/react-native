@@ -77,7 +77,7 @@ const getInitialData = () => {
     ...player
   }));
   let seats = [];
-  for (let i = 0; i < AllPlayers.length - 1 && i < 4; i++) {
+  for (let i = 0; i < AllPlayers.length - 1 && i < 7; i++) {
     seats.push({
       __typename: "Seat",
       player: players[i],

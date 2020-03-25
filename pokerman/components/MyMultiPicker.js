@@ -6,13 +6,13 @@ import i18n from "../i18n";
 
 export default function MyMultiPicker(props) {
   const [Selected, setSelected] = useState(
-    props.listItems.map(item => props.values.findIndex(v => v == item.value))
+    props.listItems.map(item => props.values.includes(item.value))
   );
 
   const onChange = index => {
     if (
       props.hightlightValue &&
-      props.listItems[index].value == props.hightlightValue
+      props.listItems[index].value === props.hightlightValue
     )
       return;
     const selected = [...Selected];
@@ -42,7 +42,13 @@ export default function MyMultiPicker(props) {
             key={"c" + i}
             checked={Selected[i]}
             onPress={() => onChange(i)}
-            title={props.listItems[i].text + Selected[i]}
+            title={props.listItems[i].text}
+            textStyle={
+              props.hightlightValue &&
+              props.listItems[i].value === props.hightlightValue
+                ? { color: "#ff0000" }
+                : {}
+            }
           ></CheckBox>
           // <CheckBox
           //   key={"c" + i}
@@ -52,7 +58,7 @@ export default function MyMultiPicker(props) {
           //   value={props.listItems[i].value}
           //   textStyle={
           //     props.hightlightValue &&
-          //     props.listItems[i].value == props.hightlightValue
+          //     props.listItems[i].value === props.hightlightValue
           //       ? { color: "#ff0000" }
           //       : {}
           //   }

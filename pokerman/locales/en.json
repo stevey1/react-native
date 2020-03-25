@@ -5,7 +5,7 @@
     "seat": "Seating",
     "player": "Player Setup",
     "playNav": "Play",
-    "timers": "Settings"
+    "timer": "Timer"
   },
   "home": {
     "welcome": "Welcome to %{appName}!"
@@ -21,10 +21,10 @@
     "raise": "Raise"
   },
   "action": {
-    "amount": "Amount",
+    "amount": "Bet",
     "seat": "Seat",
     "pot": "Pot",
-    "by": "by",
+    "by": "By",
     "checkRaise": "CR trap",
     "raise": "B",
     "players": "Players"
@@ -35,9 +35,29 @@
   "game": {
     "smallBlind": "Small Blind",
     "bigBlind": "Big Blind",
-    "straddle": "straddle"
+    "straddle": "Straddle"
   },
   "button": {
-    "done": "Done"
+    "done": "Done",
+    "straddle": "Straddle",
+    "new": "New Game"
+  },
+  "pre": {
+    "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
+    "aa-late-position": "Prefer 1 caller: raise: {{amount}}",
+    "claim-my-pot": "Claim it: All in or big raise 3B+ {{amount}} and all in after flop",
+    "kk-early-position": "find AA to fold; try check raise on action table or raise {{amount1}} -{{amount2}}",
+    "kk-later-position": "find AA to fold; raise {{amount}}",
+    "check-or-fight": "Seem AA is here; check the raiser's type and confirm it, all in to fight looser or call to see",
+    "qq-no-raiser": "find AA/KK to fold; try check raise 20 to start",
+    "big-pair-bet": "this is big bet for AA/KK bet, fold",
+    "raise-to": "raise to {{amount}}, check board if A shows up-> prepare to fold",
+    "jj-no-raiser": "find AA/KK/QQ to fold; try check raise 20 to start",
+    "middle-pair": "Regular raise or call; 50%->A*",
+    "small-pair": "call but not big(35-) to see",
+    "big-a": "{{suited}} big A, regular raise or call; 50%->pocket",
+    "medium-a-1": "{{suited}} medium A, regular raise or call; 50%->pocket",
+    "medium-a-2": "{{suited}} medium A, small raise/regular raise with position or call; 50%->pocket",
+    "samll-a": "{{suited}} medium A, small raise or call; 50%->pocket"
   }
 }
