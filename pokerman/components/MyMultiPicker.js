@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CheckBox, Button, Overlay } from "react-native-elements";
+import { ScrollView } from "react-native-gesture-handler";
 import { Modal, View } from "react-native";
 // import CheckBox from "./CheckBox";
 import i18n from "../i18n";
@@ -49,6 +50,11 @@ export default function MyMultiPicker(props) {
                 ? { color: "#ff0000" }
                 : {}
             }
+            containerStyle={{
+              margin: 0,
+              borderColor: "#F5F5F5",
+              backgroundColor: "#F5F5F5"
+            }}
           ></CheckBox>
           // <CheckBox
           //   key={"c" + i}
@@ -66,10 +72,7 @@ export default function MyMultiPicker(props) {
         );
       }
       control.push(
-        <View
-          key={"m" + r}
-          style={{ flexDirection: "row", width: 50, height: 40 }}
-        >
+        <View key={"m" + r} style={{ flexDirection: "row" }}>
           {row}
         </View>
       );
@@ -78,30 +81,25 @@ export default function MyMultiPicker(props) {
   };
 
   return (
-    <View>
-      <Overlay
-        windowBackgroundColor="rgba(255, 255, 255, .5)"
-        width="auto"
-        height="auto"
-        isVisible={props.modalVisible}
-      >
-        <View>
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            {getCheckBoxes(1)}
-          </View>
+    <Overlay
+      overlayBackgroundColor="#F5F5F5"
+      width="90%"
+      height="80%"
+      isVisible={props.modalVisible}
+    >
+      <ScrollView>
+        <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
+          <View>{getCheckBoxes(1)}</View>
           <Button
             buttonStyle={{
               backgroundColor: "#D1D1D1"
             }}
             title={i18n.t("button.done")}
             titleStyle={{ color: "#000000" }}
-            onPres
-            s={submitItems}
+            onPress={submitItems}
           />
         </View>
-      </Overlay>
-    </View>
+      </ScrollView>
+    </Overlay>
   );
 }

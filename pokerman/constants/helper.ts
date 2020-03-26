@@ -132,34 +132,6 @@ export const AllPlayers: IPlayer[] = [
     isMe: false
   },
   {
-    id: 8,
-    name: "P8",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    id: 9,
-    name: "P9",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-
-  {
-    id: 10,
-    name: "P10",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
     id: 12,
     name: "Jim Happer",
     preflopRaiseType: PlayType.M,
@@ -190,6 +162,34 @@ export const AllPlayers: IPlayer[] = [
   {
     id: 14,
     name: "Rock Player",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+  {
+    id: 8,
+    name: "P8",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+  {
+    id: 9,
+    name: "P9",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+
+  {
+    id: 10,
+    name: "P10",
     preflopRaiseType: PlayType.M,
     preflopCallType: PlayType.L,
     raiseType: PlayType.M,

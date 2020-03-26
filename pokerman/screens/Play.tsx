@@ -102,7 +102,7 @@ export default function Play(props: IProps) {
     };
     let allActions = [...AllActions];
     let actions = [...Actions];
-    
+
     const lastAction = actions[round];
     if (lastAction) {
       if (lastAction.raiser.id === action.raiser.id && lastAction.raises > 0) {
@@ -130,6 +130,7 @@ export default function Play(props: IProps) {
     setCurrentRound(round);
   };
   const handleCallers = (callers: ISeat[]) => {
+    console.log("caller selected");
     setCallerModalVisible(false);
     if (callers.length == 0) return;
     const allActions = AllActions;

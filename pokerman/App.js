@@ -82,7 +82,7 @@ const getInitialData = () => {
     ...player
   }));
   let seats = [];
-  for (let i = 0; i < AllPlayers.length - 1 && i < 7; i++) {
+  for (let i = 0; i < AllPlayers.length - 1 && i < 10; i++) {
     seats.push({
       __typename: "Seat",
       player: players[i],
@@ -125,7 +125,6 @@ function InitializeApollo() {
             }
           `;
           const player = cache.readFragment({ fragment, id: fragmentId });
-          console.log(player);
 
           //const todo = cache.readQuery({ query }, { variables: { id: id } });
           const data = {
@@ -136,7 +135,6 @@ function InitializeApollo() {
             raiseType: raiseType,
             callType: callType
           };
-          console.log(data);
           // cache.writeFragment({ fragment, fragmentId, data });
           // you can also do cache.writeData({ data, id }) here if you prefer
           cache.writeData({ data, id: fragmentId });
