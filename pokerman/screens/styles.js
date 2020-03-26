@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     width: 120
   },
 
-  control: { flexDirection: "row", margin: 1, height: 40 },
+  control: { flexDirection: "row", margin: 1 },
 
   container: {
     flex: 1,

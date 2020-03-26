@@ -63,47 +63,41 @@ export default function Timer(props: IProps) {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={[styles.container, { justifyContent: "space-between" }]}>
-        <View>
-          <Text>螳螂扑蝉，黄雀在后</Text>
+        <View style={styles.control}>
+          <Text onPress={() => setShowTip(true)}>螳螂扑蝉，黄雀在后</Text>
         </View>
         <View>
-          <TextInput
-            key="tis"
-            onChange={e => {
-              const value = e.nativeEvent.text
-                ? parseInt(e.nativeEvent.text)
-                : null;
-              if (value) setSessionTime(value);
-            }}
-            keyboardType={"numeric"}
-            maxLength={3}
-            selectTextOnFocus={true}
-            style={{
-              width: 50,
-              height: 50,
-              marginLeft: 5,
-              paddingLeft: 5,
-              backgroundColor: "#D1D1D1",
-              borderWidth: 1
-            }}
-          />
-        </View>
-        <View>
-          <Text>
-            {Math.round(TimeLeft / 3600)}:{Math.round(TimeLeft / 60) % 60}:
-            {TimeLeft % 60}
-          </Text>
+          <View style={styles.control}>
+            <Text style={styles.label_player}>Session Time</Text>
+            <TextInput
+              key="tis"
+              onChange={e => {
+                const value = e.nativeEvent.text
+                  ? parseInt(e.nativeEvent.text)
+                  : null;
+                if (value) setSessionTime(value);
+              }}
+              keyboardType={"numeric"}
+              maxLength={3}
+              selectTextOnFocus={true}
+              style={{
+                width: 50,
+                height: 50,
+                marginLeft: 5,
+                paddingLeft: 5,
+                backgroundColor: "#D1D1D1",
+                borderWidth: 1
+              }}
+            />
+          </View>
+          <View>
+            <Text style={{ textAlign: "center" }}>
+              {Math.round(TimeLeft / 3600)}:{Math.round(TimeLeft / 60) % 60}:
+              {TimeLeft % 60}
+            </Text>
+          </View>
         </View>
         {tipOverlay()}
-        <Button
-          buttonStyle={{
-            backgroundColor: "#f2f2f2",
-            width: 25
-          }}
-          title="..."
-          titleStyle={{ color: "#000000" }}
-          onPress={() => setShowTip(true)}
-        />
         <Button
           buttonStyle={{
             backgroundColor: "#D1D1D1"
