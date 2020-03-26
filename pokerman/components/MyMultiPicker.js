@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CheckBox, Button, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
-import { Modal, View } from "react-native";
+import {View } from "react-native";
 // import CheckBox from "./CheckBox";
 import i18n from "../i18n";
 

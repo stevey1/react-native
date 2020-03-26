@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, TextInput } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, Divider } from "react-native-elements";
 import MyPicker from "../components/MyPicker";
 import MyDropDownButton from "../components/MyDropDownButton";
 import styles from "./styles";
@@ -26,7 +26,7 @@ export default function Player() {
     PlayerModalVisible ? (
       <MyPicker
         modalVisible={PlayerModalVisible}
-        itemSelected={(index, value) => {
+        itemSelected={index => {
           setPlayer(AllPlayers[index]);
           setPlayerModalVisible(false);
         }}
@@ -35,30 +35,47 @@ export default function Player() {
     ) : (
       <View></View>
     );
+  const getPlayerPlayType = () => {
+    switch (CurrentPlayTypeModal) {
+      case 1:
+        return Player.preflopRaiseType;
+      case 2:
+        return Player.preflopCallType;
+      case 3:
+        return Player.raiseType;
+      default:
+        return Player.callType;
+    }
+  };
+
+  const setPlayerPlayType = index => {
+    const player = { ...Player };
+    switch (CurrentPlayTypeModal) {
+      case 1:
+        player.preflopRaiseType = index;
+        break;
+      case 2:
+        player.preflopCallType = index;
+        break;
+      case 3:
+        player.raiseType = index;
+        break;
+      default:
+        player.callType = index;
+        break;
+    }
+    setPlayer(player);
+  };
   const showPlayTypeDropDown = () =>
     PlayTypeModalVisible ? (
       <MyPicker
         modalVisible={PlayTypeModalVisible}
-        itemSelected={(index, value) => {
-          const player = { ...Player };
-          switch (CurrentPlayTypeModal) {
-            case 1:
-              player.preflopRaiseType = index;
-              break;
-            case 2:
-              player.preflopCallType = index;
-              break;
-            case 3:
-              player.RaiseType = index;
-              break;
-            default:
-              player.callType = index;
-              break;
-          }
-          setPlayer(player);
+        value={getPlayerPlayType()}
+        itemSelected={index => {
+          setPlayerPlayType(index);
           setPlayTypeModalVisible(false);
         }}
-        listItems={getPlayerList(AllPlayers)}
+        listItems={getPlayTypeList()}
       ></MyPicker>
     ) : (
       <View></View>
@@ -68,7 +85,7 @@ export default function Player() {
       <View style={styles.container}>
         <View>
           <View style={styles.control}>
-            <Text style={styles.label}>Name:</Text>
+            <Text style={styles.label_player}>Name:</Text>
             <TextInput
               value={Name}
               onChangeText={text => setName(text)}
@@ -90,23 +107,16 @@ export default function Player() {
               onPress={() => {
                 if (Name) {
                   addPlayer({ variables: { name: Name } });
-                  // updatePlayer({
-                  //   variables: {
-                  //     id: 1,
-                  //     name: "steve",
-                  //     preflopRaiseType: PlayType.LL,
-                  //     preflopCallType: PlayType.LL,
-                  //     raiseType: PlayType.LL,
-                  //     callType: PlayType.LL
-                  //   }
-                  // });
                   setName("");
                 }
               }}
             />
           </View>
+          <text>
+            <Divider style={{ backgroundColor: "white", marginTop: 15 }} />;
+          </text>
           <View style={styles.control}>
-            <Text style={styles.label}>Player:</Text>
+            <Text style={styles.label_player}>Player:</Text>
             <MyDropDownButton
               key="player"
               style={{
@@ -117,9 +127,9 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label}>Player Name:</Text>
+            <Text style={styles.label_player}>Player Name:</Text>
             <TextInput
-              value={Player?.name}
+              value={(Player && Player.name) || ""}
               onChangeText={text => {
                 const player = { ...Player };
                 player.name = text;
@@ -136,7 +146,7 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label}>Preflop Bet:</Text>
+            <Text style={styles.label_player}>Preflop Bet:</Text>
             <MyDropDownButton
               key={"pre-b"}
               style={{
@@ -150,7 +160,7 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label}>PreFlop Call:</Text>
+            <Text style={styles.label_player}>PreFlop Call:</Text>
             <MyDropDownButton
               key={"pre-c"}
               style={{
@@ -164,7 +174,7 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label}>After Flop Bet:</Text>
+            <Text style={styles.label_player}>After Flop Bet:</Text>
             <MyDropDownButton
               key={"after-b"}
               style={{
@@ -178,7 +188,7 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label}>After Flop Calling:</Text>
+            <Text style={styles.label_player}>After Flop Calling:</Text>
             <MyDropDownButton
               key={"after-c"}
               style={{
@@ -199,9 +209,33 @@ export default function Player() {
           buttonStyle={{ backgroundColor: "#D1D1D1" }}
           titleStyle={{ color: "#000000" }}
           title={i18n.t("button.done")}
-          //onPress={handleFinishSetup}
+          onPress={() => {
+            if (Player) {
+              updatePlayer({
+                variables: {
+                  id: Player.id,
+                  name: Player.name,
+                  preflopRaiseType: Player.preflopRaiseType,
+                  preflopCallType: Player.preflopCallType,
+                  raiseType: Player.raiseType,
+                  callType: Player.callType
+                }
+              });
+              setPlayer(null);
+            }
+          }}
         />
       </View>
     </ScrollView>
   );
 }
+const getPlayTypeList = () => {
+  let list = [];
+  for (let item in PlayType) {
+    let value = Number(item);
+    if (!isNaN(value)) {
+      list.push({ text: PlayType[value], value: value });
+    }
+  }
+  return list;
+};

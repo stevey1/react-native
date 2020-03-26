@@ -128,13 +128,10 @@ export default function Seat(props) {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
         <View>
-          <View>{showAll10Seats()}</View>
+          {showAll10Seats()}
           <View style={styles.control}>
-            <Text key="td" style={styles.label}>
-              {i18n.t("seat.dealer") + ":"}
-            </Text>
+            <Text style={styles.label}>{i18n.t("seat.dealer") + ":"}</Text>
             <MyDropDownButton
-              key={"dealer"}
               style={{
                 width: 150
               }}

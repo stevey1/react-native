@@ -22,6 +22,7 @@ export const GET_GAME_FORMAT = gql`
       smallBlind
       bigBlind
       straddle
+      gameType
     }
   }
 `;

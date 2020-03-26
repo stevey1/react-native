@@ -32,6 +32,10 @@ export enum PlayType {
   T,
   TT
 }
+export enum GameType {
+  cash = 0,
+  tournament
+}
 
 export enum Suit {
   c = 0,

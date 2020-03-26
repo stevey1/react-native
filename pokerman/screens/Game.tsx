@@ -1,44 +1,74 @@
 import React, { useState } from "react";
 import { Text, View, TextInput } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
 import styles from "./styles";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_GAME_FORMAT } from "../constants/apolloQuery";
+import { GameType } from "../constants/DataTypes";
 
 export default function Game(props) {
   const {
     data: { gameFormat },
     client
   } = useQuery(GET_GAME_FORMAT);
-  const [SmallBlind, setSmallBlind] = useState(gameFormat.smallBlind);
-  const [BigBlind, setBigBlind] = useState(gameFormat.bigBlind);
-  const [Straddle, setStraddle] = useState(gameFormat.straddle);
+
+  const [GameFormat, setGameFormat] = useState(gameFormat);
 
   const handleFinishSetup = () => {
-    gameFormat.smallBlind = SmallBlind;
-    gameFormat.bigBlind = BigBlind;
-    gameFormat.straddle = Straddle;
-    client.writeData({ data: {} });
+    client.writeData({ data: { GameFormat } });
     props.navigation.navigate("seat");
   };
+  const getCheckBoxes = () => {
+    console.log("GameFormat.gameType", GameFormat.gameType);
+    return getGameTypeList().map((listItem, index) => (
+      <CheckBox
+        key={"c" + index.toString()}
+        checked={GameFormat.gameType == index}
+        onPress={() => {
+          const gameFormat = { ...GameFormat };
+          gameFormat.gameType = index;
+          setGameFormat(gameFormat);
+        }}
+        size={16}
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+        title={GameType[index]}
+        containerStyle={{
+          margin: 0,
+          padding: 0,
+          borderColor: "#f2f2f2",
+          backgroundColor: "#f2f2f2"
+        }}
+      />
+    ));
+  };
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
         <View>
+          <View style={[styles.control, { marginBottom: 10 }]}>
+            <Text key="tst" style={styles.label}>
+              Game Type:
+            </Text>
+            <View style={{ flexDirection: "column" }}>{getCheckBoxes()}</View>
+          </View>
           <View key="vs" style={styles.control}>
             <Text key="ts" style={styles.label}>
               {i18n.t("game.smallBlind") + ":"}
             </Text>
             <TextInput
               key="tis"
-              onChange={e =>
-                setSmallBlind(
-                  e.nativeEvent.text ? parseInt(e.nativeEvent.text) : null
-                )
-              }
-              value={SmallBlind?.toString() ?? ""}
+              value={GameFormat.smallBlind?.toString() ?? ""}
+              onChange={e => {
+                const gameFormat = { ...GameFormat };
+                gameFormat.smallBlind = e.nativeEvent.text
+                  ? parseInt(e.nativeEvent.text)
+                  : null;
+                setGameFormat(gameFormat);
+              }}
               keyboardType={"numeric"}
               maxLength={3}
               selectTextOnFocus={true}
@@ -57,12 +87,14 @@ export default function Game(props) {
             </Text>
             <TextInput
               key="bigBlind"
-              onChange={e =>
-                setBigBlind(
-                  e.nativeEvent.text ? parseInt(e.nativeEvent.text) : null
-                )
-              }
-              value={BigBlind?.toString() ?? ""}
+              value={GameFormat.bigBlind?.toString() ?? ""}
+              onChange={e => {
+                const gameFormat = { ...GameFormat };
+                gameFormat.bigBlind = e.nativeEvent.text
+                  ? parseInt(e.nativeEvent.text)
+                  : null;
+                setGameFormat(gameFormat);
+              }}
               keyboardType={"numeric"}
               maxLength={3}
               selectTextOnFocus={true}
@@ -81,12 +113,14 @@ export default function Game(props) {
             </Text>
             <TextInput
               key="straddle"
-              onChange={e =>
-                setStraddle(
-                  e.nativeEvent.text ? parseInt(e.nativeEvent.text) : null
-                )
-              }
-              value={Straddle?.toString() ?? ""}
+              value={GameFormat.straddle?.toString() ?? ""}
+              onChange={e => {
+                const gameFormat = { ...GameFormat };
+                gameFormat.straddle = e.nativeEvent.text
+                  ? parseInt(e.nativeEvent.text)
+                  : null;
+                setGameFormat(gameFormat);
+              }}
               keyboardType={"numeric"}
               maxLength={3}
               selectTextOnFocus={true}
@@ -110,3 +144,13 @@ export default function Game(props) {
     </ScrollView>
   );
 }
+const getGameTypeList = () => {
+  let list = [];
+  for (let item in GameType) {
+    let value = Number(item);
+    if (!isNaN(value)) {
+      list.push({ label: GameType[value], value: value });
+    }
+  }
+  return list;
+};

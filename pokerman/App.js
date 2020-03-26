@@ -13,13 +13,9 @@ import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import gql from "graphql-tag";
-import {
-  GET_PLAYER,
-  GET_PLAYERS,
-  GET_GAME_FORMAT
-} from "./constants/apolloQuery";
+import { GET_PLAYERS } from "./constants/apolloQuery";
 import { AllPlayers } from "./constants/helper";
-import { PlayType } from "./constants/DataTypes";
+import { PlayType, GameType } from "./constants/DataTypes";
 
 const Stack = createStackNavigator();
 let nextPlayerId = 15;
@@ -54,7 +50,6 @@ export default function App(props) {
 
     loadResourcesAndDataAsync();
   }, []);
-  let nextPlayerId = 15;
   const client = InitializeApollo();
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
@@ -97,7 +92,8 @@ const getInitialData = () => {
       __typename: "GameFormat",
       smallBlind: 1,
       bigBlind: 2,
-      straddle: 5
+      straddle: 5,
+      gameType: GameType.cash
     }
   };
 };
