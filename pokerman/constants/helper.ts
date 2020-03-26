@@ -1,18 +1,9 @@
 import { IPlayer, ISeat, Suit, ICard, Round, PlayType } from "./DataTypes";
 import i18n from "../i18n";
-export const getNumberText = (value: number) => {
-  return i18n.t("number." + value);
-};
-export const getSuitText = (suit: Suit) => {
-  return i18n.t("suit." + suit);
-};
-const roundText = [
-  i18n.t("play.preFlop"),
-  i18n.t("play.flop"),
-  i18n.t("play.turn"),
-  i18n.t("play.river")
-];
-export const getRoundText = (round: Round) => roundText[round];
+
+export const getNumberText = (value: number) => i18n.t("number." + value);
+export const getSuitText = (suit: Suit) => i18n.t("suit." + suit);
+export const getRoundText = (round: Round) => i18n.t("round." + round);
 
 export const getCardColor = (suit: Suit) =>
   i18n.locale === "en" && (suit === Suit.d || suit === Suit.h)

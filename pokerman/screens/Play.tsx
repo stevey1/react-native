@@ -41,13 +41,13 @@ export default function Play(props: IProps) {
   const [MyHand, setMyHand] = useState([]);
   const [Board, setBoard] = useState([]);
   const [CallerModalVisible, setCallerModalVisible] = useState(false);
+
   const GameFormat = getGameFormat();
   const BigBlind =
     props.straddles > 0
       ? GameFormat.straddle * Math.pow(2, props.straddles - 1)
       : GameFormat.bigBlind;
   const Seats = getSeats();
-
   const PreFlopSeats = getSeatsInPlay(Round.Preflop, props.straddles);
 
   const raiser = PreFlopSeats[Seats.length - 1];
