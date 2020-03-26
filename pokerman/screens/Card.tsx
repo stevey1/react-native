@@ -85,8 +85,12 @@ const getCardList = () =>
     text: getNumberText(i),
     value: i
   }));
-const getSuitList = () =>
-  [0, 1, 2, 3].map(i => ({
-    text: getSuitText(i),
-    value: i
-  }));
+const getSuitList = () => {
+  let list = [];
+  for (let item in SuitType) {
+    let value = Number(item);
+    if (!isNaN(value)) {
+      list.push({ text: getSuitText(value), value: value });
+    }
+  }
+};

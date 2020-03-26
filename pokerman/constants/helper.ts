@@ -1,48 +1,10 @@
 import { IPlayer, ISeat, Suit, ICard, Round, PlayType } from "./DataTypes";
 import i18n from "../i18n";
-const numberMap =
-  i18n.locale === "en"
-    ? [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "J",
-        "Q",
-        "K",
-        "A"
-      ]
-    : [
-        "",
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六",
-        "七",
-        "八",
-        "九",
-        "十",
-        "J",
-        "Q",
-        "K",
-        "A"
-      ];
 export const getNumberText = (value: number) => {
-  return numberMap[value];
+  return i18n.t("number." + value);
 };
-const suitMap =
-  i18n.locale === "en" ? ["♣", "♦", "♥", "♠"] : ["草", "方", "红", "黑"];
 export const getSuitText = (suit: Suit) => {
-  return suitMap[suit];
+  return i18n.t("suit." + suit);
 };
 const roundText = [
   i18n.t("play.preFlop"),
@@ -205,6 +167,7 @@ const ordinal_of = n =>
 
 export const getNumberOrdinal = n =>
   i18n.locale === "en" ? ordinal_of(n) : getNumberText(n);
+
 export const getSeatList = (seats: ISeat[]) =>
   seats.map(seat => ({
     text: seat.player.name,

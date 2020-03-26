@@ -21,7 +21,6 @@ export default function Game(props) {
     props.navigation.navigate("seat");
   };
   const getCheckBoxes = () => {
-    console.log("GameFormat.gameType", GameFormat.gameType);
     return getGameTypeList().map((listItem, index) => (
       <CheckBox
         key={"c" + index.toString()}
@@ -34,7 +33,7 @@ export default function Game(props) {
         size={16}
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        title={GameType[index]}
+        title={listItem.text}
         containerStyle={{
           margin: 0,
           padding: 0,
@@ -51,7 +50,7 @@ export default function Game(props) {
         <View>
           <View style={[styles.control, { marginBottom: 10 }]}>
             <Text key="tst" style={styles.label}>
-              Game Type:
+              {i18n.t("game.gameType") + ":"}
             </Text>
             <View style={{ flexDirection: "column" }}>{getCheckBoxes()}</View>
           </View>
@@ -149,7 +148,7 @@ const getGameTypeList = () => {
   for (let item in GameType) {
     let value = Number(item);
     if (!isNaN(value)) {
-      list.push({ label: GameType[value], value: value });
+      list.push({ text: i18n.t("gameType." + value), value: value });
     }
   }
   return list;

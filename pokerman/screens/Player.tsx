@@ -152,7 +152,9 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={(Player && PlayType[Player.preflopRaiseType]) || ""}
+              label={
+                (Player && i18n.t("playType." + Player.preflopRaiseType)) || ""
+              }
               onPress={() => {
                 setPlayTypeModalVisible(true);
                 setCurrentPlayTypeModal(1);
@@ -166,7 +168,9 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={(Player && PlayType[Player.preflopCallType]) || ""}
+              label={
+                (Player && i18n.t("playType." + Player.preflopCallType)) || ""
+              }
               onPress={() => {
                 setPlayTypeModalVisible(true);
                 setCurrentPlayTypeModal(2);
@@ -180,7 +184,7 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={(Player && PlayType[Player.raiseType]) || ""}
+              label={(Player && i18n.t("playType." + Player.raiseType)) || ""}
               onPress={() => {
                 setPlayTypeModalVisible(true);
                 setCurrentPlayTypeModal(3);
@@ -194,7 +198,7 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={(Player && PlayType[Player.callType]) || ""}
+              label={(Player && i18n.t("playType." + Player.callType)) || ""}
               onPress={() => {
                 setPlayTypeModalVisible(true);
                 setCurrentPlayTypeModal(4);
@@ -234,7 +238,7 @@ const getPlayTypeList = () => {
   for (let item in PlayType) {
     let value = Number(item);
     if (!isNaN(value)) {
-      list.push({ text: PlayType[value], value: value });
+      list.push({ text: i18n.t("playType." + value), value: value });
     }
   }
   return list;

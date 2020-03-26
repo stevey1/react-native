@@ -35,7 +35,8 @@
   "game": {
     "smallBlind": "Small Blind",
     "bigBlind": "Big Blind",
-    "straddle": "Straddle"
+    "straddle": "Straddle",
+    "gameType": "Game Type"
   },
   "button": {
     "done": "Done",
@@ -59,5 +60,31 @@
     "medium-a-1": "{{suited}} medium A, regular raise or call; 50%->pocket",
     "medium-a-2": "{{suited}} medium A, small raise/regular raise with position or call; 50%->pocket",
     "samll-a": "{{suited}} medium A, small raise or call; 50%->pocket"
+  },
+  "suit": { "0": "♣", "1": "♦", "2": "♥", "3": "♠" },
+  "number": {
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "10": "10",
+    "11": "J",
+    "12": "Q",
+    "13": "K",
+    "14": "A"
+  },
+  "gameType": { "0": "Cash", "1": "Tournament" },
+  "playType": {
+    "0": "Extral Loose",
+    "1": "Loose",
+    "2": "Normal",
+    "3": "Tight",
+    "4": "Extra Tight"
   }
 }
