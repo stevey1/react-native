@@ -15,9 +15,7 @@ export default function Game(props) {
   } = useQuery(GET_GAME_FORMAT);
 
   const [GameFormat, setGameFormat] = useState(gameFormat);
-  const [LanguageType, setLanguageType] = useState(
-    i18n.locale === "en" ? 0 : 1
-  );
+  const [Language, setLanguage] = useState(i18n.locale === "en" ? 0 : 1);
 
   const handleFinishSetup = () => {
     client.writeData({ data: { GameFormat } });
@@ -50,10 +48,10 @@ export default function Game(props) {
     return getLanguageTypeList().map((listItem, index) => (
       <CheckBox
         key={"l" + index.toString()}
-        checked={LanguageType === index}
+        checked={Language === index}
         onPress={() => {
-          i18n.locale = index === 0 ? "en" : "ch";
-          setLanguageType(index);
+          i18n.locale = LanguageType[index];
+          setLanguage(index);
         }}
         size={16}
         checkedIcon="dot-circle-o"
@@ -75,7 +73,7 @@ export default function Game(props) {
         <View>
           <View style={[styles.control, { marginBottom: 10 }]}>
             <Text key="tst" style={styles.label}>
-              {i18n.t("game.languageType")}:
+              {i18n.t("game.language")}:
             </Text>
             <View style={{ flexDirection: "column" }}>
               {getLanguageBoxes()}
@@ -193,7 +191,7 @@ const getLanguageTypeList = () => {
   for (let item in LanguageType) {
     let value = Number(item);
     if (!isNaN(value)) {
-      list.push({ text: LanguageType[value], value: value });
+      list.push({ text: i18n.t("language." + value), value: value });
     }
   }
   return list;

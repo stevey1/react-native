@@ -64,7 +64,7 @@ export default function Timer(props: IProps) {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={[styles.container, { justifyContent: "space-between" }]}>
         <View style={styles.control}>
-          <Text onPress={() => setShowTip(true)}>螳螂扑蝉，黄雀在后</Text>
+          <Text onPress={() => setShowTip(true)}>{i18n.t("timer.tip")}</Text>
         </View>
         <View>
           <View style={styles.control}>
@@ -83,9 +83,7 @@ export default function Timer(props: IProps) {
               maxLength={1}
               selectTextOnFocus={true}
               style={{
-                width: 50,
-                height: 50,
-                marginLeft: 5,
+                width: 70,
                 paddingLeft: 5,
                 backgroundColor: "#D1D1D1",
                 borderWidth: 1
@@ -93,7 +91,7 @@ export default function Timer(props: IProps) {
             />
           </View>
           <View>
-            <Text style={{ textAlign: "center" }}>
+            <Text key="timer" style={{ textAlign: "center" }}>
               {Math.round(TimeLeft / 3600)}:
               {(Math.round(TimeLeft / 60) % 60).toString().padStart(2, "0")}:
               {(TimeLeft % 60).toString().padStart(2, "0")}

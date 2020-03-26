@@ -33,7 +33,7 @@
     "bigBlind": "Big Blind",
     "straddle": "Straddle",
     "gameType": "Game Type",
-    "languageType": "Language"
+    "language": "Language"
   },
   "player": {
     "name": "Name",
@@ -44,7 +44,10 @@
     "afterflopBet": "Afterflop Bet",
     "afterflopCall": "Afterflop Call"
   },
-
+  "timer": {
+    "sessionTime": "Session Time",
+    "tip": ""
+  },
   "button": {
     "done": "Done",
     "straddle": "Straddle",
@@ -100,5 +103,9 @@
     "1": "Flop",
     "2": "Turn",
     "3": "River"
+  },
+  "language": {
+    "0": "English",
+    "1": "Chinese"
   }
 }

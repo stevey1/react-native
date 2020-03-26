@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   label: {
-    paddingTop: 5,
+    paddingTop: 2,
     paddingRight: 7,
     textAlign: "right",
     width: 85
@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   label_player: {
     paddingRight: 7,
     textAlign: "right",
-    paddingTop: 5,
+    paddingTop: 2,
     width: 120
   },
 

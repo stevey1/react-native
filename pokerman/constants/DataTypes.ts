@@ -38,8 +38,8 @@ export enum GameType {
 }
 
 export enum LanguageType {
-  English = 0,
-  Chinese = 1
+  en = 0,
+  ch = 1
 }
 export enum Suit {
   c = 0,

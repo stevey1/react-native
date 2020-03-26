@@ -29,11 +29,11 @@
     "dealer": "庄"
   },
   "game": {
-    "smallBlind": "小瞎",
-    "bigBlind": "大瞎",
+    "smallBlind": "小盲",
+    "bigBlind": "大盲",
     "straddle": "盲打",
     "gameType": "Game Type",
-    "languageType": "Language"
+    "language": "Language"
   },
   "player": {
     "name": "Name",
@@ -45,7 +45,8 @@
     "afterflopCall": "Afterflop Call"
   },
   "timer": {
-    "sessionTime": "Session Time"
+    "sessionTime": "Session Time",
+    "tip": "螳螂扑蝉，黄雀在后"
   },
   "button": {
     "done": "完成",
@@ -103,5 +104,9 @@
     "1": "翻牌",
     "2": "转牌",
     "3": "河牌"
+  },
+  "language": {
+    "0": "English",
+    "1": "Chinese"
   }
 }
