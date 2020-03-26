@@ -38,6 +38,17 @@
     "straddle": "Straddle",
     "gameType": "Game Type"
   },
+  "player": {
+    "name": "Name",
+    "selectPlayer": "Select Player",
+    "playerName": "Player Name",
+    "preflopBet": "Preflop Bet",
+    "preflopCall": "Preflop Call",
+    "afterflopBet": "Afterflop Bet",
+    "afterflopCall": "Afterflop Call",
+    "add": "Add"
+  },
+
   "button": {
     "done": "Done",
     "straddle": "Straddle",

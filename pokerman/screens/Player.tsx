@@ -85,7 +85,7 @@ export default function Player() {
       <View style={styles.container}>
         <View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>Name:</Text>
+            <Text style={styles.label_player}>{i18n.t("player.name")}:</Text>
             <TextInput
               value={Name}
               onChangeText={text => setName(text)}
@@ -103,7 +103,7 @@ export default function Player() {
                 backgroundColor: "#D1D1D1",
                 width: 100
               }}
-              title="Add"
+              title={i18n.t("player.add")}
               onPress={() => {
                 if (Name) {
                   addPlayer({ variables: { name: Name } });
@@ -112,11 +112,17 @@ export default function Player() {
               }}
             />
           </View>
-          <text>
-            <Divider style={{ backgroundColor: "white", marginTop: 15 }} />;
-          </text>
+          <Divider
+            style={{
+              backgroundColor: "white",
+              marginTop: 15,
+              marginBottom: 15
+            }}
+          />
           <View style={styles.control}>
-            <Text style={styles.label_player}>Player:</Text>
+            <Text style={styles.label_player}>
+              {i18n.t("player.selectPlayer")}:
+            </Text>
             <MyDropDownButton
               key="player"
               style={{
@@ -127,7 +133,9 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>Player Name:</Text>
+            <Text style={styles.label_player}>
+              {i18n.t("player.playerName")}:
+            </Text>
             <TextInput
               value={(Player && Player.name) || ""}
               onChangeText={text => {
@@ -146,7 +154,9 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>Preflop Bet:</Text>
+            <Text style={styles.label_player}>
+              {i18n.t("player.preflopBet")}:
+            </Text>
             <MyDropDownButton
               key={"pre-b"}
               style={{
@@ -162,7 +172,9 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>PreFlop Call:</Text>
+            <Text style={styles.label_player}>
+              {i18n.t("player.preflopCall")}:
+            </Text>
             <MyDropDownButton
               key={"pre-c"}
               style={{
@@ -178,7 +190,9 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>After Flop Bet:</Text>
+            <Text style={styles.label_player}>
+              {i18n.t("player.afterflopBet")}:
+            </Text>
             <MyDropDownButton
               key={"after-b"}
               style={{
@@ -192,7 +206,9 @@ export default function Player() {
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>After Flop Calling:</Text>
+            <Text style={styles.label_player}>
+              {i18n.t("player.afterflopCall")}:
+            </Text>
             <MyDropDownButton
               key={"after-c"}
               style={{

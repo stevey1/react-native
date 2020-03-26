@@ -38,10 +38,20 @@
     "straddle": "盲打",
     "gameType": "Game Type"
   },
+  "player": {
+    "name": "Name",
+    "selectPlayer": "Select Player",
+    "playerName": "Player Name",
+    "preflopBet": "Preflop Bet",
+    "preflopCall": "Preflop Call",
+    "afterflopBet": "Afterflop Bet",
+    "afterflopCall": "Afterflop Call",
+    "add": "Add"
+  },
   "button": {
     "done": "完成",
     "straddle": "盲打",
-    "new": "New 局"
+    "new": "New局"
   },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
@@ -63,7 +73,7 @@
   },
   "suit": { "0": "草", "1": "方", "2": "红", "3": "黑" },
   "number": {
-    "0": "",
+    "0": "0",
     "1": "一",
     "2": "二",
     "3": "三",
@@ -80,6 +90,11 @@
     "14": "A"
   },
   "gameType": { "0": "Cash", "1": "Tournament" },
-  "playType": { "0": "Extral Loose", "1": "Loose", "2": "Normal", "3": "Tight" , "4": "Extra Tight" }
-
+  "playType": {
+    "0": "Extral Loose",
+    "1": "Loose",
+    "2": "Normal",
+    "3": "Tight",
+    "4": "Extra Tight"
+  }
 }
