@@ -17,6 +17,8 @@ export default function MainNavigator(props) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   const [Straddles, setStraddles] = useState(0);
+  const [TargetTime, setTargetTime] = useState(0);
+
   props.navigation.setOptions({
     headerTitle: getHeaderTitle(props.route),
     headerStyle: {
@@ -63,7 +65,7 @@ export default function MainNavigator(props) {
             {...props}
             key={(++playKey).toString()}
             straddles={Straddles}
-            handleStraddlesChange={straddles => setStraddles(straddles)}
+            handleStraddlesChange={setStraddles}
           />
         )}
       </Tab.Screen>
@@ -81,14 +83,21 @@ export default function MainNavigator(props) {
 
       <Tab.Screen
         name="timer"
-        component={Timer}
         options={{
           title: i18n.t("navigation.timer"),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-clock" />
           )
         }}
-      />
+      >
+        {props => (
+          <Timer
+            {...props}
+            targetTime={TargetTime}
+            handleSetTargetTime={setTargetTime}
+          />
+        )}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

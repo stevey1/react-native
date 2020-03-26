@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Overlay } from "react-native-elements";
-import { Modal, Picker, View } from "react-native";
+import { Picker, View } from "react-native";
 import i18n from "../i18n";
 
 export default function MyPicker(props) {

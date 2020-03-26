@@ -22,7 +22,7 @@ export default function Player() {
   const AllPlayers = data.seats.map(seat => seat.player);
   const [addPlayer] = useMutation(ADD_PLAYER);
   const [updatePlayer] = useMutation(UPDATE_PLAYER);
-  const showPlayerDropDown = () =>
+  const playerDropDownOverlay = () =>
     PlayerModalVisible ? (
       <MyPicker
         modalVisible={PlayerModalVisible}
@@ -66,7 +66,7 @@ export default function Player() {
     }
     setPlayer(player);
   };
-  const showPlayTypeDropDown = () =>
+  const playTypeDropDownOverlay = () =>
     PlayTypeModalVisible ? (
       <MyPicker
         modalVisible={PlayTypeModalVisible}
@@ -222,8 +222,8 @@ export default function Player() {
             />
           </View>
         </View>
-        {showPlayerDropDown()}
-        {showPlayTypeDropDown()}
+        {playerDropDownOverlay()}
+        {playTypeDropDownOverlay()}
 
         <Button
           buttonStyle={{ backgroundColor: "#D1D1D1" }}
