@@ -89,8 +89,10 @@ const getSuitList = () => {
   let list = [];
   for (let item in SuitType) {
     let value = Number(item);
-    if (!isNaN(value)) {
+
+    if (!isNaN(value) && value >= 0) {
       list.push({ text: getSuitText(value), value: value });
     }
   }
+  return list;
 };

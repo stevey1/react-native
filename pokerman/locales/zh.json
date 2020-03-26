@@ -13,10 +13,6 @@
   "play": {
     "myHand": "手牌",
     "board": "面牌",
-    "preFlop": "牌前下注",
-    "flop": "翻牌",
-    "turn": "转牌",
-    "river": "河牌",
     "callers": "跟注",
     "raise": "加注"
   },
@@ -45,13 +41,13 @@
     "preflopBet": "Preflop Bet",
     "preflopCall": "Preflop Call",
     "afterflopBet": "Afterflop Bet",
-    "afterflopCall": "Afterflop Call",
-    "add": "Add"
+    "afterflopCall": "Afterflop Call"
   },
   "button": {
     "done": "完成",
     "straddle": "盲打",
-    "new": "New局"
+    "new": "New局",
+    "add": "Add"
   },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",

@@ -103,7 +103,7 @@ export default function Player() {
                 backgroundColor: "#D1D1D1",
                 width: 100
               }}
-              title={i18n.t("player.add")}
+              title={i18n.t("button.add")}
               onPress={() => {
                 if (Name) {
                   addPlayer({ variables: { name: Name } });

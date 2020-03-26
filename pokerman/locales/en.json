@@ -12,11 +12,7 @@
   },
   "play": {
     "myHand": "My hand",
-    "preFlop": "Pre Flop",
     "board": "Board",
-    "flop": "Flop",
-    "turn": "Turn",
-    "river": "River",
     "callers": "Callers",
     "raise": "Raise"
   },
@@ -45,14 +41,14 @@
     "preflopBet": "Preflop Bet",
     "preflopCall": "Preflop Call",
     "afterflopBet": "Afterflop Bet",
-    "afterflopCall": "Afterflop Call",
-    "add": "Add"
+    "afterflopCall": "Afterflop Call"
   },
 
   "button": {
     "done": "Done",
     "straddle": "Straddle",
-    "new": "New Game"
+    "new": "New Game",
+    "add": "Add"
   },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",

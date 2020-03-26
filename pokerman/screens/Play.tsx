@@ -285,7 +285,7 @@ export default function Play(props: IProps) {
             <Text key="my" style={styles.label}>
               {i18n.t("play.myHand")}:
             </Text>
-            <Card key="m0" handleCard={(c: ICard) => handleMyHand(c, 0)}></Card>
+            <Card key="m0" handleCard={c => handleMyHand(c, 0)}></Card>
             <Card key="m1" handleCard={c => handleMyHand(c, 1)}></Card>
           </View>
           <View
@@ -293,7 +293,7 @@ export default function Play(props: IProps) {
           >
             <View style={styles.control}>
               <Text key="p" style={styles.label}>
-                {i18n.t("play.preFlop")}:
+                {i18n.t("round." + Round.Preflop)}:
               </Text>
               <Action
                 key={"pre"}
