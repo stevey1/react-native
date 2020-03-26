@@ -26,7 +26,7 @@ export interface IActionHistory {
 }
 
 export enum PlayType {
-  LL = 1,
+  LL = 0,
   L,
   M,
   T,

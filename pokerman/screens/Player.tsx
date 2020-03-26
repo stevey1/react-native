@@ -10,18 +10,16 @@ import { getPlayerList } from "../constants/helper";
 import i18n from "../i18n";
 
 import { PlayType } from "../constants/DataTypes";
-import {
-  GET_PLAYERS,
-  UPDATE_PLAYER,
-  ADD_PLAYER
-} from "../constants/apolloQuery";
+import { GET_SEATS, UPDATE_PLAYER, ADD_PLAYER } from "../constants/apolloQuery";
 
 export default function Player() {
   const [Name, setName] = useState("");
   const [PlayerModalVisible, setPlayerModalVisible] = useState(false);
-  const [PlayerSelected, setPlayerSelected] = useState(null);
-  const { data, client } = useQuery(GET_PLAYERS);
-  const AllPlayers = data.players;
+  const [PlayTypeModalVisible, setPlayTypeModalVisible] = useState(false);
+  const [CurrentPlayTypeModal, setCurrentPlayTypeModal] = useState(0);
+  const [Player, setPlayer] = useState(null);
+  const { data } = useQuery(GET_SEATS);
+  const AllPlayers = data.seats.map(seat => seat.player);
   const [addPlayer] = useMutation(ADD_PLAYER);
   const [updatePlayer] = useMutation(UPDATE_PLAYER);
   const showPlayerDropDown = () =>
@@ -29,8 +27,36 @@ export default function Player() {
       <MyPicker
         modalVisible={PlayerModalVisible}
         itemSelected={(index, value) => {
-          setPlayerSelected(index);
+          setPlayer(AllPlayers[index]);
           setPlayerModalVisible(false);
+        }}
+        listItems={getPlayerList(AllPlayers)}
+      ></MyPicker>
+    ) : (
+      <View></View>
+    );
+  const showPlayTypeDropDown = () =>
+    PlayTypeModalVisible ? (
+      <MyPicker
+        modalVisible={PlayTypeModalVisible}
+        itemSelected={(index, value) => {
+          const player = { ...Player };
+          switch (CurrentPlayTypeModal) {
+            case 1:
+              player.preflopRaiseType = index;
+              break;
+            case 2:
+              player.preflopCallType = index;
+              break;
+            case 3:
+              player.RaiseType = index;
+              break;
+            default:
+              player.callType = index;
+              break;
+          }
+          setPlayer(player);
+          setPlayTypeModalVisible(false);
         }}
         listItems={getPlayerList(AllPlayers)}
       ></MyPicker>
@@ -86,19 +112,19 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={
-                PlayerSelected != null &&
-                AllPlayers[PlayerSelected] &&
-                AllPlayers[PlayerSelected].name
-              }
-              onPress={() => setPlayerSelected(true)}
+              label={Player?.name}
+              onPress={() => setPlayerModalVisible(true)}
             />
           </View>
           <View style={styles.control}>
-            <Text style={styles.label}>Player:</Text>
+            <Text style={styles.label}>Player Name:</Text>
             <TextInput
-              //            value={Name}
-              //            onChangeText={text => setName(text)}
+              value={Player?.name}
+              onChangeText={text => {
+                const player = { ...Player };
+                player.name = text;
+                setPlayer(player);
+              }}
               style={{
                 flex: 1,
                 marginRight: 5,
@@ -116,8 +142,11 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={"name"}
-              //onPress={() => setSeatModalVisible(true)}
+              label={(Player && PlayType[Player.preflopRaiseType]) || ""}
+              onPress={() => {
+                setPlayTypeModalVisible(true);
+                setCurrentPlayTypeModal(1);
+              }}
             />
           </View>
           <View style={styles.control}>
@@ -127,8 +156,11 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={"name"}
-              //onPress={() => setSeatModalVisible(true)}
+              label={(Player && PlayType[Player.preflopCallType]) || ""}
+              onPress={() => {
+                setPlayTypeModalVisible(true);
+                setCurrentPlayTypeModal(2);
+              }}
             />
           </View>
           <View style={styles.control}>
@@ -138,8 +170,11 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={"name"}
-              //onPress={() => setSeatModalVisible(true)}
+              label={(Player && PlayType[Player.raiseType]) || ""}
+              onPress={() => {
+                setPlayTypeModalVisible(true);
+                setCurrentPlayTypeModal(3);
+              }}
             />
           </View>
           <View style={styles.control}>
@@ -149,12 +184,17 @@ export default function Player() {
               style={{
                 width: 150
               }}
-              label={"name"}
-              //onPress={() => setSeatModalVisible(true)}
+              label={(Player && PlayType[Player.callType]) || ""}
+              onPress={() => {
+                setPlayTypeModalVisible(true);
+                setCurrentPlayTypeModal(4);
+              }}
             />
           </View>
         </View>
-        <Text>{AllPlayers.map(p => p.name).join(", ")}</Text>
+        {showPlayerDropDown()}
+        {showPlayTypeDropDown()}
+
         <Button
           buttonStyle={{ backgroundColor: "#D1D1D1" }}
           titleStyle={{ color: "#000000" }}

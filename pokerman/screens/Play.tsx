@@ -130,7 +130,6 @@ export default function Play(props: IProps) {
     setCurrentRound(round);
   };
   const handleCallers = (callers: ISeat[]) => {
-    console.log("caller selected");
     setCallerModalVisible(false);
     if (callers.length == 0) return;
     const allActions = AllActions;
