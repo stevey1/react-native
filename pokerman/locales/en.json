@@ -32,7 +32,8 @@
     "smallBlind": "Small Blind",
     "bigBlind": "Big Blind",
     "straddle": "Straddle",
-    "gameType": "Game Type"
+    "gameType": "Game Type",
+    "languageType": "Language"
   },
   "player": {
     "name": "Name",

@@ -37,6 +37,10 @@ export enum GameType {
   tournament
 }
 
+export enum LanguageType {
+  English = 0,
+  Chinese = 1
+}
 export enum Suit {
   c = 0,
   d,

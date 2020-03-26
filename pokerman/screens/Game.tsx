@@ -6,7 +6,7 @@ import i18n from "../i18n";
 import styles from "./styles";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_GAME_FORMAT } from "../constants/apolloQuery";
-import { GameType } from "../constants/DataTypes";
+import { GameType, LanguageType } from "../constants/DataTypes";
 
 export default function Game(props) {
   const {
@@ -15,6 +15,9 @@ export default function Game(props) {
   } = useQuery(GET_GAME_FORMAT);
 
   const [GameFormat, setGameFormat] = useState(gameFormat);
+  const [LanguageType, setLanguageType] = useState(
+    i18n.locale === "en" ? 0 : 1
+  );
 
   const handleFinishSetup = () => {
     client.writeData({ data: { GameFormat } });
@@ -43,6 +46,28 @@ export default function Game(props) {
       />
     ));
   };
+  const getLanguageBoxes = () => {
+    return getLanguageTypeList().map((listItem, index) => (
+      <CheckBox
+        key={"l" + index.toString()}
+        checked={LanguageType === index}
+        onPress={() => {
+          i18n.locale = index === 0 ? "en" : "ch";
+          setLanguageType(index);
+        }}
+        size={16}
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+        title={listItem.text}
+        containerStyle={{
+          margin: 0,
+          padding: 0,
+          borderColor: "#f2f2f2",
+          backgroundColor: "#f2f2f2"
+        }}
+      />
+    ));
+  };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -50,13 +75,22 @@ export default function Game(props) {
         <View>
           <View style={[styles.control, { marginBottom: 10 }]}>
             <Text key="tst" style={styles.label}>
-              {i18n.t("game.gameType") + ":"}
+              {i18n.t("game.languageType")}:
+            </Text>
+            <View style={{ flexDirection: "column" }}>
+              {getLanguageBoxes()}
+            </View>
+          </View>
+          <View style={[styles.control, { marginBottom: 10 }]}>
+            <Text key="tst" style={styles.label}>
+              {i18n.t("game.gameType")}:
             </Text>
             <View style={{ flexDirection: "column" }}>{getCheckBoxes()}</View>
           </View>
+
           <View key="vs" style={styles.control}>
             <Text key="ts" style={styles.label}>
-              {i18n.t("game.smallBlind") + ":"}
+              {i18n.t("game.smallBlind")}:
             </Text>
             <TextInput
               key="tis"
@@ -82,7 +116,7 @@ export default function Game(props) {
           </View>
           <View key="vb" style={styles.control}>
             <Text key="tb" style={styles.label}>
-              {i18n.t("game.bigBlind") + ":"}
+              {i18n.t("game.bigBlind")}:
             </Text>
             <TextInput
               key="bigBlind"
@@ -108,7 +142,7 @@ export default function Game(props) {
           </View>
           <View key="vst" style={styles.control}>
             <Text key="tst" style={styles.label}>
-              {i18n.t("game.straddle") + ":"}
+              {i18n.t("game.straddle")}:
             </Text>
             <TextInput
               key="straddle"
@@ -149,6 +183,17 @@ const getGameTypeList = () => {
     let value = Number(item);
     if (!isNaN(value)) {
       list.push({ text: i18n.t("gameType." + value), value: value });
+    }
+  }
+  return list;
+};
+
+const getLanguageTypeList = () => {
+  let list = [];
+  for (let item in LanguageType) {
+    let value = Number(item);
+    if (!isNaN(value)) {
+      list.push({ text: LanguageType[value], value: value });
     }
   }
   return list;

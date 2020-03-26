@@ -32,7 +32,8 @@
     "smallBlind": "小瞎",
     "bigBlind": "大瞎",
     "straddle": "盲打",
-    "gameType": "Game Type"
+    "gameType": "Game Type",
+    "languageType": "Language"
   },
   "player": {
     "name": "Name",
@@ -43,11 +44,15 @@
     "afterflopBet": "Afterflop Bet",
     "afterflopCall": "Afterflop Call"
   },
+  "timer": {
+    "sessionTime": "Session Time"
+  },
   "button": {
     "done": "完成",
     "straddle": "盲打",
     "new": "New局",
-    "add": "Add"
+    "add": "Add",
+    "startTimer": "Start Timer"
   },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",

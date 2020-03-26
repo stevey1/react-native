@@ -68,7 +68,9 @@ export default function Timer(props: IProps) {
         </View>
         <View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>Session Time</Text>
+            <Text style={styles.label_player}>
+              {i18n.t("timer.sessionTime")}
+            </Text>
             <TextInput
               key="tis"
               onChange={e => {
@@ -78,7 +80,7 @@ export default function Timer(props: IProps) {
                 if (value) setSessionTime(value);
               }}
               keyboardType={"numeric"}
-              maxLength={3}
+              maxLength={1}
               selectTextOnFocus={true}
               style={{
                 width: 50,
@@ -92,8 +94,9 @@ export default function Timer(props: IProps) {
           </View>
           <View>
             <Text style={{ textAlign: "center" }}>
-              {Math.round(TimeLeft / 3600)}:{Math.round(TimeLeft / 60) % 60}:
-              {TimeLeft % 60}
+              {Math.round(TimeLeft / 3600)}:
+              {(Math.round(TimeLeft / 60) % 60).toString().padStart(2, "0")}:
+              {(TimeLeft % 60).toString().padStart(2, "0")}
             </Text>
           </View>
         </View>
@@ -102,15 +105,17 @@ export default function Timer(props: IProps) {
           buttonStyle={{
             backgroundColor: "#D1D1D1"
           }}
-          title={i18n.t("button.done")}
+          title={i18n.t("button.startTimer")}
           titleStyle={{ color: "#000000" }}
           onPress={() => {
-            const now = new Date();
-            const targetTime = Math.round(
-              now.setHours(now.getHours() + SessionTime) / 1000
-            );
-            setTargetTime(targetTime);
-            props.handleSetTargetTime(targetTime);
+            if (SessionTime > 0) {
+              const now = new Date();
+              const targetTime = Math.round(
+                now.setHours(now.getHours() + SessionTime) / 1000
+              );
+              setTargetTime(targetTime);
+              props.handleSetTargetTime(targetTime);
+            }
           }}
         />
       </View>
