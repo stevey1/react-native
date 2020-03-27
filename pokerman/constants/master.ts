@@ -184,7 +184,6 @@ export const getMyHandPreflop = (
   }
 };
 export const checkBoard = (cards: ICard[], round: Round) => {
-  cards = cards.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
   let results = [];
   let result = checkBoardPair(cards);
   if (result) results.push(result);

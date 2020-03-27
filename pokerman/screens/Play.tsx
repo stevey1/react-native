@@ -64,13 +64,14 @@ export default function Play(props: IProps) {
   ]);
 
   const handleStraddle = (newGame: boolean) => {
-    const straddles = (props.straddles + 1) % (Seats.length - 2);
+    const straddles = newGame ? 0 : (props.straddles + 1) % (Seats.length - 2);
     props.handleStraddlesChange(straddles);
     props.navigation.navigate("playNav");
   };
 
   function getSeatsInPlay(round: Round) {
-    if (round === Round.Preflop && (!AllActions || AllActions.length === 1)) {
+    if (round === Round.Preflop) {
+      //&& (!AllActions || AllActions.length === 1)
       const seats = Seats.map((seat, index) => ({
         ...seat,
         betOrder:
@@ -81,8 +82,12 @@ export default function Play(props: IProps) {
       }));
       return sortSeats(seats);
     }
-    const allAction = AllActions[AllActions.length - 1];
-    return sortSeats([allAction.action.raiser, ...allAction.action.callers]);
+    // if (round === Round.Preflop) {
+    //   return sortSeats(Seats);
+    // }
+    const action = Actions[Math.min(Actions.length - 1, round - 1)];
+    console.log("round", round);
+    return sortSeats([action.raiser, ...action.callers]);
   }
 
   const handleMyHand = (card: ICard, cardId: number) => {
@@ -135,10 +140,10 @@ export default function Play(props: IProps) {
   const handleCallers = (callers: ISeat[]) => {
     setCallerModalVisible(false);
     if (callers.length == 0) return;
-    const allActions = AllActions;
+    const allActions = [...AllActions];
     allActions[allActions.length - 1].action.callers = callers;
 
-    const actions = Actions;
+    const actions = [...Actions];
     actions[CurrentRound].callers = callers;
 
     setAllActions(allActions);
@@ -171,10 +176,10 @@ export default function Play(props: IProps) {
       <Caller
         modalVisible={CallerModalVisible}
         raiserSeatId={
-          (Actions[CurrentRound] && Actions[CurrentRound].raiser.id) || 0
+          (Actions[CurrentRound] && Actions[CurrentRound]?.raiser.id) || 0
         }
         seats={getSeatsInPlay(CurrentRound)}
-        callers={Actions[CurrentRound].callers.map(c => c.id)}
+        callers={Actions[CurrentRound]?.callers.map(c => c.id)}
         callersSelected={handleCallers}
       ></Caller>
     ) : (
@@ -233,14 +238,16 @@ export default function Play(props: IProps) {
             handleAction={(r, a) => handleAction(r, a, round)}
           ></Action>
         </View>
-        {displayRoundAction(Action[round], round)}
+        {
+          //displayRoundAction(Action[round], round)
+        }
       </View>
     );
   };
   const showTips = () => {
     const myHand = MyHand.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
+    const board = Board.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
 
-    const board = Board;
     let result = "";
     if (board.length < 3) {
       result =
