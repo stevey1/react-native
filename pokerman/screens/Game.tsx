@@ -4,21 +4,34 @@ import { Button, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import i18n from "../i18n";
 import styles from "./styles";
-import { useQuery } from "@apollo/react-hooks";
-import { GET_GAME_FORMAT } from "../constants/apolloQuery";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { GET_GAME_FORMAT, UPDATE_GAME_FORMAT } from "../constants/apolloQuery";
 import { GameType, LanguageType } from "../constants/DataTypes";
 
 export default function Game(props) {
+  const [updateGameFormat] = useMutation(UPDATE_GAME_FORMAT);
+
   const {
     data: { gameFormat },
     client
   } = useQuery(GET_GAME_FORMAT);
-
+  console.log("GameEEEE", gameFormat);
   const [GameFormat, setGameFormat] = useState(gameFormat);
+  ///console.log("GameFormat22", gameFormat);
   const [Language, setLanguage] = useState(i18n.locale === "en" ? 0 : 1);
 
   const handleFinishSetup = () => {
-    client.writeData({ data: { GameFormat } });
+    //client.writeQuery({ query: GET_GAME_FORMAT, data: { GameFormat } });
+    updateGameFormat({
+      variables: {
+        id: 1,
+        smallBlind: GameFormat.smallBlind,
+        bigBlind: GameFormat.bigBlind,
+        straddle: GameFormat.straddle,
+        gameType: GameFormat.gameType
+      }
+    });
+
     props.navigation.navigate("seat");
   };
   const getCheckBoxes = () => {

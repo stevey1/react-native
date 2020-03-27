@@ -35,7 +35,7 @@ export default function MainNavigator(props) {
           //title: route.params.name,
           title: i18n.t("navigation.game"), //"Seat Setup",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-person-add" />
+            <TabBarIcon focused={focused} name="md-settings" />
           )
         })}
       />
@@ -85,7 +85,7 @@ export default function MainNavigator(props) {
         options={{
           title: i18n.t("navigation.timer"),
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-clock" />
+            <TabBarIcon focused={focused} name="md-timer" />
           )
         }}
       >

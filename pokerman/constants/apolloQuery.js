@@ -1,4 +1,32 @@
 import gql from "graphql-tag";
+export const GET_GAME_FORMAT = gql`
+  query getGameFormat {
+    gameFormat @client {
+      smallBlind
+      bigBlind
+      straddle
+      gameType
+    }
+  }
+`;
+export const UPDATE_GAME_FORMAT = gql`
+  mutation update(
+    $id: Int!
+    $smallBlind: Int!
+    $bigBlind: Int!
+    $straddle: Int!
+    $gameType: Int!
+  ) {
+    updateGameFormat(
+      id: $id
+      smallBlind: $smallBlind
+      bigBlind: $bigBlind
+      straddle: $straddle
+      raiseType: $raiseType
+      gameType: $gameType
+    ) @client
+  }
+`;
 export const GET_SEATS = gql`
   query getSeats {
     seats @client {
@@ -13,16 +41,6 @@ export const GET_SEATS = gql`
         callType
         isMe
       }
-    }
-  }
-`;
-export const GET_GAME_FORMAT = gql`
-  query getGameFormat {
-    gameFormat @client {
-      smallBlind
-      bigBlind
-      straddle
-      gameType
     }
   }
 `;

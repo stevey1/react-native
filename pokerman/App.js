@@ -90,6 +90,7 @@ const getInitialData = () => {
     players: players,
     gameFormat: {
       __typename: "GameFormat",
+      id: 1,
       smallBlind: 1,
       bigBlind: 2,
       straddle: 5,
@@ -103,6 +104,34 @@ function InitializeApollo() {
     cache: new InMemoryCache(),
     resolvers: {
       Mutation: {
+        updateGameFormat: (
+          _,
+          { id, smallBlind, bigBlind, straddle, gameType },
+          { cache }
+        ) => {
+          const fragmentId = `GameFormat:${id}`;
+          const fragment = gql`
+            fragment gameFormat on GameFormat {
+              id
+              smallBlind
+              bigBlind
+              straddle
+              gameType
+            }
+          `;
+          const gameFormat = cache.readFragment({ fragment, id: fragmentId });
+          const data = {
+            ...gameFormat,
+            smallBlind: smallBlind,
+            bigBlind: bigBlind,
+            straddle: straddle,
+            gameType: gameType
+          };
+          // cache.writeFragment({ fragment, fragmentId, data });
+          // you can also do cache.writeData({ data, id }) here if you prefer
+          cache.writeData({ data, id: fragmentId });
+          return null;
+        },
         updatePlayer: (
           _,
           { id, name, preflopRaiseType, preflopCallType, raiseType, callType },

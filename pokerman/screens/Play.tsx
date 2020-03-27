@@ -431,6 +431,7 @@ const getSeats = () => {
 };
 const getGameFormat = () => {
   const { data } = useQuery(GET_GAME_FORMAT);
+  console.log("play", data.gameFormat);
   return data.gameFormat;
 };
 const sortSeats = (seats: ISeat[]) =>
