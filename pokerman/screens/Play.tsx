@@ -48,7 +48,7 @@ export default function Play(props: IProps) {
       ? GameFormat.straddle * Math.pow(2, props.straddles - 1)
       : GameFormat.bigBlind;
   const Seats = getSeats();
-  const PreFlopSeats = getSeatsInPlay(Round.Preflop, props.straddles);
+  const PreFlopSeats = getSeatsInPlay(Round.Preflop);
 
   const raiser = PreFlopSeats[Seats.length - 1];
   const action: IAction = {
@@ -69,16 +69,25 @@ export default function Play(props: IProps) {
     props.navigation.navigate("playNav");
   };
 
-  function getSeatsInPlay(round: Round, straddles = 0) {
-    if (round === Round.Preflop) {
+  function getSeatsInPlay(round: Round) {
+    if (round === Round.Preflop && (!AllActions || AllActions.length === 1)) {
       const seats = Seats.map((s, index) => ({
         ...s,
         betOrder:
-          index - 2 - straddles + (index > 1 + straddles ? 0 : Seats.length)
+          index -
+          2 -
+          props.straddles +
+          (index > 1 + props.straddles ? 0 : Seats.length)
       }));
       return sortSeats(seats);
     }
-    const action = Actions[Math.min(Actions.length - 1, round - 1)];
+    const action =
+      Actions[
+        Math.min(
+          Actions.length - 1,
+          (round === Round.Preflop && round) || round - 1
+        )
+      ];
     return sortSeats([action.raiser, ...action.callers]);
   }
 
@@ -163,7 +172,7 @@ export default function Play(props: IProps) {
       />
     </View>
   );
-  const showCaller = () =>
+  const callersOverlay = () =>
     CallerModalVisible ? (
       <Caller
         modalVisible={CallerModalVisible}
@@ -317,7 +326,7 @@ export default function Play(props: IProps) {
 
           {showCurrentRound()}
           {showCallerButton()}
-          {showCaller()}
+          {callersOverlay()}
           <View style={{ flexDirection: "row" }}>
             <Text>{i18n.t("play.myHand")}:</Text>
             {displayCards(MyHand)}
