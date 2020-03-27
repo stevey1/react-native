@@ -59,7 +59,7 @@ export default function Seat(props) {
       seatList.push(
         <View key={"v" + i} style={styles.control}>
           <Text key={"t" + i} style={styles.label}>
-            {getSeatText(i)}
+            {getSeatText(i)}:
           </Text>
           <MyDropDownButton
             key={"b" + i}

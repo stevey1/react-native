@@ -305,7 +305,7 @@ export default function Play(props: IProps) {
 
             <Button
               buttonStyle={{ backgroundColor: "#D1D1D1" }}
-              style={{ width: 75, marginRight: 3 }}
+              style={{ flex: 1, marginRight: 2 }}
               title={i18n.t("button.straddle")}
               titleStyle={{ color: "#000000" }}
               onPress={() => handleStraddle(false)}

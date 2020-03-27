@@ -72,7 +72,7 @@ export default function Game(props) {
       <View style={styles.container}>
         <View>
           <View style={[styles.control, { marginBottom: 10 }]}>
-            <Text key="tst" style={styles.label}>
+            <Text key="tst" style={{ ...styles.label, width: 100 }}>
               {i18n.t("game.language")}:
             </Text>
             <View style={{ flexDirection: "column" }}>
@@ -80,14 +80,14 @@ export default function Game(props) {
             </View>
           </View>
           <View style={[styles.control, { marginBottom: 10 }]}>
-            <Text key="tst" style={styles.label}>
+            <Text key="tst" style={{ ...styles.label, width: 100 }}>
               {i18n.t("game.gameType")}:
             </Text>
             <View style={{ flexDirection: "column" }}>{getCheckBoxes()}</View>
           </View>
 
           <View key="vs" style={styles.control}>
-            <Text key="ts" style={styles.label}>
+            <Text key="ts" style={{ ...styles.label, width: 100 }}>
               {i18n.t("game.smallBlind")}:
             </Text>
             <TextInput
@@ -103,17 +103,11 @@ export default function Game(props) {
               keyboardType={"numeric"}
               maxLength={3}
               selectTextOnFocus={true}
-              style={{
-                width: 50,
-                marginLeft: 5,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
-              }}
+              style={styles.textInput}
             />
           </View>
           <View key="vb" style={styles.control}>
-            <Text key="tb" style={styles.label}>
+            <Text key="tb" style={{ ...styles.label, width: 100 }}>
               {i18n.t("game.bigBlind")}:
             </Text>
             <TextInput
@@ -129,17 +123,11 @@ export default function Game(props) {
               keyboardType={"numeric"}
               maxLength={3}
               selectTextOnFocus={true}
-              style={{
-                width: 50,
-                marginLeft: 5,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
-              }}
+              style={styles.textInput}
             />
           </View>
           <View key="vst" style={styles.control}>
-            <Text key="tst" style={styles.label}>
+            <Text key="tst" style={{ ...styles.label, width: 100 }}>
               {i18n.t("game.straddle")}:
             </Text>
             <TextInput
@@ -155,13 +143,7 @@ export default function Game(props) {
               keyboardType={"numeric"}
               maxLength={3}
               selectTextOnFocus={true}
-              style={{
-                width: 50,
-                marginLeft: 5,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
-              }}
+              style={styles.textInput}
             />
           </View>
         </View>

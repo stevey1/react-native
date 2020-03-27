@@ -143,14 +143,7 @@ export default function Player() {
                 player.name = text;
                 setPlayer(player);
               }}
-              style={{
-                flex: 1,
-                marginRight: 5,
-                marginTop: 1,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
-              }}
+              style={styles.textInput}
             />
           </View>
           <View style={styles.control}>

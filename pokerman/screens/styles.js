@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     paddingRight: 7,
     textAlign: "right",
-    width: 85
+    width: 75
   },
   label_player: {
     paddingRight: 7,
@@ -14,7 +14,15 @@ const styles = StyleSheet.create({
   },
 
   control: { flexDirection: "row", margin: 1 },
-
+  textInput: {
+    width: 50,
+    paddingLeft: 5,
+    backgroundColor: "#D1D1D1",
+    borderWidth: 1,
+    height: 35
+  },
+  button: {},
+  overlay: {},
   container: {
     flex: 1,
     justifyContent: "space-between",

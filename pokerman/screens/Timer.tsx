@@ -68,8 +68,8 @@ export default function Timer(props: IProps) {
         </View>
         <View>
           <View style={styles.control}>
-            <Text style={styles.label_player}>
-              {i18n.t("timer.sessionTime")}
+            <Text style={{ ...styles.label, width: 110 }}>
+              {i18n.t("timer.sessionTime")}:
             </Text>
             <TextInput
               key="tis"
@@ -82,12 +82,7 @@ export default function Timer(props: IProps) {
               keyboardType={"numeric"}
               maxLength={1}
               selectTextOnFocus={true}
-              style={{
-                width: 70,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
-              }}
+              style={styles.textInput}
             />
           </View>
           <View>
