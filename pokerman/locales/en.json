@@ -11,7 +11,7 @@
     "welcome": "Welcome to %{appName}!"
   },
   "play": {
-    "myHand": "My hand",
+    "myHand": "My Hand",
     "board": "Board",
     "callers": "Callers",
     "raise": "Raise"
@@ -25,9 +25,6 @@
     "raise": "B",
     "players": "Players"
   },
-  "seat": {
-    "dealer": "Dealer"
-  },
   "game": {
     "smallBlind": "Small Blind",
     "bigBlind": "Big Blind",
@@ -35,6 +32,10 @@
     "gameType": "Game Type",
     "language": "Language"
   },
+  "seat": {
+    "dealer": "Dealer"
+  },
+
   "player": {
     "name": "Name",
     "selectPlayer": "Select Player",
@@ -52,7 +53,8 @@
     "done": "Done",
     "straddle": "Straddle",
     "new": "New Game",
-    "add": "Add"
+    "add": "Add",
+    "update": "Update"
   },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
@@ -65,12 +67,21 @@
     "big-pair-bet": "this is big bet for AA/KK bet, fold",
     "raise-to": "raise to {{amount}}, check board if A shows up-> prepare to fold",
     "jj-no-raiser": "find AA/KK/QQ to fold; try check raise 20 to start",
-    "middle-pair": "Regular raise or call; 50%->A*",
+    "middle-pair": "Regular raise or call medium 50%->A*",
     "small-pair": "call but not big(35-) to see",
-    "big-a": "{{suited}} big A, regular raise or call; 50%->pocket",
-    "medium-a-1": "{{suited}} medium A, regular raise or call; 50%->pocket",
-    "medium-a-2": "{{suited}} medium A, small raise/regular raise with position or call; 50%->pocket",
-    "samll-a": "{{suited}} medium A, small raise or call; 50%->pocket"
+    "big-a": "{{suited}} big A, regular raise or call medium 50%->pocket",
+    "medium-a-1": "{{suited}} medium A, regular raise or call medium 50%->pocket",
+    "medium-a-2": "{{suited}} medium A, small raise/regular raise with position or call medium 50%->pocket",
+    "samll-a": "{{suited}} medium A, small raise or call medium 50%->pocket",
+    "good-kq": "{{suited}} good KQ, raise or call medium",
+    "good-k": "{{suited}} good K, raise or call medium",
+    "ok-k": "{{suited}} OK K, raise small or call medium",
+    "suited-big-card": "suited big cards, call small",
+    "suited-medium-card": "suited big cards, call small",
+    "suited-small-card": "suited big cards, call small",
+    "good-connector": "{{suited}} good connectors, raise or call medium",
+    "ok-connector": "{{suited}} good connectors, call small",
+    "small-connector": "{{suited}} good connectors, call small"
   },
   "suit": { "0": "♣", "1": "♦", "2": "♥", "3": "♠" },
   "number": {

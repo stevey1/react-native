@@ -22,7 +22,7 @@
     "pot": "锅",
     "raise": "B",
     "by": "by",
-    "checkRaise": "CR 陷阱",
+    "checkRaise": "CR陷阱",
     "players": "人数"
   },
   "seat": {
@@ -32,7 +32,7 @@
     "smallBlind": "小盲",
     "bigBlind": "大盲",
     "straddle": "盲打",
-    "gameType": "Game Type",
+    "gameType": "牌局种类",
     "language": "语言"
   },
   "player": {
@@ -60,8 +60,8 @@
     "aa-late-position": "Prefer 1 caller: raise: {{amount}}",
     "claim-my-pot": "Claim it: All in or big raise 3B+ {{amount}} and all in after flop",
     "kk-early-position": "find AA to fold; try check raise on action table or raise {{amount1}} -{{amount2}}",
-    "kk-later-position": "find AA to fold; raise {{amount}}",
-    "check-or-fight": "Seem AA is here; check the raiser's type and confirm it, all in to fight looser or call to see",
+    "kk-late-position": "find AA to fold; raise {{amount}}",
+    "check-or-fight": "Seem AA is here; check the raiser's play type and confirm it, all in to looser or call",
     "qq-no-raiser": "find AA/KK to fold; try check raise 20 to start",
     "big-pair-bet": "this is big bet for AA/KK bet, fold",
     "raise-to": "raise to {{amount}}, check board if A shows up-> prepare to fold",
@@ -71,7 +71,17 @@
     "big-a": "{{suited}} big A, regular raise or call; 50%->pocket",
     "medium-a-1": "{{suited}} medium A, regular raise or call; 50%->pocket",
     "medium-a-2": "{{suited}} medium A, small raise/regular raise with position or call; 50%->pocket",
-    "samll-a": "{{suited}} medium A, small raise or call; 50%->pocket"
+    "samll-a": "{{suited}} medium A, small raise or call; 50%->pocket",
+    "good-kq": "{{suited}} good KQ, raise or call medium",
+    "good-k": "{{suited}} good K, raise or call medium",
+    "ok-k": "{{suited}} OK K, raise small or call medium",
+    "suited-big-card": "suited big cards, call small",
+    "suited-medium-card": "suited big cards, call small",
+    "suited-small-card": "suited big cards, call small",
+    "good-connector": "{{suited}} good connectors, raise or call medium",
+    "ok-connector": "{{suited}} good connectors, call small",
+    "small-connector": "{{suited}} good connectors, call small",
+    "suited": "suited"
   },
   "suit": { "0": "草", "1": "方", "2": "红", "3": "黑" },
   "number": {

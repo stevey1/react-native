@@ -20,7 +20,7 @@ export const getMyHandPreflop = (
               amount2: bigBlind * (players - 1) * 3
             });
           else
-            return i18n.t("pre.aa-later-position", {
+            return i18n.t("pre.aa-late-position", {
               amount: bigBlind * (players - 1) * 2
             });
         }
@@ -35,7 +35,7 @@ export const getMyHandPreflop = (
               amount2: bigBlind * (players - 1) * 3
             });
           else
-            return i18n.t("pre.kk-later-position", {
+            return i18n.t("pre.kk-late-position", {
               amount1: bigBlind * (players - 1) * 2
             });
         }
@@ -53,134 +53,117 @@ export const getMyHandPreflop = (
         if (action.raises === 0) {
           return i18n.t("pre.qq-no-raiser");
         }
-        if (action.amount > 35) return i18n.t("pre.call-to-see");
-        if (action.amount > 75) return i18n.t("pre.big-pair-bet");
-        return i18n.t("pre.raise-to", { amount: 75 });
+        if (action.amount > bigBlind * 40) return i18n.t("pre.big-pair-bet");
+        if (action.amount > bigBlind * 15) return i18n.t("pre.call-to-see");
+        return i18n.t("pre.raise-to", { amount: bigBlind * 40 });
       case 11:
         if (action.raises === 0) {
           return i18n.t("pre.jj-no-raiser");
         }
-        if (action.amount > 35) return i18n.t("pre.call-to-see");
-        if (action.amount > 75) return i18n.t("pre.big-pair-bet");
-        return i18n.t("pre.raise-to", { amount: 55 });
+        if (action.amount > bigBlind * 40) return i18n.t("pre.big-pair-bet");
+        if (action.amount > bigBlind * 15) return i18n.t("pre.call-to-see");
+        return i18n.t("pre.raise-to", { amount: bigBlind * 20 });
       case 10:
       case 9:
       case 8:
-        return i18n.t("pre.pocket-middle-pair");
+        return i18n.t("pre.middle-pair");
       default:
-        return i18n.t("pre.pocket-middle-pair");
+        return i18n.t("pre.small-pair");
     }
   }
   const isSuited = cards[0].suit === cards[1].suit;
 
-  if (cards[1].cardNumber === 14) {
-    switch (cards[0].cardNumber) {
-      case 13:
-      case 12:
-        return i18n.t("pre.big-a", (isSuited && i18n.t("pre.suited")) || "");
-      case 11:
-      case 10:
-        return i18n.t(
-          "pre.medium-a-1",
-          (isSuited && i18n.t("pre.suited")) || ""
-        );
-      case 9:
-      case 8:
-        return i18n.t(
-          "pre.medium-a-2",
-          (isSuited && i18n.t("pre.suited")) || ""
-        );
-      default:
-        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
-    }
-  }
-  if (cards[1].cardNumber === 13) {
-    switch (cards[0].cardNumber) {
-      case 12:
-        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
-        return (
-          "Raise or call" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      case 11:
-        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
-        return (
-          "Raise or call medium" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      case 10:
-        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
-        return (
-          "Raise or call small" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      default:
-        return i18n.t("pre.small-a", (isSuited && i18n.t("pre.suited")) || "");
-        return (
-          "call big blind with position" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-    }
-  }
-  if (cards[1].cardNumber === 12) {
-    switch (cards[0].cardNumber) {
-      case 11:
-        return (
-          "rasie or call" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      case 10:
-        return (
-          "small rasie or call" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      case 9:
-        return (
-          "call big blind" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      default:
-        return "";
-    }
-  }
-  if (cards[1].cardNumber === 11) {
-    switch (cards[0].cardNumber) {
-      case 10:
-        return (
-          "small rasie or call" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      case 9:
-        return (
-          "call big blind" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      default:
-        return "";
-    }
-  }
-  if (cards[1].cardNumber === 10) {
-    switch (cards[0].cardNumber) {
-      case 9:
-        return (
-          "call big blind" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
+  switch (cards[1].cardNumber) {
+    case 14:
+      switch (cards[0].cardNumber) {
+        case 13:
+        case 12:
+          return i18n.t("pre.big-a", (isSuited && i18n.t("pre.suited")) || "");
+        case 11:
+        case 10:
+          return i18n.t(
+            "pre.medium-a-1",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        case 9:
+        case 8:
+          return i18n.t(
+            "pre.medium-a-2",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        default:
+          return i18n.t(
+            "pre.small-a",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+      }
 
-      default:
-        return "";
-    }
-  }
-  if (cards[1].cardNumber === 9) {
-    switch (cards[0].cardNumber) {
-      case 8:
-        return (
-          "call big blind" +
-          ((isSuited && "; with suited preflop potential") || "")
-        );
-      default:
-        return "";
-    }
+    case 13:
+      switch (cards[0].cardNumber) {
+        case 12:
+          return i18n.t(
+            "pre.good-kq",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        case 11:
+          return i18n.t("pre.good-k", (isSuited && i18n.t("pre.suited")) || "");
+        case 10:
+          return i18n.t("pre.ok-k", (isSuited && i18n.t("pre.suited")) || "");
+        default:
+          return (isSuited && i18n.t("pre.suited-big-card")) || "";
+      }
+    case 12:
+      switch (cards[0].cardNumber) {
+        case 11:
+          return i18n.t(
+            "pre.good-connector",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        case 10:
+          return i18n.t(
+            "pre.ok-connector",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        default:
+          return (isSuited && i18n.t("pre.suited-big-card")) || "";
+      }
+    case 11:
+      switch (cards[0].cardNumber) {
+        case 10:
+          return i18n.t(
+            "pre.ok-connector",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        case 9:
+          return i18n.t(
+            "pre.ok-connector",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        default:
+          return (isSuited && i18n.t("pre.suited-big-card")) || "";
+      }
+    case 10:
+      switch (cards[0].cardNumber) {
+        case 9:
+          return i18n.t(
+            "pre.ok-connector",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        default:
+          return (isSuited && i18n.t("pre.suited-medium-card")) || "";
+      }
+    case 9:
+      switch (cards[0].cardNumber) {
+        case 8:
+          return i18n.t(
+            "pre.ok-connector",
+            (isSuited && i18n.t("pre.suited")) || ""
+          );
+        default:
+          return (isSuited && i18n.t("pre.suited-medium-card")) || "";
+      }
+    default:
+      return (isSuited && i18n.t("pre.suited-small-card")) || "";
   }
 };
 export const checkBoard = (cards: ICard[], round: Round) => {
