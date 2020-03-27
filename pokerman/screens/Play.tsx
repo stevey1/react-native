@@ -71,8 +71,8 @@ export default function Play(props: IProps) {
 
   function getSeatsInPlay(round: Round) {
     if (round === Round.Preflop && (!AllActions || AllActions.length === 1)) {
-      const seats = Seats.map((s, index) => ({
-        ...s,
+      const seats = Seats.map((seat, index) => ({
+        ...seat,
         betOrder:
           index -
           2 -
@@ -81,14 +81,8 @@ export default function Play(props: IProps) {
       }));
       return sortSeats(seats);
     }
-    const action =
-      Actions[
-        Math.min(
-          Actions.length - 1,
-          (round === Round.Preflop && round) || round - 1
-        )
-      ];
-    return sortSeats([action.raiser, ...action.callers]);
+    const allAction = AllActions[AllActions.length - 1];
+    return sortSeats([allAction.action.raiser, ...allAction.action.callers]);
   }
 
   const handleMyHand = (card: ICard, cardId: number) => {
