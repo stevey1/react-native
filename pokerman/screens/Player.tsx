@@ -89,14 +89,7 @@ export default function Player() {
             <TextInput
               value={Name}
               onChangeText={text => setName(text)}
-              style={{
-                flex: 1,
-                marginRight: 5,
-                marginTop: 1,
-                paddingLeft: 5,
-                backgroundColor: "#D1D1D1",
-                borderWidth: 1
-              }}
+              style={[styles.textInput, { flex: 1, marginRight: 3 }]}
             />
             <Button
               buttonStyle={{

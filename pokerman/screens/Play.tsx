@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, FlatList } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Button } from "react-native-elements";
+import { Button, Overlay } from "react-native-elements";
 import Card from "./Card";
 import Action from "./Action";
 import Caller from "./Caller";
@@ -37,6 +37,7 @@ interface IProps {
   handleStraddlesChange: (straddles: number) => void;
 }
 export default function Play(props: IProps) {
+  const [ShowTipOverlay, setShowTipOverlay] = useState(false);
   const [CurrentRound, setCurrentRound] = useState(Round.Preflop);
   const [MyHand, setMyHand] = useState([]);
   const [Board, setBoard] = useState([]);
@@ -286,6 +287,51 @@ export default function Play(props: IProps) {
     }
     return <View>{tips}</View>;
   };
+  const tipOverlay = () =>
+    ShowTipOverlay ? (
+      <Overlay
+        overlayBackgroundColor="#F5F5F5"
+        width="90%"
+        height="70%"
+        isVisible={ShowTipOverlay}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={[styles.container, { justifyContent: "space-between" }]}>
+            <FlatList
+              data={[
+                { key: "Control Session Time" },
+                { key: "Energy level</Text" },
+                { key: "Safe Play</Text" },
+                { key: "A*; K*(any ghost card); 手中对</Text" },
+                {
+                  key:
+                    "Assume 3 aces on play: 1 on board, 1 In my hand; 1 in another players hand"
+                },
+                { key: "Hand blocker - 用bet和手牌排除" },
+                { key: "Set bet/Straight Bet" },
+                {
+                  key:
+                    "Preflop Re-raise, raise big - not many people will not call"
+                }
+              ]}
+              renderItem={({ item }) => (
+                <Text style={styles.item}>{item.key}</Text>
+              )}
+            ></FlatList>
+            <Button
+              buttonStyle={{
+                backgroundColor: "#D1D1D1"
+              }}
+              title={i18n.t("button.done")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => setShowTipOverlay(false)}
+            />
+          </View>
+        </ScrollView>
+      </Overlay>
+    ) : (
+      <View></View>
+    );
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -320,6 +366,7 @@ export default function Play(props: IProps) {
               titleStyle={{ color: "#000000" }}
               onPress={() => handleStraddle(false)}
             />
+            {tipOverlay()}
           </View>
           {
             //displayRoundAction(Round.Preflop)

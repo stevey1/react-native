@@ -72,7 +72,7 @@ export default function Game(props) {
       <View style={styles.container}>
         <View>
           <View style={[styles.control, { marginBottom: 10 }]}>
-            <Text key="tst" style={{ ...styles.label, width: 100 }}>
+            <Text key="tst" style={[styles.label, { width: 100 }]}>
               {i18n.t("game.language")}:
             </Text>
             <View style={{ flexDirection: "column" }}>
@@ -80,14 +80,14 @@ export default function Game(props) {
             </View>
           </View>
           <View style={[styles.control, { marginBottom: 10 }]}>
-            <Text key="tst" style={{ ...styles.label, width: 100 }}>
+            <Text key="tst" style={[styles.label, { width: 100 }]}>
               {i18n.t("game.gameType")}:
             </Text>
             <View style={{ flexDirection: "column" }}>{getCheckBoxes()}</View>
           </View>
 
           <View key="vs" style={styles.control}>
-            <Text key="ts" style={{ ...styles.label, width: 100 }}>
+            <Text key="ts" style={[styles.label, { width: 100 }]}>
               {i18n.t("game.smallBlind")}:
             </Text>
             <TextInput
@@ -107,7 +107,7 @@ export default function Game(props) {
             />
           </View>
           <View key="vb" style={styles.control}>
-            <Text key="tb" style={{ ...styles.label, width: 100 }}>
+            <Text key="tb" style={[styles.label, { width: 100 }]}>
               {i18n.t("game.bigBlind")}:
             </Text>
             <TextInput
@@ -127,7 +127,7 @@ export default function Game(props) {
             />
           </View>
           <View key="vst" style={styles.control}>
-            <Text key="tst" style={{ ...styles.label, width: 100 }}>
+            <Text key="tst" style={[styles.label, { width: 100 }]}>
               {i18n.t("game.straddle")}:
             </Text>
             <TextInput

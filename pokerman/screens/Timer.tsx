@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Text, TextInput, View, FlatList } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button, Overlay } from "react-native-elements";
 import styles from "./styles";
@@ -29,33 +29,39 @@ export default function Timer(props: IProps) {
         height="70%"
         isVisible={ShowTip}
       >
-        <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
-          <View>
-            <Text>Control Session Time</Text>
-            <Text>Energy level</Text>
-
-            <Text>Safe Play</Text>
-            <Text>A*; K*(any ghost card); 手中对</Text>
-            <Text>
-              Assume 3 aces on play: 1 on board, 1 In my hand; 1 in another
-              players hand
-            </Text>
-            <Text>Hand blocker - 用bet和手牌排除</Text>
-            <Text>Set bet/Straight Bet</Text>
-
-            <Text>
-              Preflop Re-raise, raise big - not many people will not call.
-            </Text>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={[styles.container, { justifyContent: "space-between" }]}>
+            <FlatList
+              data={[
+                { key: "Control Session Time" },
+                { key: "Energy level</Text" },
+                { key: "Safe Play</Text" },
+                { key: "A*; K*(any ghost card); 手中对</Text" },
+                {
+                  key:
+                    "Assume 3 aces on play: 1 on board, 1 In my hand; 1 in another players hand"
+                },
+                { key: "Hand blocker - 用bet和手牌排除" },
+                { key: "Set bet/Straight Bet" },
+                {
+                  key:
+                    "Preflop Re-raise, raise big - not many people will not call"
+                }
+              ]}
+              renderItem={({ item }) => (
+                <Text style={styles.item}>{item.key}</Text>
+              )}
+            ></FlatList>
+            <Button
+              buttonStyle={{
+                backgroundColor: "#D1D1D1"
+              }}
+              title={i18n.t("button.done")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => setShowTip(false)}
+            />
           </View>
-          <Button
-            buttonStyle={{
-              backgroundColor: "#D1D1D1"
-            }}
-            title={i18n.t("button.done")}
-            titleStyle={{ color: "#000000" }}
-            onPress={() => setShowTip(false)}
-          />
-        </View>
+        </ScrollView>
       </Overlay>
     ) : (
       <View></View>
@@ -64,53 +70,50 @@ export default function Timer(props: IProps) {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={[styles.container, { justifyContent: "space-between" }]}>
         <View style={styles.control}>
-          <Text onPress={() => setShowTip(true)}>{i18n.t("timer.tip")}</Text>
+          <Text style={[styles.label, { width: 110 }]}>
+            {i18n.t("timer.sessionTime")}:
+          </Text>
+          <TextInput
+            onChange={e => {
+              const value = e.nativeEvent.text
+                ? parseInt(e.nativeEvent.text)
+                : null;
+              if (value) setSessionTime(value);
+            }}
+            keyboardType={"numeric"}
+            maxLength={1}
+            selectTextOnFocus={true}
+            style={[styles.textInput, { flex: 1, marginRight: 3 }]}
+          />
+          <Button
+            buttonStyle={{
+              backgroundColor: "#D1D1D1"
+            }}
+            title={i18n.t("button.startTimer")}
+            titleStyle={{ color: "#000000" }}
+            onPress={() => {
+              if (SessionTime > 0) {
+                const now = new Date();
+                const targetTime = Math.round(
+                  now.setHours(now.getHours() + SessionTime) / 1000
+                );
+                setTargetTime(targetTime);
+                props.handleSetTargetTime(targetTime);
+              }
+            }}
+          />
         </View>
         <View>
-          <View style={styles.control}>
-            <Text style={{ ...styles.label, width: 110 }}>
-              {i18n.t("timer.sessionTime")}:
-            </Text>
-            <TextInput
-              key="tis"
-              onChange={e => {
-                const value = e.nativeEvent.text
-                  ? parseInt(e.nativeEvent.text)
-                  : null;
-                if (value) setSessionTime(value);
-              }}
-              keyboardType={"numeric"}
-              maxLength={1}
-              selectTextOnFocus={true}
-              style={styles.textInput}
-            />
-          </View>
-          <View>
-            <Text key="timer" style={{ textAlign: "center" }}>
-              {Math.round(TimeLeft / 3600)}:
-              {(Math.round(TimeLeft / 60) % 60).toString().padStart(2, "0")}:
-              {(TimeLeft % 60).toString().padStart(2, "0")}
-            </Text>
-          </View>
+          <Text key="timer" style={{ textAlign: "center", fontSize: 72 }}>
+            {Math.round(TimeLeft / 3600)}:
+            {(Math.round(TimeLeft / 60) % 60).toString().padStart(2, "0")}:
+            {(TimeLeft % 60).toString().padStart(2, "0")}
+          </Text>
         </View>
         {tipOverlay()}
-        <Button
-          buttonStyle={{
-            backgroundColor: "#D1D1D1"
-          }}
-          title={i18n.t("button.startTimer")}
-          titleStyle={{ color: "#000000" }}
-          onPress={() => {
-            if (SessionTime > 0) {
-              const now = new Date();
-              const targetTime = Math.round(
-                now.setHours(now.getHours() + SessionTime) / 1000
-              );
-              setTargetTime(targetTime);
-              props.handleSetTargetTime(targetTime);
-            }
-          }}
-        />
+        <View style={styles.control}>
+          <Text onPress={() => setShowTip(true)}>{i18n.t("timer.tip")}</Text>
+        </View>
       </View>
     </ScrollView>
   );
