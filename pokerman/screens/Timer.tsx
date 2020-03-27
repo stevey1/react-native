@@ -25,7 +25,6 @@ export default function Timer(props: IProps) {
     }, 1000);
   });
   const gameType = getGameFormat();
-  console.log("gameType", gameType);
   const tips =
     gameType === GameType.cash
       ? [
@@ -170,7 +169,6 @@ export default function Timer(props: IProps) {
 }
 const getGameFormat = () => {
   const { data } = useQuery(GET_GAME_FORMAT);
-  console.log("timer", data.gameFormat);
   return data.gameFormat.gameType;
 };
 

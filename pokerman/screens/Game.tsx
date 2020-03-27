@@ -15,9 +15,7 @@ export default function Game(props) {
     data: { gameFormat },
     client
   } = useQuery(GET_GAME_FORMAT);
-  console.log("GameEEEE", gameFormat);
   const [GameFormat, setGameFormat] = useState(gameFormat);
-  ///console.log("GameFormat22", gameFormat);
   const [Language, setLanguage] = useState(i18n.locale === "en" ? 0 : 1);
 
   const handleFinishSetup = () => {

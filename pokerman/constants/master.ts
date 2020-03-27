@@ -1,4 +1,11 @@
-import { ICard, Round, IAction, Suit } from "./DataTypes";
+import {
+  ICard,
+  Round,
+  IAction,
+  IActionHistory,
+  Suit,
+  GameType
+} from "./DataTypes";
 import { getSuitText, getNumberText } from "./helper";
 import i18n from "../i18n";
 
@@ -7,21 +14,26 @@ export const getMyHandPreflop = (
   betOrder: number,
   players: number,
   bigBlind: number,
-  action: IAction
+  action: IAction,
+  gameType: GameType
 ) => {
+  players = players - 1;
   //Pocket pair
   if (cards[0].cardNumber === cards[1].cardNumber) {
     switch (cards[0].cardNumber) {
       case 14:
         if (action.raises === 0) {
-          if (betOrder <= (players - 1) / 2)
+          if (betOrder <= players / 2)
             return i18n.t("pre.aa-early-position", {
-              amount1: bigBlind * (players - 1) * 2,
-              amount2: bigBlind * (players - 1) * 3
+              amount1:
+                bigBlind * ((gameType === GameType.cash && players * 2) || 4),
+              amount2:
+                bigBlind * ((gameType === GameType.cash && players * 3) || 5)
             });
           else
             return i18n.t("pre.aa-late-position", {
-              amount: bigBlind * (players - 1) * 2
+              amount:
+                bigBlind * ((gameType === GameType.cash && players * 3) || 4)
             });
         }
         return i18n.t("pre.claim-my-pot", {
@@ -29,20 +41,23 @@ export const getMyHandPreflop = (
         });
       case 13:
         if (action.raises === 0) {
-          if (betOrder <= (players - 1) / 2)
+          if (betOrder <= players / 2)
             return i18n.t("pre.kk-early-position", {
-              amount1: bigBlind * (players - 1) * 2,
-              amount2: bigBlind * (players - 1) * 3
+              amount1:
+                bigBlind * ((gameType === GameType.cash && players * 2) || 4),
+              amount2:
+                bigBlind * ((gameType === GameType.cash && players * 3) || 5)
             });
           else
             return i18n.t("pre.kk-late-position", {
-              amount1: bigBlind * (players - 1) * 2
+              amount:
+                bigBlind * ((gameType === GameType.cash && players * 3) || 4)
             });
         }
         if (
           action.raises > 2 ||
           action.checkRaise ||
-          action.amount > 40 * bigBlind
+          action.amount > bigBlind * ((gameType === GameType.cash && 50) || 7)
         )
           return i18n.t("pre.check-or-fight");
         return i18n.t("pre.claim-my-pot", {
@@ -53,16 +68,36 @@ export const getMyHandPreflop = (
         if (action.raises === 0) {
           return i18n.t("pre.qq-no-raiser");
         }
-        if (action.amount > bigBlind * 40) return i18n.t("pre.big-pair-bet");
-        if (action.amount > bigBlind * 15) return i18n.t("pre.call-to-see");
-        return i18n.t("pre.raise-to", { amount: bigBlind * 40 });
+        if (
+          action.amount >
+          bigBlind * ((gameType === GameType.cash && 50) || 7)
+        )
+          return i18n.t("pre.big-pair-bet");
+        if (
+          action.amount >
+          bigBlind * ((gameType === GameType.cash && 30) || 5)
+        )
+          return i18n.t("pre.call-to-see");
+        return i18n.t("pre.raise-to", {
+          amount: bigBlind * ((gameType === GameType.cash && 40) || 7)
+        });
       case 11:
         if (action.raises === 0) {
           return i18n.t("pre.jj-no-raiser");
         }
-        if (action.amount > bigBlind * 40) return i18n.t("pre.big-pair-bet");
-        if (action.amount > bigBlind * 15) return i18n.t("pre.call-to-see");
-        return i18n.t("pre.raise-to", { amount: bigBlind * 20 });
+        if (
+          action.amount >
+          bigBlind * ((gameType === GameType.cash && 50) || 7)
+        )
+          return i18n.t("pre.big-pair-bet");
+        if (
+          action.amount >
+          bigBlind * ((gameType === GameType.cash && 30) || 4)
+        )
+          return i18n.t("pre.call-to-see");
+        return i18n.t("pre.raise-to", {
+          amount: bigBlind * ((gameType === GameType.cash && 20) || 3)
+        });
       case 10:
       case 9:
       case 8:
@@ -166,30 +201,30 @@ export const getMyHandPreflop = (
       return (isSuited && i18n.t("pre.suited-small-card")) || "";
   }
 };
-export const checkBoard = (cards: ICard[], round: Round) => {
+export const checkBoard = (cards: ICard[]) => {
   let results = [];
   let result = checkBoardPair(cards);
   if (result) results.push(result);
-  result = checkBoardFlush(cards, round);
+  result = checkBoardFlush(cards);
   if (result) results.push(result);
   result = checkBoardStaight(cards);
   if (result) results.push(result);
   return results;
 };
-export const checkMyHand = (cards: ICard[], myHand: ICard[], round: Round) => {
+export const checkMyHand = (cards: ICard[], myHand: ICard[]) => {
   let results = [];
   const allCards = [...cards, ...myHand].sort(
     (c1, c2) => c1.cardNumber - c2.cardNumber
   );
-  let result = checkMyPair(allCards, myHand, round);
+  let result = checkMyPair(allCards, myHand);
   if (result) results.push(result);
-  result = checkMyFlush(allCards, myHand, round);
+  result = checkMyFlush(allCards, myHand);
   if (result) results.push(result);
   result = checkMyStraight(allCards, myHand);
   if (result) results.push(result);
   return results;
 };
-const checkBoardFlush = (cards: ICard[], round: Round) => {
+const checkBoardFlush = (cards: ICard[]) => {
   const suits = cards.reduce(
     (p, card) => {
       p[card.suit] += 1;
@@ -200,7 +235,7 @@ const checkBoardFlush = (cards: ICard[], round: Round) => {
   const suitsCount = suits.find(s => s > 2);
   if (suitsCount) {
     return `${suitsCount.toString()} flush , prepare to fold`;
-  } else if (round !== Round.River) {
+  } else if (cards.length < 7) {
     const suitIndex = suits.findIndex(s => s === 2);
     if (suitIndex >= 0) return;
     `${getSuitText(
@@ -327,7 +362,7 @@ enum PairType {
   top2Pairs,
   pairs2
 }
-export const checkMyPair = (cards: ICard[], myHand: ICard[], round: Round) => {
+export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
   let myPairType = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   let i = cards.length - 1;
   let loops = 1;
@@ -398,12 +433,11 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[], round: Round) => {
       //(myPairType[PairType.pair] > 0 && PairType.pairs2) || PairType.topPair
       (myPairType[PairType.pair] > 0 && "2 Pairs") || "Top pair"
     );
-  if (myPairType[PairType.overPair] === 2) return "over pair"; //PairType.overPair;
   if (myPairType[PairType.pair] === 2) return "2 pairs"; //PairType.pairs2;
   if (myPairType[PairType.pair] === 1) return "pair"; //PairType.pair;
   return ""; //PairType.none;
 };
-export const checkMyFlush = (cards: ICard[], myHand: ICard[], round: Round) => {
+export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
   const suits = cards.reduce(
     (p, card) => {
       p[card.suit] += 1;
@@ -424,7 +458,7 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[], round: Round) => {
       else if (suit === myHand[0].suit || suit === myHand[1].suit)
         return `4 cards flush, A?`;
     case 4:
-      if (round === Round.River) return "";
+      if (cards.length < 7) return "";
 
       if (suit === myHand[0].suit && suit === myHand[1].suit) {
         if (myHand[1].cardNumber === cards[cards.length - 1].cardNumber)
@@ -497,7 +531,42 @@ const checkMyStraightDraw = (
 const countIt = (cards: ICard[], cardNumber: number) =>
   cards.filter(c => c.cardNumber === cardNumber).length;
 
-export const getActionTip = (actions: IAction[], round: Round) => {
-  //preflop->CheckRaise/big all in re-raise: AA
-  //afterflop->CheckRaise/big all in re-raise: Set
+export const getActionTip = (allAction: IActionHistory[]) => {
+  const action = allAction[allAction.length - 1].action;
+  const round = allAction[allAction.length - 1].round;
+  if (action.raiser.player.isMe) return "";
+  if (round === Round.Preflop) {
+    if (action.checkRaise) return "Check Raise: must be AA/KK";
+    if (action.raises > 1) {
+      const lastAction = allAction[allAction.length - 2].action;
+      if (action.amount >= lastAction.amount * 5)
+        return `${Math.round(
+          action.amount / lastAction.amount
+        )} raise; must be AA/KK`;
+      if (action.amount > lastAction.amount * 3)
+        return `${Math.round(
+          action.amount / lastAction.amount
+        )} raise; QQ/JJ raise`;
+      if (action.amount > lastAction.amount * 2)
+        return `${Math.round(
+          action.amount / lastAction.amount
+        )} raise; must AK `;
+      return "mini raise";
+    }
+    return "";
+  }
+  const lastAction = allAction[allAction.length - 2].action;
+  if (action.checkRaise)
+    return `${Math.round(
+      action.amount / lastAction.amount
+    )} times Check Raise: must be Set/Straight`;
+
+  if (action.raises > 1) {
+    if (action.amount > lastAction.amount * 2)
+      return `${Math.round(
+        action.amount / lastAction.amount
+      )} re-raise; must be Set/Straight`;
+    return `minimum-raise`;
+  }
+  return "";
 };

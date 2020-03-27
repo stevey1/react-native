@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, FlatList } from "react-native";
+import { Text, View, SectionList, ActionSheetIOS } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button, Overlay } from "react-native-elements";
 import Card from "./Card";
@@ -87,7 +87,6 @@ export default function Play(props: IProps) {
     //   return sortSeats(Seats);
     // }
     const action = Actions[Math.min(Actions.length - 1, round - 1)];
-    console.log("round", round);
     return sortSeats([action.raiser, ...action.callers]);
   }
 
@@ -188,22 +187,10 @@ export default function Play(props: IProps) {
     );
   const showCurrentRound = () => {
     if (CurrentRound === Round.Preflop) return <View></View>;
-    let roundData = [
-      <View key="r1">
-        {showRoundData(0, 3, getRoundText(Round.Flop), Round.Flop)}
-      </View>
-    ];
-    roundData.push(
-      <View key="r2">
-        {showRoundData(3, 1, getRoundText(Round.Turn), Round.Turn)}
-      </View>
-    );
+    let roundData = [<View key="r1">{showRoundData(Round.Flop)}</View>];
+    roundData.push(<View key="r2">{showRoundData(Round.Turn)}</View>);
 
-    roundData.push(
-      <View key="r3">
-        {showRoundData(4, 1, getRoundText(Round.River), Round.River)}
-      </View>
-    );
+    roundData.push(<View key="r3">{showRoundData(Round.River)}</View>);
     return <View>{roundData}</View>;
   };
   const showCards = (start: number, totalCards: number) => {
@@ -215,33 +202,18 @@ export default function Play(props: IProps) {
     }
     return <View style={styles.control}>{cards}</View>;
   };
-  const showRoundData = (
-    start: number,
-    totalCards: number,
-    label: string,
-    round: Round
-  ) => {
+  const showRoundData = (round: Round) => {
     return (
-      <View>
-        <View key="l" style={styles.control}>
-          <Text key="f" style={styles.label}>
-            {label}:
-          </Text>
-          {showCards(start, totalCards)}
-        </View>
-        <View key="c" style={styles.control}>
-          <Text key="t" style={styles.label}>
-            {i18n.t("play.raise")}:
-          </Text>
-          <Action
-            key="a"
-            seats={getSeatsInPlay(round)}
-            handleAction={(r, a) => handleAction(r, a, round)}
-          ></Action>
-        </View>
-        {
-          //displayRoundAction(Action[round], round)
-        }
+      <View key="c" style={styles.control}>
+        <Text key="t" style={styles.label}>
+          {i18n.t("round." + round) + " " + i18n.t("play.raise")}:
+        </Text>
+        <Action
+          key="a"
+          seats={getSeatsInPlay(round)}
+          handleAction={(r, a) => handleAction(r, a, round)}
+        ></Action>
+        <Text>{showCallerSeats(round)}</Text>
       </View>
     );
   };
@@ -259,36 +231,46 @@ export default function Play(props: IProps) {
               PreFlopSeats.findIndex(s => s.player.isMe) ?? 0,
               Seats.length,
               BigBlind,
-              Actions[Round.Preflop]
+              Actions[Round.Preflop],
+              GameFormat.gameType
             );
-      return (
-        <View key="p">
-          <Text>{result}</Text>
-        </View>
-      );
+      return <Text key="p">{result}</Text>;
     }
-    let tips = [<View key="p"></View>];
+    let tips = [];
+    result = getActionTip(AllActions);
+    if (result) tips.push(<Text key="a">{"Action: " + result}</Text>);
 
-    result = checkBoard(board, CurrentRound).join("; ");
-    if (result)
-      tips.push(
-        <View key="b">
-          <Text>{"Board: " + result}</Text>
-        </View>
-      );
+    result = checkBoard(board).join("; ");
+    if (result) tips.push(<Text key="b">{"Board: " + result}</Text>);
     if (myHand.length == 2) {
-      result = checkMyHand(board, myHand, CurrentRound).join("; ");
-      if (result)
-        tips.push(
-          <View key="m">
-            <Text>{"I have: " + result}</Text>
-          </View>
-        );
+      result = checkMyHand(board, myHand).join("; ");
+      if (result) tips.push(<Text key="m">{"I have: " + result}</Text>);
     }
     return <View>{tips}</View>;
   };
-  const tipOverlay = () =>
-    ShowTipOverlay ? (
+  const tipOverlay = () => {
+    if (!ShowTipOverlay) return <View></View>;
+
+    const actions = [
+      {
+        title: i18n.t("round." + Round.Preflop),
+        data: displayRoundAction(Actions, Round.Preflop)
+      },
+      {
+        title: i18n.t("round." + Round.Flop),
+        data: displayRoundAction(Actions, Round.Flop)
+      },
+      {
+        title: i18n.t("round." + Round.Turn),
+        data: displayRoundAction(Actions, Round.Turn)
+      },
+      {
+        title: i18n.t("round." + Round.River),
+        data: displayRoundAction(Actions, Round.River)
+      }
+    ];
+
+    return (
       <Overlay
         overlayBackgroundColor="#F5F5F5"
         width="90%"
@@ -297,27 +279,14 @@ export default function Play(props: IProps) {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={[styles.container, { justifyContent: "space-between" }]}>
-            <FlatList
-              data={[
-                { key: "Control Session Time" },
-                { key: "Energy level</Text" },
-                { key: "Safe Play</Text" },
-                { key: "A*; K*(any ghost card); 手中对</Text" },
-                {
-                  key:
-                    "Assume 3 aces on play: 1 on board, 1 In my hand; 1 in another players hand"
-                },
-                { key: "Hand blocker - 用bet和手牌排除" },
-                { key: "Set bet/Straight Bet" },
-                {
-                  key:
-                    "Preflop Re-raise, raise big - not many people will not call"
-                }
-              ]}
-              renderItem={({ item }) => (
-                <Text style={styles.item}>{item.key}</Text>
+            <SectionList
+              sections={actions}
+              renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
+              renderSectionHeader={({ section }) => (
+                <Text style={styles.sectionHeader}>{section.title}</Text>
               )}
-            ></FlatList>
+              keyExtractor={(item, index) => index}
+            />
             <Button
               buttonStyle={{
                 backgroundColor: "#D1D1D1"
@@ -329,36 +298,26 @@ export default function Play(props: IProps) {
           </View>
         </ScrollView>
       </Overlay>
-    ) : (
-      <View></View>
     );
+  };
+  const showCallerSeats = (round: Round) => {
+    if (Actions.length - 1 < round || Actions[round].callers.length == 0)
+      return "";
+
+    return (
+      "Callers: " +
+      Actions[round].callers.map(caller => caller.id + 1).join(", ")
+    );
+  };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
         <View>
           <View style={[styles.control]}>
-            <Text key="my" style={styles.label}>
-              {i18n.t("play.myHand")}:
-            </Text>
+            <Text style={styles.label}>{i18n.t("play.myHand")}:</Text>
             <Card key="m0" handleCard={c => handleMyHand(c, 0)}></Card>
             <Card key="m1" handleCard={c => handleMyHand(c, 1)}></Card>
-          </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <View style={styles.control}>
-              <Text key="p" style={styles.label}>
-                {i18n.t("round." + Round.Preflop)}:
-              </Text>
-              <Action
-                key={"pre"}
-                bigBlind={BigBlind}
-                seats={PreFlopSeats}
-                handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
-              ></Action>
-            </View>
-
             <Button
               buttonStyle={{ backgroundColor: "#D1D1D1" }}
               style={{ flex: 1, marginRight: 2 }}
@@ -366,15 +325,40 @@ export default function Play(props: IProps) {
               titleStyle={{ color: "#000000" }}
               onPress={() => handleStraddle(false)}
             />
-            {tipOverlay()}
           </View>
-          {
-            //displayRoundAction(Round.Preflop)
-          }
+          <View style={styles.control}>
+            <Text key="f" style={styles.label}>
+              {getRoundText(Round.Flop)}:
+            </Text>
+            {showCards(0, 3)}
+          </View>
+          <View style={styles.control}>
+            <Text key="f1" style={styles.label}>
+              {getRoundText(Round.Turn)}:
+            </Text>
+            {showCards(3, 1)}
+            <Text key="f2" style={styles.label}>
+              {getRoundText(Round.River)}:
+            </Text>
+            {showCards(4, 1)}
+          </View>
+          <View style={styles.control}>
+            <Text key="p" style={styles.label}>
+              {i18n.t("round." + Round.Preflop)}:
+            </Text>
+            <Action
+              key={"pre"}
+              bigBlind={BigBlind}
+              seats={PreFlopSeats}
+              handleAction={(r, a) => handleAction(r, a, Round.Preflop)}
+            ></Action>
+            <Text>{showCallerSeats(Round.Preflop)}</Text>
+          </View>
 
           {showCurrentRound()}
           {showCallerButton()}
           {callersOverlay()}
+          {tipOverlay()}
           <View style={{ flexDirection: "row" }}>
             <Text>{i18n.t("play.myHand")}:</Text>
             {displayCards(MyHand)}
@@ -383,14 +367,23 @@ export default function Play(props: IProps) {
             <Text>{i18n.t("play.board")}:</Text>
             {displayCards(Board)}
           </View>
-          <View>{displayPot(AllActions)}</View>
+          <Text>{displayPot(AllActions)}</Text>
           {showTips()}
+        </View>
+        <View style={{ flexDirection: "row" }}>
           <Button
             buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            style={{ width: 105, marginRight: 3 }}
+            style={{ marginRight: 3, flex: 1 }}
             title={i18n.t("button.new")}
             titleStyle={{ color: "#000000" }}
             onPress={() => handleStraddle(true)}
+          />
+          <Button
+            buttonStyle={{ backgroundColor: "#D1D1D1" }}
+            title="View History" //{i18n.t("button.new")}
+            titleStyle={{ color: "#000000" }}
+            onPress={() => setShowTipOverlay(true)}
+            style={{ flex: 1 }}
           />
         </View>
       </View>
@@ -431,7 +424,6 @@ const getSeats = () => {
 };
 const getGameFormat = () => {
   const { data } = useQuery(GET_GAME_FORMAT);
-  console.log("play", data.gameFormat);
   return data.gameFormat;
 };
 const sortSeats = (seats: ISeat[]) =>
@@ -444,71 +436,54 @@ const displayPot = (allActions: IActionHistory[]) => {
       currentAction.action.amount * (currentAction.action.callers.length + 1),
     0
   );
-  return (
-    <Text style={{ fontSize: 14 }}>
-      {i18n.t("action.pot") + ":" + pot.toString()}$
-    </Text>
-  );
+  return i18n.t("action.pot") + ":" + pot.toString();
 };
-const displayRoundAction = (action: IAction, round: Round) => {
-  return action ? (
-    <View>
-      <Text
-        key={"c" + round}
-        style={
-          action.checkRaise && !action.raiser.player.isMe
-            ? { color: "#ff0000", fontSize: 16 }
-            : {}
-        }
-      >
-        {action.checkRaise && !action.raiser.player.isMe
-          ? "***" + i18n.t("action.checkRaise") + "***"
-          : ""}
-      </Text>
-      <Text
-        key={"a" + round}
-        style={
-          action.raises > 1 && !action.raiser.player.isMe
-            ? { color: "#ff0000", fontSize: 16 }
-            : { fontSize: 14 }
-        }
-      >
-        {action.raiser.player.name +
-          ((!action.raiser.player.isMe &&
-            "_" +
-              PlayType[
-                (round === Round.Preflop &&
-                  action.raiser.player.preflopRaiseType) ||
-                  action.raiser.player.raiseType
-              ]) ||
-            "") +
+const displayRoundAction = (actions: IAction[], round: Round) => {
+  if (actions.length == 0 || round > actions.length) return [];
+  const action = actions[actions.length - 1];
+  let results = [];
+
+  if (action.checkRaise)
+    results.push("***" + i18n.t("action.checkRaise") + "***");
+
+  results.push(
+    action.raiser.player.name +
+      (action.raiser.player.isMe
+        ? ""
+        : "_" +
+          i18n.t(
+            "playType." +
+              (round === Round.Preflop
+                ? action.raiser.player.preflopRaiseType.toString()
+                : action.raiser.player.raiseType.toString())
+          ) +
           " " +
           action.raises +
           i18n.t("action.raise") +
           " " +
           action.amount +
-          "$; " +
-          i18n.t("action.players") +
-          ": " +
-          (action.callers.length + 1) +
-          action.callers.reduce(
-            (p, c) =>
-              p +
-              ((p !== " - " && ", ") || "") +
-              c.player.name +
-              (c.player.isMe
-                ? ""
-                : "_" +
-                  PlayType[
-                    (round === Round.Preflop &&
-                      action.raiser.player.preflopCallType) ||
-                      action.raiser.player.callType
-                  ]),
-            " - "
-          )}
-      </Text>
-    </View>
-  ) : (
-    <View></View>
+          "$")
   );
+  results.push(
+    i18n.t("action.players") +
+      ": " +
+      (action.callers.length + 1).toString() +
+      " - " +
+      action.callers
+        .map(
+          caller =>
+            caller.player.name +
+            (caller.player.isMe
+              ? ""
+              : "_" +
+                i18n.t(
+                  "playType." +
+                    (round === Round.Preflop
+                      ? caller.player.preflopCallType.toString()
+                      : caller.player.callType.toString())
+                ))
+        )
+        .join(",")
+  );
+  return results;
 };
