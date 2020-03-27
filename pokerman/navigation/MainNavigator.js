@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Seat from "../screens/Seat";
-import PlayNav from "../screens/PlayNav";
 import Game from "../screens/Game";
 import Timer from "../screens/Timer";
 import Player from "../screens/Player";

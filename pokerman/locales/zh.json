@@ -33,27 +33,27 @@
     "bigBlind": "大盲",
     "straddle": "盲打",
     "gameType": "Game Type",
-    "language": "Language"
+    "language": "语言"
   },
   "player": {
-    "name": "Name",
-    "selectPlayer": "Select Player",
-    "playerName": "Player Name",
-    "preflopBet": "Preflop Bet",
-    "preflopCall": "Preflop Call",
-    "afterflopBet": "Afterflop Bet",
-    "afterflopCall": "Afterflop Call"
+    "name": "名字",
+    "selectPlayer": "选择玩家",
+    "playerName": "玩家名字",
+    "preflopBet": "翻前押注",
+    "preflopCall": "翻前跟注",
+    "afterflopBet": "翻后押注",
+    "afterflopCall": "翻后跟注"
   },
   "timer": {
-    "sessionTime": "Session Time",
+    "sessionTime": "预设时间",
     "tip": "螳螂扑蝉，黄雀在后"
   },
   "button": {
     "done": "完成",
     "straddle": "盲打",
-    "new": "New局",
-    "add": "Add",
-    "startTimer": "Start Timer"
+    "new": "下一局",
+    "add": "新加",
+    "startTimer": "开始计时"
   },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
@@ -91,13 +91,13 @@
     "13": "K",
     "14": "A"
   },
-  "gameType": { "0": "Cash", "1": "Tournament" },
+  "gameType": { "0": "现金", "1": "比赛" },
   "playType": {
-    "0": "Extral Loose",
-    "1": "Loose",
-    "2": "Normal",
-    "3": "Tight",
-    "4": "Extra Tight"
+    "0": "松松",
+    "1": "松",
+    "2": "正常",
+    "3": "紧",
+    "4": "紧紧"
   },
   "round": {
     "0": "牌前",
@@ -107,6 +107,6 @@
   },
   "language": {
     "0": "English",
-    "1": "Chinese"
+    "1": "汉语"
   }
 }
