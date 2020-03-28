@@ -55,6 +55,60 @@
     "add": "新加",
     "startTimer": "开始计时"
   },
+
+  "suit": { "0": "草", "1": "方", "2": "红", "3": "黑" },
+  "number": {
+    "0": "0",
+    "1": "一",
+    "2": "二",
+    "3": "三",
+    "4": "四",
+    "5": "五",
+    "6": "六",
+    "7": "七",
+    "8": "八",
+    "9": "九",
+    "10": "十",
+    "11": "J",
+    "12": "Q",
+    "13": "K",
+    "14": "A"
+  },
+  "card": {
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "10": "T",
+    "11": "J",
+    "12": "Q",
+    "13": "K",
+    "14": "A"
+  },
+  "gameType": { "0": "现金", "1": "比赛" },
+  "playType": {
+    "0": "松松",
+    "1": "松",
+    "2": "正常",
+    "3": "紧",
+    "4": "紧紧"
+  },
+  "round": {
+    "0": "牌前",
+    "1": "翻牌",
+    "2": "转牌",
+    "3": "河牌"
+  },
+  "language": {
+    "0": "English",
+    "1": "汉语"
+  },
   "pre": {
     "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
     "aa-late-position": "Prefer 1 caller: raise: {{amount}}",
@@ -83,40 +137,52 @@
     "small-connector": "{{suited}} good connectors, call small",
     "suited": "suited"
   },
-  "suit": { "0": "草", "1": "方", "2": "红", "3": "黑" },
-  "number": {
-    "0": "0",
-    "1": "一",
-    "2": "二",
-    "3": "三",
-    "4": "四",
-    "5": "五",
-    "6": "六",
-    "7": "七",
-    "8": "八",
-    "9": "九",
-    "10": "十",
-    "11": "J",
-    "12": "Q",
-    "13": "K",
-    "14": "A"
+  "board": {
+    "4Kind": "Four kind - prepare to fold.",
+    "fullHouse": "{{cardNumber}} Full house - prepare to fold, don't draw",
+    "4Flush": "4 cards flush",
+    "flush": "Flush on board",
+    "flushDraw": "flush draw, if over pair+ and hand blocker...",
+    "straight": "{{cardNumber}} high straight, watch bet",
+    "4straight": "{{cardNumber}} high 4 cards straight, watch bet",
+    "5straight": "{{cardNumber}} high 5 cards straight, watch bet",
+    "": "flush draw, if over pair+ and hand blocker...",
+    "flcccush": "Flush on board"
   },
-  "gameType": { "0": "现金", "1": "比赛" },
-  "playType": {
-    "0": "松松",
-    "1": "松",
-    "2": "正常",
-    "3": "紧",
-    "4": "紧紧"
+  "iMake": {
+    "4Kind": "四张",
+    "topFullHouse": "大三挂二",
+    "fullHouse": "三挂二",
+    "topSet": "大Set",
+    "set": "Set",
+    "trips": "三",
+    "overPair": "Over对",
+    "top2": "二大对",
+    "2Pairs": "二对",
+    "TopPair": "大对",
+    "pair": "对",
+    "5Flush": "面同花, A?",
+    "4Flush": "4同花, A?",
+    "flush": "同花",
+    "2flushDraw": "18%+12叫同花/顶对(2)",
+    "1flushDraw": "18%+6叫同花/顶对(1)",
+    "flushDraw": "18%叫同花",
+    "4CardsFlushDraw": "18%四张叫同花",
+    "straight": "{{cardNumber}} 顺",
+    "openEnd2Draw": "16%+12 两头叫顺/顶对(2)",
+    "openEnd1Draw": "16%+6 两头叫顺/顶对(1)",
+    "openEndDraw": "16% 两头叫顺",
+    "straight2Draw": "8%+12 单头叫顺/顶对(2)",
+    "straight1Draw": "8%+6 单头叫顺/顶对(1)",
+    "straightDraw": "8% 单头叫顺"
   },
-  "round": {
-    "0": "牌前",
-    "1": "翻牌",
-    "2": "转牌",
-    "3": "河牌"
-  },
-  "language": {
-    "0": "English",
-    "1": "汉语"
+  "actionTip": {
+    "preCheckReraise": "CR陷阱: 一定是AA/KK",
+    "preAAReraise": "{{times}} 倍加注; 一定是AA/KK",
+    "preQQReraise": "{{times}} 倍加注; 可能是QQ/JJ",
+    "preAKReraise": "{{times}} 倍加注; 可能是A/K",
+    "miniReraise": "minimum re-raise",
+    "checkReraise": "CR陷阱； 一定是Set/Straight",
+    "reraise": "{{times}} 倍加注; 可能是Set/Straight"
   }
 }

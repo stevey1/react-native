@@ -194,6 +194,23 @@ export const checkMyHand = (cards: ICard[], myHand: ICard[]) => {
   if (result) results.push(result);
   return results;
 };
+
+const checkBoardPair = (cards: ICard[]) => {
+  for (let i = cards.length - 2; i >= 0; i--) {
+    if (i - 1 >= 0)
+      if (
+        cards[i].cardNumber === cards[i + 1].cardNumber &&
+        cards[i].cardNumber === cards[i - 1].cardNumber
+      )
+        return i18n.t("board.4Kind");
+
+    if (cards[i].cardNumber === cards[i + 1].cardNumber)
+      return i18n.t("board.fullHouse", {
+        cardNumber: getNumberText(cards[cards.length - 1].cardNumber)
+      });
+  }
+};
+
 const checkBoardFlush = (cards: ICard[]) => {
   const suits = cards.reduce(
     (p, card) => {
@@ -204,36 +221,18 @@ const checkBoardFlush = (cards: ICard[]) => {
   );
   let suitIndex = suits.findIndex(s => s === 4);
   if (suitIndex >= 0) {
-    return `${getSuitText(suitIndex)} 4 cards flush, prepare to fold`;
+    return i18n.t("board.4Flush");
   } else {
     let suitIndex = suits.findIndex(s => s === 3);
     if (suitIndex >= 0) {
-      return `${getSuitText(suitIndex)} flush, prepare to fold`;
+      return i18n.t("board.flush");
     } else {
       suitIndex = suits.findIndex(s => s === 2);
-      if (suitIndex >= 0)
-        return `${getSuitText(
-          suitIndex
-        )} flush draw, if over pair+ with hand blocker to charge`;
+      if (suitIndex >= 0) return i18n.t("board.flushDraw");
     }
   }
 };
 
-const checkBoardPair = (cards: ICard[]) => {
-  for (let i = cards.length - 2; i >= 0; i--) {
-    if (i - 1 >= 0)
-      if (
-        cards[i].cardNumber === cards[i + 1].cardNumber &&
-        cards[i].cardNumber === cards[i - 1].cardNumber
-      )
-        return "Four kind - prepare to fold.";
-
-    if (cards[i].cardNumber === cards[i + 1].cardNumber)
-      return `${getNumberText(
-        cards[cards.length - 1].cardNumber
-      )} Full house - prepare to fold, don't draw`;
-  }
-};
 const checkBoardStaight = (cards: ICard[]) => {
   let cardNumbers = [...new Set(cards.map(c => c.cardNumber))];
 
@@ -252,73 +251,72 @@ const checkBoardStraightType = (
 ) => {
   let result: string;
   let cardGap: number;
+  let highNumber: number;
   switch (howMany) {
     case 3:
       if (i < 0 || i > cardNumbers.length - 3) return "";
-      const hightNumber2 = cardNumbers[i + 2];
-      cardGap = hightNumber2 - cardNumbers[i];
+      highNumber = cardNumbers[i + 2];
+      cardGap = highNumber - cardNumbers[i];
       if (cardGap === 2) {
         result = checkBoardStraightType(cardNumbers, i - 1, 4);
-        if (result) return result;
-        switch (hightNumber2 + 2) {
-          case 16:
-            return `${getNumberText(14)} high hard straight`;
-          case 15:
-            return `${getNumberText(14)} high easier straight`;
-          default:
-            return cardNumbers[i] === 1
-              ? `${getNumberText(hightNumber2 + 2)} high hard straight`
-              : cardNumbers[i] === 2
-              ? `${getNumberText(hightNumber2 + 2)} high easier straight`
-              : `${getNumberText(hightNumber2 + 2)} high easy straight`;
-        }
+        return (
+          result ||
+          i18n.t("board.straight", {
+            cardNumber: getNumberText(Math.min(highNumber + 2, 14))
+          })
+        );
       }
       if (cardGap === 3) {
         result = checkBoardStraightType(cardNumbers, i - 1, 4);
-        return result || hightNumber2 + 1 > 14
-          ? `${getNumberText(14)} high hard straight`
-          : cardNumbers[i] === 1
-          ? `${getNumberText(hightNumber2 + 1)} high hard straight`
-          : `${getNumberText(hightNumber2 + 1)} high easier straight`;
+        return (
+          result ||
+          i18n.t("board.straight", {
+            cardNumber: getNumberText(Math.min(highNumber + 1, 14))
+          })
+        );
       }
-
       return (
         (cardGap === 4 &&
-          `${getNumberText(hightNumber2)} high hard straight`) ||
+          i18n.t("board.straight", {
+            cardNumber: getNumberText(highNumber)
+          })) ||
         ""
       );
     case 4:
       if (i < 0 || i > cardNumbers.length - 4) return "";
-      const highNumber = cardNumbers[i + 3];
+      highNumber = cardNumbers[i + 3];
       cardGap = highNumber - cardNumbers[i];
       if (cardGap === 3) {
         result = checkBoardStraightType(cardNumbers, i - 1, 5);
         return (
           result ||
-          `${getNumberText(
-            (highNumber + 2 > 14 && 14) || highNumber + 2
-          )} high 4 cards straight`
+          i18n.t("board.straight", {
+            cardNumber: getNumberText(Math.min(highNumber + 2, 14))
+          })
         );
       }
 
       return (
         (cardGap === 4 &&
-          `${getNumberText(
-            (highNumber + (highNumber - cardNumbers[i + 1] === 2 ? 2 : 1) >
-              14 &&
-              14) ||
-              highNumber + (highNumber - cardNumbers[i + 1] === 2 ? 2 : 1)
-          )} high 4 cards straight`) ||
+          i18n.t("board.straight", {
+            cardNumber: getNumberText(
+              Math.min(
+                highNumber + (highNumber - cardNumbers[i + 1] === 2 ? 2 : 1),
+                14
+              )
+            )
+          })) ||
         ""
       );
     case 5:
       if (i < 0 || i > cardNumbers.length - 5) return "";
-      cardGap = cardNumbers[i + 4] - cardNumbers[i];
+      highNumber = cardNumbers[i + 4];
+      cardGap = highNumber - cardNumbers[i];
       return (
         (cardGap === 5 &&
-          `${getNumberText(
-            (cardNumbers[i + 4] + 2 > 14 && 14) || cardNumbers[i + 4] + 2
-          )} high straight-5`) ||
+          i18n.t("board.straight", {
+            cardNumber: getNumberText(Math.min(highNumber + 2, 14))
+          })) ||
         ""
       );
     default:
@@ -394,34 +392,35 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
     i -= count;
     loops++;
   }
-  if (myPairType[PairType.kind4]) return "4 Kind"; // PairType.kind4;
+  if (myPairType[PairType.kind4]) return i18n.t("iMake.4Kind"); // PairType.kind4;
   if (myPairType[PairType.topSet]) {
-    return myPairType[PairType.boardPair] ? "Top Full House" : "Top set";
+    return i18n.t(myPairType[PairType.boardPair] ? "topFullHouse" : "topSet");
   }
   if (myPairType[PairType.set]) {
-    return myPairType[PairType.boardPair] ? "Full House" : "Set"; //PairType.set;
+    return i18n.t(myPairType[PairType.boardPair] ? "fullHouse" : "set"); //PairType.set;
   }
   if (myPairType[PairType.topTrip]) {
-    return myPairType[PairType.topPair] ||
-      myPairType[PairType.pair] ||
-      myPairType[PairType.boardPair]
-      ? "Top Full House"
-      : "Trips"; // PairType.topTrip;
+    return i18n.t(
+      myPairType[PairType.topPair] ||
+        myPairType[PairType.pair] ||
+        myPairType[PairType.boardPair]
+        ? "topFullHouse"
+        : "trips"
+    ); // PairType.topTrip;
   }
   if (myPairType[PairType.trip]) {
-    return myPairType[PairType.topPair] || myPairType[PairType.pair]
-      ? "Full House"
-      : "Trips";
-  }
-  if (myPairType[PairType.overPair]) return "Over pair"; //PairType.overPair;
-  if (myPairType[PairType.topPair] === 2) return "Top 2 pairs"; //PairType.top2Pairs;
-  if (myPairType[PairType.topPair] === 1)
-    return (
-      //(myPairType[PairType.pair] > 0 && PairType.pairs2) || PairType.topPair
-      (myPairType[PairType.pair] > 0 && "2 Pairs") || "Top pair"
+    return i18n.t(
+      myPairType[PairType.topPair] || myPairType[PairType.pair]
+        ? "fullHouse"
+        : "trips"
     );
-  if (myPairType[PairType.pair] === 2) return "2 pairs"; //PairType.pairs2;
-  if (myPairType[PairType.pair] === 1) return "pair"; //PairType.pair;
+  }
+  if (myPairType[PairType.overPair]) return i18n.t("iMake.overPair"); //PairType.overPair;
+  if (myPairType[PairType.topPair] === 2) return i18n.t("iMake.top2"); //PairType.top2Pairs;
+  if (myPairType[PairType.topPair] === 1)
+    return i18n.t((myPairType[PairType.pair] > 0 && "2Pairs") || "toppair");
+  if (myPairType[PairType.pair] === 2) return i18n.t("iMake.2pairs"); //PairType.pairs2;
+  if (myPairType[PairType.pair] === 1) return i18n.t("iMake.pair"); //PairType.pair;
   return ""; //PairType.none;
 };
 
@@ -437,24 +436,26 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
   const suit = suits.findIndex(s => s >= 4);
   switch (suitsCount) {
     case 6:
-      return `4 cards flush, A?`;
+      return i18n.t("iMake.4Flush");
     case 7:
-      return `flush on board, A?`;
+      return i18n.t("iMake.5Flush");
     case 5:
       if (suit === myHand[0].suit && suit === myHand[1].suit)
-        return `flush, I don't fold`;
+        return i18n.t("iMake.flush");
       else if (suit === myHand[0].suit || suit === myHand[1].suit)
-        return `4 cards flush, A?`;
+        return i18n.t("iMake.4Flush");
     case 4:
       if (cards.length === 7) return "";
       if (suit === myHand[0].suit && suit === myHand[1].suit) {
         if (myHand[1].cardNumber === cards[cards.length - 1].cardNumber)
-          return myHand[0].cardNumber === cards[cards.length - 2].cardNumber
-            ? `30% flush/top pair(2) draw `
-            : `24% flush/top pair draw`;
-        else return `18% flush draw`;
+          return i18n.t(
+            myHand[0].cardNumber === cards[cards.length - 2].cardNumber
+              ? "2flushDraw"
+              : `1flushDraw`
+          );
+        else return i18n.t("iMake.flushDraw");
       } else if (suit === myHand[0].suit || suit === myHand[1].suit) {
-        return "18% 4 cards flush draw";
+        return i18n.t("iMake.4CardsFlushDraw");
       }
       return "";
     default:
@@ -484,7 +485,9 @@ const checkMyStraightFrom = (cardNumbers: number[], i: number) => {
 
   cardGap = cardNumbers[i + 4] - cardNumbers[i];
   if (cardGap === 4)
-    return `${getNumberText(cardNumbers[i + 4])} high straight`;
+    return i18n.t("iMake.straight", {
+      cardNumber: getNumberText(cardNumbers[i + 4])
+    });
   return "";
 };
 const checkMyStraightDraw = (
@@ -500,18 +503,18 @@ const checkMyStraightDraw = (
   if (cardGap === 3) {
     if (cardNumbers[cardNumbers.length - 1] === myHand[1].cardNumber) {
       if (cardNumbers[cardNumbers.length - 2] === myHand[0].cardNumber)
-        return `draw 28% O/E straight/top pair(2) draw `;
-      else return `22% O/E straight/top pair draw `;
+        return i18n.t("iMake.openEnd2Draw");
+      else return i18n.t("iMake.openEnd1Draw");
     }
-    return `16% O/E straight draw `;
+    return i18n.t("iMake.openEndDraw");
   }
   if (cardGap === 4) {
     if (cardNumbers[cardNumbers.length - 1] === myHand[1].cardNumber) {
       if (cardNumbers[cardNumbers.length - 2] === myHand[0].cardNumber)
-        return `draw 20% straight/top pair(2) draw `;
-      else return `14% straight/top pair draw `;
+        return i18n.t("iMake.straight2Draw");
+      else return i18n.t("iMake.straight1Draw");
     }
-    return `8% straight draw`;
+    return i18n.t("iMake.straightDraw");
   }
 
   return "";
@@ -525,37 +528,34 @@ export const getActionTip = (allAction: IActionHistory[]) => {
   const round = allAction[allAction.length - 1].round;
   if (action.raiser.player.isMe) return "";
   if (round === Round.Preflop) {
-    if (action.checkRaise) return "Check Raise: must be AA/KK";
+    if (action.checkRaise) return i18n.t("actionTip.preCheckRaise");
     if (action.raises > 1) {
       const lastAction = allAction[allAction.length - 2].action;
       if (action.amount >= lastAction.amount * 5)
-        return `${Math.round(
-          action.amount / lastAction.amount
-        )} raise; must be AA/KK`;
+        return i18n.t("actionTip.preAAReraise", {
+          times: Math.round(action.amount / lastAction.amount)
+        });
       if (action.amount > lastAction.amount * 3)
-        return `${Math.round(
-          action.amount / lastAction.amount
-        )} raise; QQ/JJ raise`;
+        return i18n.t("actionTip.preQQReraise", {
+          times: Math.round(action.amount / lastAction.amount)
+        });
       if (action.amount > lastAction.amount * 2)
-        return `${Math.round(
-          action.amount / lastAction.amount
-        )} raise; must AK `;
-      return "mini raise";
+        return i18n.t("actionTip.preAKReraise", {
+          times: Math.round(action.amount / lastAction.amount)
+        });
+      return i18n.t("actionTip.miniReraise");
     }
     return "";
   }
   const lastAction = allAction[allAction.length - 2].action;
-  if (action.checkRaise)
-    return `${Math.round(
-      action.amount / lastAction.amount
-    )} times Check Raise: must be Set/Straight`;
+  if (action.checkRaise) i18n.t("actionTip.checkRaise");
 
   if (action.raises > 1) {
     if (action.amount > lastAction.amount * 2)
-      return `${Math.round(
-        action.amount / lastAction.amount
-      )} re-raise; must be Set/Straight`;
-    return `minimum-raise`;
+      return i18n.t("actionTip.reraise", {
+        times: Math.round(action.amount / lastAction.amount)
+      });
+    return i18n.t("actionTip.miniReraise");
   }
   return "";
 };
