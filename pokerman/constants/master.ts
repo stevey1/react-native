@@ -107,93 +107,63 @@ export const getMyHandPreflop = (
     }
   }
   const isSuited = cards[0].suit === cards[1].suit;
-
+  const suited = { suited: (isSuited && i18n.t("pre.suited")) || "" };
   switch (cards[1].cardNumber) {
     case 14:
       switch (cards[0].cardNumber) {
         case 13:
         case 12:
-          return i18n.t("pre.big-a", (isSuited && i18n.t("pre.suited")) || "");
+          return i18n.t("pre.big-a", suited);
         case 11:
         case 10:
-          return i18n.t(
-            "pre.medium-a-1",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.medium-a-1", suited);
         case 9:
         case 8:
-          return i18n.t(
-            "pre.medium-a-2",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.medium-a-2", suited);
         default:
-          return i18n.t(
-            "pre.small-a",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.small-a", suited);
       }
 
     case 13:
       switch (cards[0].cardNumber) {
         case 12:
-          return i18n.t(
-            "pre.good-kq",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.good-kq", suited);
         case 11:
-          return i18n.t("pre.good-k", (isSuited && i18n.t("pre.suited")) || "");
+          return i18n.t("pre.good-k", suited);
         case 10:
-          return i18n.t("pre.ok-k", (isSuited && i18n.t("pre.suited")) || "");
+          return i18n.t("pre.ok-k", suited);
         default:
           return (isSuited && i18n.t("pre.suited-big-card")) || "";
       }
     case 12:
       switch (cards[0].cardNumber) {
         case 11:
-          return i18n.t(
-            "pre.good-connector",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.good-connector", suited);
         case 10:
-          return i18n.t(
-            "pre.ok-connector",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.ok-connector", suited);
         default:
           return (isSuited && i18n.t("pre.suited-big-card")) || "";
       }
     case 11:
       switch (cards[0].cardNumber) {
         case 10:
-          return i18n.t(
-            "pre.ok-connector",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.ok-connector", suited);
         case 9:
-          return i18n.t(
-            "pre.ok-connector",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.ok-connector", suited);
         default:
           return (isSuited && i18n.t("pre.suited-big-card")) || "";
       }
     case 10:
       switch (cards[0].cardNumber) {
         case 9:
-          return i18n.t(
-            "pre.ok-connector",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.ok-connector", suited);
         default:
           return (isSuited && i18n.t("pre.suited-medium-card")) || "";
       }
     case 9:
       switch (cards[0].cardNumber) {
         case 8:
-          return i18n.t(
-            "pre.ok-connector",
-            (isSuited && i18n.t("pre.suited")) || ""
-          );
+          return i18n.t("pre.ok-connector", suited);
         default:
           return (isSuited && i18n.t("pre.suited-medium-card")) || "";
       }
@@ -362,7 +332,6 @@ const checkBoardStraightType = (
   }
 };
 enum PairType {
-  none = -1,
   overPair = 0,
   boardPair,
   pair,
@@ -373,15 +342,16 @@ enum PairType {
   topSet,
   kind4,
   fullHouse,
+  topFullHouse,
   top2Pairs,
   pairs2
 }
 export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
-  let myPairType = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let myPairType = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2];
   let i = cards.length - 1;
   let loops = 1;
   while (i > 0) {
-    let cardNumber = cards[cards.length - 1].cardNumber;
+    let cardNumber = cards[i].cardNumber;
     const count = countIt(cards, cardNumber);
     switch (count) {
       case 4:
@@ -410,11 +380,18 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
           loops === 1
         )
           myPairType[PairType.overPair] += 1;
-        else if (
-          myHand[0].cardNumber === cardNumber ||
-          myHand[1].cardNumber === cardNumber
-        )
-          myPairType[loops === 1 ? PairType.topPair : PairType.pair] += 1;
+        else if (loops === 1)
+          myPairType[
+            myHand[1].cardNumber === cardNumber
+              ? PairType.topPair
+              : PairType.pair
+          ] += 1;
+        else if (loops === 2)
+          myPairType[
+            myHand[0].cardNumber === cardNumber && myPairType[PairType.topPair]
+              ? PairType.topPair
+              : PairType.pair
+          ] += 1;
         else myPairType[PairType.boardPair] += 1;
         break;
       default:
@@ -425,7 +402,7 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
   }
   if (myPairType[PairType.kind4]) return "4 Kind"; // PairType.kind4;
   if (myPairType[PairType.topSet]) {
-    return myPairType[PairType.boardPair] ? "Full House" : "Top set";
+    return myPairType[PairType.boardPair] ? "Top Full House" : "Top set";
   }
   if (myPairType[PairType.set]) {
     return myPairType[PairType.boardPair] ? "Full House" : "Set"; //PairType.set;
@@ -434,7 +411,7 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
     return myPairType[PairType.topPair] ||
       myPairType[PairType.pair] ||
       myPairType[PairType.boardPair]
-      ? "Full House"
+      ? "Top Full House"
       : "Trips"; // PairType.topTrip;
   }
   if (myPairType[PairType.trip]) {
@@ -442,8 +419,8 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
       ? "Full House"
       : "Trips";
   }
-  if (myPairType[PairType.overPair]) return PairType.overPair;
-  if (myPairType[PairType.topPair] === 2) return PairType.top2Pairs;
+  if (myPairType[PairType.overPair]) return "Over pair"; //PairType.overPair;
+  if (myPairType[PairType.topPair] === 2) return "Top 2 pairs"; //PairType.top2Pairs;
   if (myPairType[PairType.topPair] === 1)
     return (
       //(myPairType[PairType.pair] > 0 && PairType.pairs2) || PairType.topPair
@@ -490,6 +467,7 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
       return;
   }
 };
+
 const checkMyStraight = (cards: ICard[], myHand: ICard[]) => {
   let cardNumbers = [...new Set(cards.map(c => c.cardNumber))];
 
