@@ -143,7 +143,7 @@ export default function Timer(props: IProps) {
             onPress={() => {
               if (SessionTime > 0) {
                 const now = new Date();
-                const targetTime = Math.round(
+                const targetTime = Math.floor(
                   now.setHours(now.getHours() + SessionTime) / 1000
                 );
                 setTargetTime(targetTime);
@@ -154,8 +154,8 @@ export default function Timer(props: IProps) {
         </View>
         <View>
           <Text key="timer" style={{ textAlign: "center", fontSize: 72 }}>
-            {Math.round(TimeLeft / 3600)}:
-            {(Math.round(TimeLeft / 60) % 60).toString().padStart(2, "0")}:
+            {Math.floor(TimeLeft / 3600)}:
+            {(Math.floor(TimeLeft / 60) % 60).toString().padStart(2, "0")}:
             {(TimeLeft % 60).toString().padStart(2, "0")}
           </Text>
         </View>

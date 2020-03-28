@@ -220,7 +220,7 @@ export default function Play(props: IProps) {
   const showTips = () => {
     const myHand = MyHand.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
     const board = Board.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
-
+    let tips = [];
     let result = "";
     if (board.length < 3) {
       result =
@@ -234,12 +234,15 @@ export default function Play(props: IProps) {
               Actions[Round.Preflop],
               GameFormat.gameType
             );
-      return <Text key="p">{result}</Text>;
+      if (result) tips.push(<Text key="a">{"My Hand: " + result}</Text>);
     }
-    let tips = [];
+
     result = getActionTip(AllActions);
     if (result) tips.push(<Text key="a">{"Action: " + result}</Text>);
 
+    if (board.length < 3) {
+      return <View>{tips}</View>;
+    }
     result = checkBoard(board).join("; ");
     if (result) tips.push(<Text key="b">{"Board: " + result}</Text>);
     if (myHand.length == 2) {
@@ -305,8 +308,7 @@ export default function Play(props: IProps) {
       return "";
 
     return (
-      "Callers: " +
-      Actions[round].callers.map(caller => caller.id + 1).join(", ")
+      "C: " + Actions[round].callers.map(caller => caller.id + 1).join(", ")
     );
   };
 
@@ -439,7 +441,7 @@ const displayPot = (allActions: IActionHistory[]) => {
   return i18n.t("action.pot") + ":" + pot.toString();
 };
 const displayRoundAction = (actions: IAction[], round: Round) => {
-  if (actions.length == 0 || round > actions.length) return [];
+  if (actions.length == 0 || round > actions.length - 1) return [];
   const action = actions[actions.length - 1];
   let results = [];
 
