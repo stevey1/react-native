@@ -145,17 +145,15 @@
     "flushDraw": "flush draw, if over pair+ and hand blocker...",
     "straight": "{{cardNumber}} high straight, watch bet",
     "4straight": "{{cardNumber}} high 4 cards straight, watch bet",
-    "5straight": "{{cardNumber}} high 5 cards straight, watch bet",
-    "": "flush draw, if over pair+ and hand blocker...",
-    "flcccush": "Flush on board"
+    "5straight": "{{cardNumber}} high 5 cards straight, watch bet"
   },
   "iMake": {
     "4Kind": "四张",
     "topFullHouse": "大三挂二",
     "fullHouse": "三挂二",
-    "topSet": "大Set",
-    "set": "Set",
-    "trips": "三",
+    "topSet": "大三张",
+    "set": "三张",
+    "trips": "假三张",
     "overPair": "Over对",
     "top2": "二大对",
     "2Pairs": "二对",

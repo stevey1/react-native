@@ -394,31 +394,39 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
   }
   if (myPairType[PairType.kind4]) return i18n.t("iMake.4Kind"); // PairType.kind4;
   if (myPairType[PairType.topSet]) {
-    return i18n.t(myPairType[PairType.boardPair] ? "topFullHouse" : "topSet");
+    return i18n.t(
+      "iMake." + (myPairType[PairType.boardPair] ? "topFullHouse" : "topSet")
+    );
   }
   if (myPairType[PairType.set]) {
-    return i18n.t(myPairType[PairType.boardPair] ? "fullHouse" : "set"); //PairType.set;
+    return i18n.t(
+      "iMake." + (myPairType[PairType.boardPair] ? "fullHouse" : "set")
+    ); //PairType.set;
   }
   if (myPairType[PairType.topTrip]) {
     return i18n.t(
-      myPairType[PairType.topPair] ||
+      "iMake." +
+        (myPairType[PairType.topPair] ||
         myPairType[PairType.pair] ||
         myPairType[PairType.boardPair]
-        ? "topFullHouse"
-        : "trips"
+          ? "topFullHouse"
+          : "trips")
     ); // PairType.topTrip;
   }
   if (myPairType[PairType.trip]) {
     return i18n.t(
-      myPairType[PairType.topPair] || myPairType[PairType.pair]
-        ? "fullHouse"
-        : "trips"
+      "iMake." +
+        (myPairType[PairType.topPair] || myPairType[PairType.pair]
+          ? "fullHouse"
+          : "trips")
     );
   }
   if (myPairType[PairType.overPair]) return i18n.t("iMake.overPair"); //PairType.overPair;
   if (myPairType[PairType.topPair] === 2) return i18n.t("iMake.top2"); //PairType.top2Pairs;
   if (myPairType[PairType.topPair] === 1)
-    return i18n.t((myPairType[PairType.pair] > 0 && "2Pairs") || "toppair");
+    return i18n.t(
+      "iMake." + ((myPairType[PairType.pair] > 0 && "2Pairs") || "toppair")
+    );
   if (myPairType[PairType.pair] === 2) return i18n.t("iMake.2pairs"); //PairType.pairs2;
   if (myPairType[PairType.pair] === 1) return i18n.t("iMake.pair"); //PairType.pair;
   return ""; //PairType.none;
@@ -449,9 +457,10 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
       if (suit === myHand[0].suit && suit === myHand[1].suit) {
         if (myHand[1].cardNumber === cards[cards.length - 1].cardNumber)
           return i18n.t(
-            myHand[0].cardNumber === cards[cards.length - 2].cardNumber
-              ? "2flushDraw"
-              : `1flushDraw`
+            "iMake." +
+              (myHand[0].cardNumber === cards[cards.length - 2].cardNumber
+                ? "2flushDraw"
+                : "1flushDraw")
           );
         else return i18n.t("iMake.flushDraw");
       } else if (suit === myHand[0].suit || suit === myHand[1].suit) {
