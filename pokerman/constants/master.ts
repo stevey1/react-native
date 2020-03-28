@@ -18,6 +18,8 @@ export const getMyHandPreflop = (
   gameType: GameType
 ) => {
   players = players - 1;
+  const cashGame = gameType === GameType.cash;
+
   //Pocket pair
   if (cards[0].cardNumber === cards[1].cardNumber) {
     switch (cards[0].cardNumber) {
@@ -25,15 +27,12 @@ export const getMyHandPreflop = (
         if (action.raises === 0) {
           if (betOrder <= players / 2)
             return i18n.t("pre.aa-early-position", {
-              amount1:
-                bigBlind * ((gameType === GameType.cash && players * 2) || 4),
-              amount2:
-                bigBlind * ((gameType === GameType.cash && players * 3) || 5)
+              amount1: bigBlind * ((cashGame && players * 2) || 4),
+              amount2: bigBlind * ((cashGame && players * 3) || 5)
             });
           else
             return i18n.t("pre.aa-late-position", {
-              amount:
-                bigBlind * ((gameType === GameType.cash && players * 3) || 4)
+              amount: bigBlind * ((cashGame && players * 3) || 4)
             });
         }
         return i18n.t("pre.claim-my-pot", {
@@ -43,21 +42,18 @@ export const getMyHandPreflop = (
         if (action.raises === 0) {
           if (betOrder <= players / 2)
             return i18n.t("pre.kk-early-position", {
-              amount1:
-                bigBlind * ((gameType === GameType.cash && players * 2) || 4),
-              amount2:
-                bigBlind * ((gameType === GameType.cash && players * 3) || 5)
+              amount1: bigBlind * ((cashGame && players * 2) || 4),
+              amount2: bigBlind * ((cashGame && players * 3) || 5)
             });
           else
             return i18n.t("pre.kk-late-position", {
-              amount:
-                bigBlind * ((gameType === GameType.cash && players * 3) || 4)
+              amount: bigBlind * ((cashGame && players * 3) || 4)
             });
         }
         if (
           action.raises > 2 ||
           action.checkRaise ||
-          action.amount > bigBlind * ((gameType === GameType.cash && 50) || 7)
+          action.amount > bigBlind * ((cashGame && 50) || 7)
         )
           return i18n.t("pre.check-or-fight");
         return i18n.t("pre.claim-my-pot", {
@@ -68,35 +64,23 @@ export const getMyHandPreflop = (
         if (action.raises === 0) {
           return i18n.t("pre.qq-no-raiser");
         }
-        if (
-          action.amount >
-          bigBlind * ((gameType === GameType.cash && 50) || 7)
-        )
+        if (action.amount > bigBlind * ((cashGame && 50) || 7))
           return i18n.t("pre.big-pair-bet");
-        if (
-          action.amount >
-          bigBlind * ((gameType === GameType.cash && 30) || 5)
-        )
+        if (action.amount > bigBlind * ((cashGame && 30) || 5))
           return i18n.t("pre.call-to-see");
         return i18n.t("pre.raise-to", {
-          amount: bigBlind * ((gameType === GameType.cash && 40) || 7)
+          amount: bigBlind * ((cashGame && 40) || 7)
         });
       case 11:
         if (action.raises === 0) {
           return i18n.t("pre.jj-no-raiser");
         }
-        if (
-          action.amount >
-          bigBlind * ((gameType === GameType.cash && 50) || 7)
-        )
+        if (action.amount > bigBlind * ((cashGame && 50) || 7))
           return i18n.t("pre.big-pair-bet");
-        if (
-          action.amount >
-          bigBlind * ((gameType === GameType.cash && 30) || 4)
-        )
+        if (action.amount > bigBlind * ((cashGame && 30) || 4))
           return i18n.t("pre.call-to-see");
         return i18n.t("pre.raise-to", {
-          amount: bigBlind * ((gameType === GameType.cash && 20) || 3)
+          amount: bigBlind * ((cashGame && 20) || 3)
         });
       case 10:
       case 9:
@@ -220,13 +204,11 @@ const checkBoardFlush = (cards: ICard[]) => {
     [0, 0, 0, 0]
   );
   let suitIndex = suits.findIndex(s => s === 4);
-  if (suitIndex >= 0) {
-    return i18n.t("board.4Flush");
-  } else {
+  if (suitIndex >= 0) return i18n.t("board.4Flush");
+  else {
     let suitIndex = suits.findIndex(s => s === 3);
-    if (suitIndex >= 0) {
-      return i18n.t("board.flush");
-    } else {
+    if (suitIndex >= 0) return i18n.t("board.flush");
+    else {
       suitIndex = suits.findIndex(s => s === 2);
       if (suitIndex >= 0) return i18n.t("board.flushDraw");
     }
@@ -372,19 +354,25 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
           loops === 1
         )
           myPairType[PairType.overPair] += 1;
-        else if (loops === 1)
-          myPairType[
-            myHand[1].cardNumber === cardNumber
-              ? PairType.topPair
-              : PairType.pair
-          ] += 1;
-        else if (loops === 2)
-          myPairType[
-            myHand[0].cardNumber === cardNumber && myPairType[PairType.topPair]
-              ? PairType.topPair
-              : PairType.pair
-          ] += 1;
-        else myPairType[PairType.boardPair] += 1;
+        else if (
+          cardNumber === myHand[0].cardNumber ||
+          cardNumber === myHand[1].cardNumber
+        ) {
+          if (loops === 1)
+            myPairType[
+              myHand[1].cardNumber === cardNumber
+                ? PairType.topPair
+                : PairType.pair
+            ] += 1;
+          else if (loops === 2)
+            myPairType[
+              myPairType[PairType.topPair] &&
+              cardNumber === myHand[0].cardNumber
+                ? PairType.topPair
+                : PairType.pair
+            ] += 1;
+          else myPairType[PairType.pair] += 1;
+        } else myPairType[PairType.boardPair] += 1;
         break;
       default:
         break;
@@ -393,16 +381,15 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
     loops++;
   }
   if (myPairType[PairType.kind4]) return i18n.t("iMake.4Kind"); // PairType.kind4;
-  if (myPairType[PairType.topSet]) {
+  if (myPairType[PairType.topSet])
     return i18n.t(
       "iMake." + (myPairType[PairType.boardPair] ? "topFullHouse" : "topSet")
     );
-  }
-  if (myPairType[PairType.set]) {
+
+  if (myPairType[PairType.set])
     return i18n.t(
       "iMake." + (myPairType[PairType.boardPair] ? "fullHouse" : "set")
-    ); //PairType.set;
-  }
+    );
   if (myPairType[PairType.topTrip]) {
     return i18n.t(
       "iMake." +
@@ -413,21 +400,22 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
           : "trips")
     ); // PairType.topTrip;
   }
-  if (myPairType[PairType.trip]) {
+  if (myPairType[PairType.trip])
     return i18n.t(
       "iMake." +
         (myPairType[PairType.topPair] || myPairType[PairType.pair]
           ? "fullHouse"
           : "trips")
     );
-  }
+
   if (myPairType[PairType.overPair]) return i18n.t("iMake.overPair"); //PairType.overPair;
-  if (myPairType[PairType.topPair] === 2) return i18n.t("iMake.top2"); //PairType.top2Pairs;
-  if (myPairType[PairType.topPair] === 1)
+  if (myPairType[PairType.topPair] > 1) return i18n.t("iMake.top2");
+  //PairType.top2Pairs;
+  else if (myPairType[PairType.topPair] > 1)
     return i18n.t(
-      "iMake." + ((myPairType[PairType.pair] > 0 && "2Pairs") || "toppair")
+      "iMake." + ((myPairType[PairType.pair] > 0 && "2Pairs") || "topPair")
     );
-  if (myPairType[PairType.pair] === 2) return i18n.t("iMake.2pairs"); //PairType.pairs2;
+  if (myPairType[PairType.pair] > 1) return i18n.t("iMake.2Pairs"); //PairType.pairs2;
   if (myPairType[PairType.pair] === 1) return i18n.t("iMake.pair"); //PairType.pair;
   return ""; //PairType.none;
 };
