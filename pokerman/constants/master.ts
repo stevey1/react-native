@@ -221,19 +221,13 @@ const checkBoardFlush = (cards: ICard[]) => {
 
 const checkBoardPair = (cards: ICard[]) => {
   for (let i = cards.length - 2; i >= 0; i--) {
-    if (i === 0) {
-      if (cards[i].cardNumber === cards[i + 1].cardNumber)
-        return `${getNumberText(
-          cards[cards.length - 1].cardNumber
-        )} Full house - prepare to fold, don't draw`;
-      break;
-    }
+    if (i - 1 >= 0)
+      if (
+        cards[i].cardNumber === cards[i + 1].cardNumber &&
+        cards[i].cardNumber === cards[i - 1].cardNumber
+      )
+        return "Four kind - prepare to fold.";
 
-    if (
-      cards[i].cardNumber === cards[i + 1].cardNumber &&
-      cards[i].cardNumber === cards[i - 1].cardNumber
-    )
-      return "Four kind - prepare to fold.";
     if (cards[i].cardNumber === cards[i + 1].cardNumber)
       return `${getNumberText(
         cards[cards.length - 1].cardNumber
