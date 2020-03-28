@@ -442,7 +442,7 @@ const displayPot = (allActions: IActionHistory[]) => {
 };
 const displayRoundAction = (actions: IAction[], round: Round) => {
   if (actions.length == 0 || round > actions.length - 1) return [];
-  const action = actions[actions.length - 1];
+  const action = actions[round];
   let results = [];
 
   if (action.checkRaise)

@@ -232,15 +232,20 @@ const checkBoardFlush = (cards: ICard[]) => {
     },
     [0, 0, 0, 0]
   );
-  const suitsCount = suits.find(s => s > 2);
-  if (suitsCount) {
-    return `${suitsCount.toString()} flush , prepare to fold`;
-  } else if (cards.length < 7) {
-    const suitIndex = suits.findIndex(s => s === 2);
-    if (suitIndex >= 0) return;
-    `${getSuitText(
-      suitIndex
-    )} flush draw, if over pair+ with hand blocker to charge`;
+  let suitIndex = suits.findIndex(s => s === 4);
+  if (suitIndex >= 0) {
+    return `${getSuitText(suitIndex)} 4 cards flush, prepare to fold`;
+  } else {
+    let suitIndex = suits.findIndex(s => s === 3);
+    if (suitIndex >= 0) {
+      return `${getSuitText(suitIndex)} flush, prepare to fold`;
+    } else {
+      suitIndex = suits.findIndex(s => s === 2);
+      if (suitIndex >= 0)
+        return `${getSuitText(
+          suitIndex
+        )} flush draw, if over pair+ with hand blocker to charge`;
+    }
   }
 };
 
@@ -267,6 +272,7 @@ const checkBoardPair = (cards: ICard[]) => {
 };
 const checkBoardStaight = (cards: ICard[]) => {
   let cardNumbers = [...new Set(cards.map(c => c.cardNumber))];
+
   if (cards[cards.length - 1].cardNumber === 14)
     cardNumbers = [1, ...cardNumbers];
   for (let i = cards.length - 3; i >= 0; i--) {
@@ -276,7 +282,7 @@ const checkBoardStaight = (cards: ICard[]) => {
 };
 
 const checkBoardStraightType = (
-  carNumbers: number[],
+  cardNumbers: number[],
   i: number,
   howMany: number
 ) => {
@@ -284,62 +290,70 @@ const checkBoardStraightType = (
   let cardGap: number;
   switch (howMany) {
     case 3:
-      if (i < 0 || i > carNumbers.length - 3) return "";
-
-      cardGap = carNumbers[i + 2] - carNumbers[i];
+      if (i < 0 || i > cardNumbers.length - 3) return "";
+      const hightNumber2 = cardNumbers[i + 2];
+      cardGap = hightNumber2 - cardNumbers[i];
       if (cardGap === 2) {
-        return (
-          result ||
-          `${getNumberText(
-            (carNumbers[i + 2] + 2 > 14 && 14) || carNumbers[i + 2] + 2
-          )} high easy straight `
-        );
+        result = checkBoardStraightType(cardNumbers, i - 1, 4);
+        if (result) return result;
+        switch (hightNumber2 + 2) {
+          case 16:
+            return `${getNumberText(14)} high hard straight`;
+          case 15:
+            return `${getNumberText(14)} high easier straight`;
+          default:
+            return cardNumbers[i] === 1
+              ? `${getNumberText(hightNumber2 + 2)} high hard straight`
+              : cardNumbers[i] === 2
+              ? `${getNumberText(hightNumber2 + 2)} high easier straight`
+              : `${getNumberText(hightNumber2 + 2)} high easy straight`;
+        }
       }
       if (cardGap === 3) {
-        result = checkBoardStraightType(carNumbers, i - 1, 4);
-        return (
-          result ||
-          `${getNumberText(
-            (carNumbers[i + 2] + 1 > 14 && 14) || carNumbers[i + 2] + 1
-          )} high easier straight`
-        );
+        result = checkBoardStraightType(cardNumbers, i - 1, 4);
+        return result || hightNumber2 + 1 > 14
+          ? `${getNumberText(14)} high hard straight`
+          : cardNumbers[i] === 1
+          ? `${getNumberText(hightNumber2 + 1)} high hard straight`
+          : `${getNumberText(hightNumber2 + 1)} high easier straight`;
       }
 
       return (
         (cardGap === 4 &&
-          `${getNumberText(carNumbers[i])} high harder(3) straight`) ||
+          `${getNumberText(hightNumber2)} high hard straight`) ||
         ""
       );
     case 4:
-      if (i < 0 || i > carNumbers.length - 4) return "";
-      const highNumber = carNumbers[i + 3];
-      cardGap = highNumber - carNumbers[i];
+      if (i < 0 || i > cardNumbers.length - 4) return "";
+      const highNumber = cardNumbers[i + 3];
+      cardGap = highNumber - cardNumbers[i];
       if (cardGap === 3) {
-        result = checkBoardStraightType(carNumbers, i - 1, 5);
+        result = checkBoardStraightType(cardNumbers, i - 1, 5);
         return (
           result ||
           `${getNumberText(
             (highNumber + 2 > 14 && 14) || highNumber + 2
-          )} high straight-4`
+          )} high 4 cards straight`
         );
       }
 
       return (
         (cardGap === 4 &&
           `${getNumberText(
-            (highNumber + (highNumber - carNumbers[i + 1] === 2 ? 2 : 1) > 14 &&
+            (highNumber + (highNumber - cardNumbers[i + 1] === 2 ? 2 : 1) >
+              14 &&
               14) ||
-              highNumber + (highNumber - carNumbers[i + 1] === 2 ? 2 : 1)
-          )} high straight-4`) ||
+              highNumber + (highNumber - cardNumbers[i + 1] === 2 ? 2 : 1)
+          )} high 4 cards straight`) ||
         ""
       );
     case 5:
-      if (i < 0 || i > carNumbers.length - 5) return "";
-      cardGap = carNumbers[i + 4] - carNumbers[i];
+      if (i < 0 || i > cardNumbers.length - 5) return "";
+      cardGap = cardNumbers[i + 4] - cardNumbers[i];
       return (
         (cardGap === 5 &&
           `${getNumberText(
-            (carNumbers[i + 4] + 2 > 14 && 14) || carNumbers[i + 4] + 2
+            (cardNumbers[i + 4] + 2 > 14 && 14) || cardNumbers[i + 4] + 2
           )} high straight-5`) ||
         ""
       );
@@ -371,12 +385,16 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
     const count = countIt(cards, cardNumber);
     switch (count) {
       case 4:
-        myPairType[PairType.kind4] = 1;
+        if (
+          myHand[0].cardNumber === cardNumber ||
+          myHand[1].cardNumber === cardNumber
+        )
+          myPairType[PairType.kind4] = 1;
         break;
       case 3:
         if (
-          myHand[0].cardNumber === myHand[1].cardNumber &&
-          myHand[0].cardNumber === cardNumber
+          cardNumber === myHand[1].cardNumber &&
+          cardNumber === myHand[0].cardNumber
         )
           myPairType[loops === 1 ? PairType.topSet : PairType.set] += 1;
         else if (
@@ -386,7 +404,11 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
           myPairType[loops === 1 ? PairType.topTrip : PairType.trip] += 1;
         break;
       case 2:
-        if (myHand[0].cardNumber === myHand[1].cardNumber && loops === 1)
+        if (
+          cardNumber === myHand[0].cardNumber &&
+          cardNumber === myHand[1].cardNumber &&
+          loops === 1
+        )
           myPairType[PairType.overPair] += 1;
         else if (
           myHand[0].cardNumber === cardNumber ||
@@ -403,28 +425,22 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
   }
   if (myPairType[PairType.kind4]) return "4 Kind"; // PairType.kind4;
   if (myPairType[PairType.topSet]) {
-    if (myPairType[PairType.boardPair]) return "Full House";
-    // PairType.fullHouse;
-    else return "Top set"; //PairType.topSet;
+    return myPairType[PairType.boardPair] ? "Full House" : "Top set";
   }
   if (myPairType[PairType.set]) {
-    if (myPairType[PairType.boardPair]) return "Full House";
-    //PairType.fullHouse;
-    else return "Set"; //PairType.set;
+    return myPairType[PairType.boardPair] ? "Full House" : "Set"; //PairType.set;
   }
   if (myPairType[PairType.topTrip]) {
-    if (
-      myPairType[PairType.topPair] ||
+    return myPairType[PairType.topPair] ||
       myPairType[PairType.pair] ||
       myPairType[PairType.boardPair]
-    )
-      return "Full House"; //PairType.fullHouse;
-    return "Trips"; // PairType.topTrip;
+      ? "Full House"
+      : "Trips"; // PairType.topTrip;
   }
   if (myPairType[PairType.trip]) {
-    if (myPairType[PairType.topPair] || myPairType[PairType.pair])
-      return "Full House"; //PairType.fullHouse;
-    return "Trips"; //PairType.trip;
+    return myPairType[PairType.topPair] || myPairType[PairType.pair]
+      ? "Full House"
+      : "Trips";
   }
   if (myPairType[PairType.overPair]) return PairType.overPair;
   if (myPairType[PairType.topPair] === 2) return PairType.top2Pairs;
@@ -437,6 +453,7 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
   if (myPairType[PairType.pair] === 1) return "pair"; //PairType.pair;
   return ""; //PairType.none;
 };
+
 export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
   const suits = cards.reduce(
     (p, card) => {
@@ -451,15 +468,14 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
     case 6:
       return `4 cards flush, A?`;
     case 7:
-      return `flush board, A?`;
+      return `flush on board, A?`;
     case 5:
       if (suit === myHand[0].suit && suit === myHand[1].suit)
         return `flush, I don't fold`;
       else if (suit === myHand[0].suit || suit === myHand[1].suit)
         return `4 cards flush, A?`;
     case 4:
-      if (cards.length < 7) return "";
-
+      if (cards.length === 7) return "";
       if (suit === myHand[0].suit && suit === myHand[1].suit) {
         if (myHand[1].cardNumber === cards[cards.length - 1].cardNumber)
           return myHand[0].cardNumber === cards[cards.length - 2].cardNumber
@@ -476,6 +492,7 @@ export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
 };
 const checkMyStraight = (cards: ICard[], myHand: ICard[]) => {
   let cardNumbers = [...new Set(cards.map(c => c.cardNumber))];
+
   if (cardNumbers[cards.length - 1] === 14) cardNumbers = [1, ...cardNumbers];
   for (let i = cardNumbers.length - 5; i >= 0; i--) {
     const result = checkMyStraightFrom(cardNumbers, i);
