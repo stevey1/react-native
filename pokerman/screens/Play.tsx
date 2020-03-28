@@ -218,8 +218,8 @@ export default function Play(props: IProps) {
     );
   };
   const showTips = () => {
-    const myHand = MyHand.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
-    const board = Board.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
+    const myHand = [...MyHand].sort((c1, c2) => c1.cardNumber - c2.cardNumber);
+    const board = [...Board].sort((c1, c2) => c1.cardNumber - c2.cardNumber);
     let tips = [];
     let result = "";
     if (board.length < 3) {
@@ -363,11 +363,11 @@ export default function Play(props: IProps) {
           {tipOverlay()}
           <View style={{ flexDirection: "row" }}>
             <Text>{i18n.t("play.myHand")}:</Text>
-            {displayCards(MyHand)}
+            {displayCards([...MyHand])}
           </View>
           <View style={{ flexDirection: "row" }}>
             <Text>{i18n.t("play.board")}:</Text>
-            {displayCards(Board)}
+            {displayCards([...Board])}
           </View>
           <Text>{displayPot(AllActions)}</Text>
           {showTips()}
