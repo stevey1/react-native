@@ -132,11 +132,13 @@ export default function Player() {
             <TextInput
               value={(Player && Player.name) || ""}
               onChangeText={text => {
-                const player = { ...Player };
-                player.name = text;
-                setPlayer(player);
+                if (Player) {
+                  const player = { ...Player };
+                  player.name = text;
+                  setPlayer(player);
+                }
               }}
-              style={styles.textInput}
+              style={[styles.textInput, { width: 150 }]}
             />
           </View>
           <View style={styles.control}>
@@ -152,8 +154,10 @@ export default function Player() {
                 (Player && i18n.t("playType." + Player.preflopRaiseType)) || ""
               }
               onPress={() => {
-                setPlayTypeModalVisible(true);
-                setCurrentPlayTypeModal(1);
+                if (Player) {
+                  setPlayTypeModalVisible(true);
+                  setCurrentPlayTypeModal(1);
+                }
               }}
             />
           </View>
@@ -170,8 +174,10 @@ export default function Player() {
                 (Player && i18n.t("playType." + Player.preflopCallType)) || ""
               }
               onPress={() => {
-                setPlayTypeModalVisible(true);
-                setCurrentPlayTypeModal(2);
+                if (Player) {
+                  setPlayTypeModalVisible(true);
+                  setCurrentPlayTypeModal(2);
+                }
               }}
             />
           </View>
@@ -186,8 +192,10 @@ export default function Player() {
               }}
               label={(Player && i18n.t("playType." + Player.raiseType)) || ""}
               onPress={() => {
-                setPlayTypeModalVisible(true);
-                setCurrentPlayTypeModal(3);
+                if (Player) {
+                  setPlayTypeModalVisible(true);
+                  setCurrentPlayTypeModal(3);
+                }
               }}
             />
           </View>
@@ -202,8 +210,10 @@ export default function Player() {
               }}
               label={(Player && i18n.t("playType." + Player.callType)) || ""}
               onPress={() => {
-                setPlayTypeModalVisible(true);
-                setCurrentPlayTypeModal(4);
+                if (Player) {
+                  setPlayTypeModalVisible(true);
+                  setCurrentPlayTypeModal(4);
+                }
               }}
             />
           </View>
