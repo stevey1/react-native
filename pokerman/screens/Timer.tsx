@@ -38,7 +38,7 @@ export default function Timer(props: IProps) {
       <Overlay
         overlayBackgroundColor="#F5F5F5"
         width="100%"
-        height="70%"
+        height="80%"
         isVisible={ShowTip}
         onBackdropPress={() => setShowTip(false)}
       >
@@ -124,7 +124,7 @@ const cashTipInEnglish = [
     data: [
       "Control Session Time, keep energy level",
       "Put on headphone, focus on game",
-      "Play Safe, think about worse cases",
+      "Play Safe, no slow play, no over bet; think about worse cases",
       "No Drawing: Pair on Boad/Flush on Board",
       "Preflop Re-raise, re-raise big",
       "Loop for All in opportunity"
@@ -150,25 +150,25 @@ const cashTipInChinese = [
     title: "遵守牌道",
     data: [
       "控制时间 - 保证精力和清醒的头脑",
-      "戴上耳机，专心牌局 排除干扰",
-      "Play安全, 小心黄雀在后",
+      "戴上耳机 - 专心牌局, 排除干扰",
+      "安全打, no slow play, no over bet; 小心黄雀在后",
       "能All in就All in, 寻找All in机会",
       "牌面对/同花/顺，不要侥幸",
-      "不打倔强牌：陷阱叫，超级叫 -> 服输"
+      "不打倔强牌：陷阱注，超级注 -> 服输"
     ]
   },
   {
     title: "分析对手牌",
     data: [
-      "翻牌前小叫 - 牌型：A*?, K*?, 手中对?",
-      "翻牌前大叫 - 牌型：手中大对? A*? K*?",
-      "翻牌前陷阱叫，超级叫: AA/KK/QQ/JJ",
+      "翻牌前小注 - 牌型：A*?, K*?, 手中对?",
+      "翻牌前大注 - 牌型：手中大对? A*? K*?",
+      "翻牌前陷阱注，超级注: AA/KK/QQ/JJ",
       "对手Range：牌面是Raiser Range/Caller Range",
       "假设局中3个A: 牌面/自己/对手",
       "Hand blocker: block flush",
-      "翻牌后小叫: 一大对?, C-Bet?, draw?",
-      "翻牌后大叫: 两对",
-      "翻牌后陷阱叫，超级叫: 三张/顺子"
+      "翻牌后小注: 一大对?, C-Bet?, draw?",
+      "翻牌后大注: 两对",
+      "翻牌后陷阱注，超级注: 三张/顺子"
     ]
   }
 ];
@@ -231,15 +231,15 @@ const tournamentTipInChinese = [
   {
     title: "分析对手牌",
     data: [
-      "翻牌前小叫 - 牌型：A*?, K*?, 手中对?",
-      "翻牌前大叫 - 牌型：手中大对? A*? K*?",
-      "翻牌前陷阱叫, 超级叫: AA/KK/QQ/JJ",
+      "翻牌前小注 - 牌型：A*?, K*?, 手中对?",
+      "翻牌前大注 - 牌型：手中大对? A*? K*?",
+      "翻牌前陷阱注, 超级注: AA/KK/QQ/JJ",
       "对手Range：牌面是Raiser Range/Caller Range",
       "假设局中3个A: 牌面/自己/对手",
       "Hand blocker: block flush",
-      "翻牌后小叫: 一大对?, C-Bet?, draw?",
-      "翻牌后大叫: 两对",
-      "翻牌后陷阱叫，超级叫: 三张/顺子"
+      "翻牌后小注: 一大对?, C-Bet?, draw?",
+      "翻牌后大注: 两对",
+      "翻牌后陷阱注，超级注: 三张/顺子"
     ]
   }
 ];

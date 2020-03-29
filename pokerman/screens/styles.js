@@ -40,9 +40,9 @@ export const sectionListStyles = StyleSheet.create({
   sectionHeader: {
     paddingTop: 5,
     paddingBottom: 2,
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "bold",
-    backgroundColor: "#E1E1E1"
+    backgroundColor: "#D1D1D1"
   },
   item: {
     padding: 2,
