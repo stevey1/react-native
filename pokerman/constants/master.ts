@@ -410,7 +410,7 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
   if (myPairType[PairType.overPair]) return i18n.t("iMake.overPair"); //PairType.overPair;
   if (myPairType[PairType.topPair] > 1) return i18n.t("iMake.top2");
   //PairType.top2Pairs;
-  else if (myPairType[PairType.topPair] > 1)
+  else if (myPairType[PairType.topPair] == 1)
     return i18n.t(
       "iMake." + ((myPairType[PairType.pair] > 0 && "2Pairs") || "topPair")
     );
