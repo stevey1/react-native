@@ -57,7 +57,7 @@ export default function MyPicker(props) {
           buttonStyle={{
             backgroundColor: "#D1D1D1"
           }}
-          title={i18n.t("button.done")}
+          title={i18n.t("button.return")}
           titleStyle={{ color: "#000000" }}
           onPress={() => props.itemSelected(ItemIndex, ItemValue)}
         />

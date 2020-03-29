@@ -157,18 +157,21 @@ export default function Play(props: IProps) {
   };
 
   const showCallerButton = () => (
-    <View style={styles.control}>
-      <Text key="p" style={styles.label}>
-        {i18n.t("play.callers")}:
-      </Text>
-      <MyDropDownButton
-        label=""
-        onPress={() => {
-          if (!Actions[CurrentRound]) setCurrentRound(CurrentRound - 1);
-          setCallerModalVisible(true);
-        }}
-        style={{ width: 100 }}
-      />
+    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={styles.control}>
+        <Text key="p" style={styles.label}>
+          {i18n.t("play.callers")}:
+        </Text>
+        <MyDropDownButton
+          label=""
+          onPress={() => {
+            if (!Actions[CurrentRound]) setCurrentRound(CurrentRound - 1);
+            setCallerModalVisible(true);
+          }}
+          style={{ width: 100 }}
+        />
+      </View>
+      <Text style={styles.text}>{displayPot(AllActions)}</Text>
     </View>
   );
   const callersOverlay = () =>
@@ -232,25 +235,59 @@ export default function Play(props: IProps) {
               Seats.length,
               BigBlind,
               Actions[Round.Preflop],
-              GameFormat.gameType
+              GameFormat.gameType,
+              [...AllActions]
             );
-      if (result) tips.push(<Text key="a">{"My Hand: " + result}</Text>);
+      if (result)
+        tips.push(
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.text}>{i18n.t("play.myHand")}: </Text>
+            <Text key="a" style={styles.text}>
+              {result}
+            </Text>
+          </View>
+        );
     }
 
-    result = getActionTip(AllActions);
-    if (result) tips.push(<Text key="a">{"Action: " + result}</Text>);
+    result = getActionTip([...AllActions]);
+    if (result)
+      tips.push(
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.text}>{i18n.t("play.myHand")}: </Text>
+          <Text key="a" style={styles.text}>
+            {result}
+          </Text>
+        </View>
+      );
 
     if (board.length < 3) {
       return <View>{tips}</View>;
     }
-    result = checkBoard(board).join("; ");
-    if (result) tips.push(<Text key="b">{"Board: " + result}</Text>);
+    tips.push(
+      <View style={{ flexDirection: "row" }}>
+        <Text key="b" style={styles.text}>
+          {i18n.t("play.board")}:
+        </Text>
+        <View>{formatResult(checkBoard(board))}</View>
+      </View>
+    );
     if (myHand.length == 2) {
-      result = checkMyHand(board, myHand).join("; ");
-      if (result) tips.push(<Text key="m">{"I have: " + result}</Text>);
+      tips.push(
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.text}>{i18n.t("play.iHave")}: </Text>
+          <View>{formatResult(checkMyHand(board, myHand))}</View>
+        </View>
+      );
     }
     return <View>{tips}</View>;
   };
+  const formatResult = (results: string[]) =>
+    results.map((x, index) => (
+      <Text key={index} style={styles.text}>
+        {x}
+      </Text>
+    ));
+
   const tipOverlay = () => {
     if (!ShowTipOverlay) return <View></View>;
 
@@ -294,7 +331,7 @@ export default function Play(props: IProps) {
               buttonStyle={{
                 backgroundColor: "#D1D1D1"
               }}
-              title={i18n.t("button.done")}
+              title={i18n.t("button.return")}
               titleStyle={{ color: "#000000" }}
               onPress={() => setShowTipOverlay(false)}
             />
@@ -316,13 +353,19 @@ export default function Play(props: IProps) {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
         <View>
-          <View style={[styles.control]}>
-            <Text style={styles.label}>{i18n.t("play.myHand")}:</Text>
-            <Card key="m0" handleCard={c => handleMyHand(c, 0)}></Card>
-            <Card key="m1" handleCard={c => handleMyHand(c, 1)}></Card>
+          <View
+            style={[
+              styles.control,
+              { flex: 1, justifyContent: "space-between" }
+            ]}
+          >
+            <View style={[styles.control]}>
+              <Text style={styles.label}>{i18n.t("play.myHand")}:</Text>
+              <Card key="m0" handleCard={c => handleMyHand(c, 0)}></Card>
+              <Card key="m1" handleCard={c => handleMyHand(c, 1)}></Card>
+            </View>
             <Button
               buttonStyle={{ backgroundColor: "#D1D1D1" }}
-              style={{ flex: 1, marginRight: 2 }}
               title={i18n.t("button.straddle")}
               titleStyle={{ color: "#000000" }}
               onPress={() => handleStraddle(false)}
@@ -369,7 +412,7 @@ export default function Play(props: IProps) {
             <Text>{i18n.t("play.board")}:</Text>
             {displayCards([...Board])}
           </View>
-          <Text>{displayPot(AllActions)}</Text>
+
           {showTips()}
         </View>
         <View style={{ flexDirection: "row" }}>
@@ -382,7 +425,7 @@ export default function Play(props: IProps) {
           />
           <Button
             buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            title="View History" //{i18n.t("button.new")}
+            title={i18n.t("button.viewHistory")}
             titleStyle={{ color: "#000000" }}
             onPress={() => setShowTipOverlay(true)}
             style={{ flex: 1 }}
@@ -393,26 +436,23 @@ export default function Play(props: IProps) {
   );
 }
 const displayCards = (cards: ICard[]) => {
-  const suitDisplay = cards
-    .sort((a, b) => a.cardNumber - b.cardNumber)
-    .map(card => (
-      <Text
-        key={"s" + card.cardNumber.toString() + card.suit.toString()}
-        style={getCardColor(card.suit)}
-      >
-        {getSuitText(card.suit)}
-      </Text>
-    ));
-  const cardDisplay = cards
-    .sort((a, b) => a.cardNumber - b.cardNumber)
-    .map(card => (
-      <Text
-        key={"c" + card.cardNumber.toString() + card.suit.toString()}
-        style={getCardColor(card.suit)}
-      >
-        {getNumberText(card.cardNumber)}
-      </Text>
-    ));
+  cards = cards.sort((a, b) => a.cardNumber - b.cardNumber);
+  const suitDisplay = cards.map(card => (
+    <Text
+      key={"s" + card.cardNumber.toString()}
+      style={getCardColor(card.suit)}
+    >
+      {getSuitText(card.suit)}
+    </Text>
+  ));
+  const cardDisplay = cards.map(card => (
+    <Text
+      key={"c" + card.cardNumber.toString()}
+      style={getCardColor(card.suit)}
+    >
+      {getNumberText(card.cardNumber)}
+    </Text>
+  ));
   return (
     <View style={{ flexDirection: "row" }}>
       {suitDisplay}

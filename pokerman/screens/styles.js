@@ -26,7 +26,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    padding: 10
+    padding: 2,
+    paddingTop: 5
+  },
+  text: {
+    fontSize: 16
   }
 });
 export default styles;

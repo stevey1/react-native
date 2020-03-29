@@ -15,10 +15,12 @@ export const getMyHandPreflop = (
   players: number,
   bigBlind: number,
   action: IAction,
-  gameType: GameType
+  gameType: GameType,
+  allActions: IActionHistory[]
 ) => {
   players = players - 1;
   const cashGame = gameType === GameType.cash;
+  const potSize = getPotBeforReraise(allActions);
 
   //Pocket pair
   if (cards[0].cardNumber === cards[1].cardNumber) {
@@ -27,8 +29,7 @@ export const getMyHandPreflop = (
         if (action.raises === 0) {
           if (betOrder <= players / 2)
             return i18n.t("pre.aa-early-position", {
-              amount1: bigBlind * ((cashGame && players * 2) || 4),
-              amount2: bigBlind * ((cashGame && players * 3) || 5)
+              amount: bigBlind * ((cashGame && players * 3) || 4)
             });
           else
             return i18n.t("pre.aa-late-position", {
@@ -36,13 +37,12 @@ export const getMyHandPreflop = (
             });
         }
         return i18n.t("pre.claim-my-pot", {
-          amount: action.amount * (action.callers.length + 1) * 4
+          amount: potSize * 4
         });
       case 13:
         if (action.raises === 0) {
           if (betOrder <= players / 2)
             return i18n.t("pre.kk-early-position", {
-              amount1: bigBlind * ((cashGame && players * 2) || 4),
               amount2: bigBlind * ((cashGame && players * 3) || 5)
             });
           else
@@ -57,14 +57,14 @@ export const getMyHandPreflop = (
         )
           return i18n.t("pre.check-or-fight");
         return i18n.t("pre.claim-my-pot", {
-          amount: action.amount * (action.callers.length + 1) * 4
+          amount: potSize * 4
         });
 
       case 12:
         if (action.raises === 0) {
           return i18n.t("pre.qq-no-raiser");
         }
-        if (action.amount > bigBlind * ((cashGame && 50) || 7))
+        if (action.amount > bigBlind * ((cashGame && 40) || 7))
           return i18n.t("pre.big-pair-bet");
         if (action.amount > bigBlind * ((cashGame && 30) || 5))
           return i18n.t("pre.call-to-see");
@@ -75,13 +75,12 @@ export const getMyHandPreflop = (
         if (action.raises === 0) {
           return i18n.t("pre.jj-no-raiser");
         }
-        if (action.amount > bigBlind * ((cashGame && 50) || 7))
+        if (action.amount > bigBlind * ((cashGame && 40) || 7))
           return i18n.t("pre.big-pair-bet");
         if (action.amount > bigBlind * ((cashGame && 30) || 4))
           return i18n.t("pre.call-to-see");
-        return i18n.t("pre.raise-to", {
-          amount: bigBlind * ((cashGame && 20) || 3)
-        });
+        return i18n.t("pre.jj-call");
+
       case 10:
       case 9:
       case 8:
@@ -520,39 +519,53 @@ const checkMyStraightDraw = (
 const countIt = (cards: ICard[], cardNumber: number) =>
   cards.filter(c => c.cardNumber === cardNumber).length;
 
-export const getActionTip = (allAction: IActionHistory[]) => {
-  const action = allAction[allAction.length - 1].action;
-  const round = allAction[allAction.length - 1].round;
+export const getActionTip = (allActions: IActionHistory[]) => {
+  const actionLength = allActions.length - 1;
+  const action = allActions[actionLength].action;
+  const round = allActions[actionLength].round;
+  const potSize = getPotBeforReraise(allActions.splice(actionLength, 1));
+
   if (action.raiser.player.isMe) return "";
   if (round === Round.Preflop) {
     if (action.checkRaise) return i18n.t("actionTip.preCheckRaise");
     if (action.raises > 1) {
-      const lastAction = allAction[allAction.length - 2].action;
-      if (action.amount >= lastAction.amount * 5)
+      const lastAction = allActions[actionLength - 2].action;
+
+      if (
+        action.amount >= potSize * 3 ||
+        action.amount >= lastAction.amount * 5
+      )
         return i18n.t("actionTip.preAAReraise", {
-          times: Math.round(action.amount / lastAction.amount)
+          times: (action.amount / potSize).toFixed(1)
         });
-      if (action.amount > lastAction.amount * 3)
+      if (action.amount >= potSize || action.amount > lastAction.amount * 3)
         return i18n.t("actionTip.preQQReraise", {
-          times: Math.round(action.amount / lastAction.amount)
+          times: (action.amount / potSize).toFixed(1)
         });
       if (action.amount > lastAction.amount * 2)
         return i18n.t("actionTip.preAKReraise", {
-          times: Math.round(action.amount / lastAction.amount)
+          times: (action.amount / potSize).toFixed(1)
         });
       return i18n.t("actionTip.miniReraise");
     }
     return "";
   }
-  const lastAction = allAction[allAction.length - 2].action;
   if (action.checkRaise) i18n.t("actionTip.checkRaise");
 
   if (action.raises > 1) {
-    if (action.amount > lastAction.amount * 2)
+    const lastAction = allActions[actionLength - 2].action;
+
+    if (action.amount >= potSize || action.amount > lastAction.amount * 2)
       return i18n.t("actionTip.reraise", {
-        times: Math.round(action.amount / lastAction.amount)
+        times: (action.amount / potSize).toFixed(1)
       });
     return i18n.t("actionTip.miniReraise");
   }
   return "";
+};
+const getPotBeforReraise = (allActions: IActionHistory[]) => {
+  return allActions.reduce(
+    (s, a) => s + a.action.amount * (a.action.callers.length + 1),
+    0
+  );
 };

@@ -152,7 +152,7 @@ export default function Seat(props) {
           buttonStyle={{
             backgroundColor: "#D1D1D1"
           }}
-          title={i18n.t("button.done")}
+          title={i18n.t("button.update")}
           titleStyle={{ color: "#000000" }}
           onPress={handleFinishSeating}
         />

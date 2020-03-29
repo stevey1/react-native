@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CheckBox, Button, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
-import {View } from "react-native";
+import { View } from "react-native";
 // import CheckBox from "./CheckBox";
 import i18n from "../i18n";
 
@@ -94,7 +94,7 @@ export default function MyMultiPicker(props) {
             buttonStyle={{
               backgroundColor: "#D1D1D1"
             }}
-            title={i18n.t("button.done")}
+            title={i18n.t("button.return")}
             titleStyle={{ color: "#000000" }}
             onPress={submitItems}
           />

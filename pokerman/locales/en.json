@@ -14,6 +14,8 @@
     "myHand": "My Hand",
     "board": "Board",
     "callers": "Callers",
+    "iHave": "I have",
+    "action": "Action",
     "raise": "Raise"
   },
   "action": {
@@ -54,6 +56,8 @@
     "straddle": "Straddle",
     "new": "New Game",
     "add": "Add",
+    "viewHistory": "View History",
+    "return": "Return",
     "update": "Update"
   },
   "suit": { "0": "♣", "1": "♦", "2": "♥", "3": "♠" },
@@ -110,9 +114,9 @@
     "1": "汉语"
   },
   "pre": {
-    "aa-early-position": "Prefer 1 caller: try check raise on action table or raise {{amount1}} -{{amount2}}",
-    "aa-late-position": "Prefer 1 caller: raise: {{amount}}",
-    "claim-my-pot": "Claim it: All in or big raise 3B+ {{amount}} and all in after flop",
+    "aa-early-position": "Check Raise 3B, All In or {{amount}}",
+    "aa-late-position": "Raise: {{amount}}",
+    "claim-my-pot": "Claim it: All in or big raise {{amount}} 3B+ and all in",
     "kk-early-position": "find AA to fold; try check raise on action table or raise {{amount1}} -{{amount2}}",
     "kk-late-position": "find AA to fold; raise {{amount}}",
     "check-or-fight": "Seem AA is here; check the raiser's play type and confirm it, all in to looser or call",
@@ -121,6 +125,7 @@
     "raise-to": "raise to {{amount}}, check board if A shows up-> prepare to fold",
     "jj-no-raiser": "find AA/KK/QQ to fold; try check raise 20 to start",
     "middle-pair": "Regular raise or call; 50%->A*",
+    "jj-call": "JJ, 不可all in 安全跟",
     "small-pair": "call but not big(35-) to see",
     "big-a": "{{suited}} big A, regular raise or call; 50%->pocket",
     "medium-a-1": "{{suited}} medium A, regular raise or call; 50%->pocket",
@@ -145,9 +150,7 @@
     "flushDraw": "flush draw, if over pair+ and hand blocker...",
     "straight": "{{cardNumber}} high straight, watch bet",
     "4straight": "{{cardNumber}} high 4 cards straight, watch bet",
-    "5straight": "{{cardNumber}} high 5 cards straight, watch bet",
-    "": "flush draw, if over pair+ and hand blocker...",
-    "flcccush": "Flush on board"
+    "5straight": "{{cardNumber}} high 5 cards straight, watch bet"
   },
   "iMake": {
     "4Kind": "Four kind",

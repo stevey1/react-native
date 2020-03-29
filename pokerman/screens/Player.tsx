@@ -214,7 +214,7 @@ export default function Player() {
         <Button
           buttonStyle={{ backgroundColor: "#D1D1D1" }}
           titleStyle={{ color: "#000000" }}
-          title={i18n.t("button.done")}
+          title={i18n.t("button.update")}
           onPress={() => {
             if (Player) {
               updatePlayer({
