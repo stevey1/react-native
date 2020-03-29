@@ -180,12 +180,13 @@
     "straightDraw": "8% 单头叫顺"
   },
   "actionTip": {
-    "preCheckReraise": "CR陷阱, {{times}}倍CR加注; 一定是AA/KK",
-    "preAAReraise": "{{times}}倍加注; 一定是AA/KK",
-    "preQQReraise": "{{times}}倍加注; 可能是QQ/JJ",
-    "preAKReraise": "{{times}}倍加注; 可能是A/K",
-    "miniReraise": "minimum re-raise",
-    "checkReraise": "CR陷阱, {{times}}倍CR加注; 至少是三张/顺子/两对",
-    "reraise": "{{times}}倍加注; 可能是三张/顺子/两对"
+    "preCheckRaise": "CR陷阱, {{times}}倍CR加注; 一定是AA/KK",
+    "preAARaise": "{{times}}倍加注; 一定是AA/KK",
+    "preQQRaise": "{{times}}倍加注; 可能是QQ/JJ",
+    "preAKRaise": "{{times}}倍加注; 可能是A/K",
+    "miniRaise": "{{times}}倍小加注",
+    "checkRaise": "CR陷阱, {{times}}倍CR再加注; 至少是三张/顺子/两对",
+    "raise": "{{times}}倍再加注; 可能是三张/顺子/两对",
+    "bet": "{{times}}倍下注"
   }
 }

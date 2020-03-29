@@ -180,12 +180,13 @@
     "straightDraw": "8% straight draw"
   },
   "actionTip": {
-    "preCheckReraise": "Check Raise, {{times}} times check re-raise: must be AA/KK",
-    "preAAReraise": "{{times}} times re-raise; must be AA/KK",
-    "preQQReraise": "{{times}} times re-raise; may be QQ/JJ",
-    "preAKReraise": "{{times}} times re-raise; may be A/K",
-    "miniReraise": "minimum re-raise",
-    "checkReraise": "Check Raise, {{times}} times check re-raise: must be Set/Straight",
-    "reraise": "{{times}} times re-raise; may be Set/Straight"
+    "preCheckRaise": "Check Raise, {{times}} times check raise: must be AA/KK",
+    "preAARaise": "{{times}} times raise; must be AA/KK",
+    "preQQRaise": "{{times}} times raise; may be QQ/JJ",
+    "preAKRaise": "{{times}} times raise; may be A/K",
+    "miniRaise": "{{times}} times minimum re-raise",
+    "checkRaise": "Check Raise, {{times}} times check re-raise: must be Set/Straight",
+    "raise": "{{times}} times raise; may be Set/Straight",
+    "bet": "{{times}} times bet"
   }
 }

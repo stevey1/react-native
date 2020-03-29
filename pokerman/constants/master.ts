@@ -543,7 +543,7 @@ export const getActionTip = (allActions: IActionHistory[]) => {
     if (action.raises > 1) {
       const lastAction = allActions[actionLength - 2].action;
       if (action.checkRaise)
-        return i18n.t("actionTip.preCheckReraise", {
+        return i18n.t("actionTip.preCheckRaise", {
           times: (action.amount / potSize).toFixed(1)
         });
 
@@ -551,35 +551,42 @@ export const getActionTip = (allActions: IActionHistory[]) => {
         action.amount >= potSize * 3 ||
         action.amount >= lastAction.amount * 5
       )
-        return i18n.t("actionTip.preAAReraise", {
+        return i18n.t("actionTip.preAARaise", {
           times: (action.amount / potSize).toFixed(1)
         });
       if (action.amount > potSize || action.amount > lastAction.amount * 3)
-        return i18n.t("actionTip.preQQReraise", {
+        return i18n.t("actionTip.preQQRaise", {
           times: (action.amount / potSize).toFixed(1)
         });
       if (action.amount > lastAction.amount * 2)
-        return i18n.t("actionTip.preAKReraise", {
+        return i18n.t("actionTip.preAKRaise", {
           times: (action.amount / potSize).toFixed(1)
         });
-      return i18n.t("actionTip.miniReraise");
+      return i18n.t("actionTip.miniRaise", {
+        times: (action.amount / potSize).toFixed(1)
+      });
     }
     return "";
   }
   if (action.raises > 1) {
     if (action.checkRaise)
-      return i18n.t("actionTip.checkReraise", {
+      return i18n.t("actionTip.checkRaise", {
         times: (action.amount / potSize).toFixed(1)
       });
     const lastAction = allActions[actionLength - 2].action;
 
     if (action.amount > potSize || action.amount > lastAction.amount * 2)
-      return i18n.t("actionTip.reraise", {
+      return i18n.t("actionTip.raise", {
         times: (action.amount / potSize).toFixed(1)
       });
-    return i18n.t("actionTip.miniReraise");
+    return i18n.t("actionTip.miniRaise", {
+      times: (action.amount / potSize).toFixed(1)
+    });
+  } else if (potSize > 0) {
+    return i18n.t("actionTip.bet", {
+      times: (action.amount / potSize).toFixed(1)
+    });
   }
-  return "";
 };
 const getPotBeforReraise = (allActions: IActionHistory[]) => {
   return allActions.reduce(
