@@ -499,10 +499,23 @@ const checkMyStraightDraw = (
   if (cardGap === 3) {
     if (cardNumbers[cardNumbers.length - 1] === myHand[1].cardNumber) {
       if (cardNumbers[cardNumbers.length - 2] === myHand[0].cardNumber)
-        return i18n.t("iMake.openEnd2Draw");
-      else return i18n.t("iMake.openEnd1Draw");
+        return i18n.t(
+          highNumber === 14 || cardNumbers[i] === 1
+            ? "iMake.straight2Draw"
+            : "iMake.openEnd2Draw"
+        );
+      else
+        return i18n.t(
+          highNumber === 14 || cardNumbers[i] === 1
+            ? "iMake.straight1Draw"
+            : "iMake.openEnd1Draw"
+        );
     }
-    return i18n.t("iMake.openEndDraw");
+    return i18n.t(
+      highNumber === 14 || cardNumbers[i] === 1
+        ? "iMake.straightDraw"
+        : "iMake.openEndDraw"
+    );
   }
   if (cardGap === 4) {
     if (cardNumbers[cardNumbers.length - 1] === myHand[1].cardNumber) {

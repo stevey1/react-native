@@ -21,7 +21,7 @@ export default function MainNavigator(props) {
   props.navigation.setOptions({
     headerTitle: getHeaderTitle(props.route),
     headerStyle: {
-      height: 40
+      height: 45
     }
     //headerShown: false
   });
@@ -49,7 +49,16 @@ export default function MainNavigator(props) {
           )
         })}
       />
-
+      <Tab.Screen
+        name="player"
+        component={Player}
+        options={{
+          title: i18n.t("navigation.player"),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-person" />
+          )
+        }}
+      />
       <Tab.Screen
         name="playNav"
         options={{
@@ -68,17 +77,6 @@ export default function MainNavigator(props) {
           />
         )}
       </Tab.Screen>
-
-      <Tab.Screen
-        name="player"
-        component={Player}
-        options={{
-          title: i18n.t("navigation.player"),
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-person" />
-          )
-        }}
-      />
 
       <Tab.Screen
         name="timer"
@@ -104,5 +102,5 @@ export default function MainNavigator(props) {
 function getHeaderTitle(route) {
   const routeName =
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-  return i18n.t("navigation." + routeName);
+  return i18n.t("timer.tip"); //i18n.t("navigation." + routeName);
 }

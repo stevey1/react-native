@@ -21,14 +21,15 @@ export const getPlayerText = (player: IPlayer) => player.name;
 
 export const AllPlayers: IPlayer[] = [
   {
-    id: 11,
-    name: "Me",
+    id: 1,
+    name: "P1",
     preflopRaiseType: PlayType.M,
     preflopCallType: PlayType.L,
     raiseType: PlayType.M,
     callType: PlayType.M,
-    isMe: true
+    isMe: false
   },
+
   {
     id: 2,
     name: "P2",
@@ -84,43 +85,6 @@ export const AllPlayers: IPlayer[] = [
     isMe: false
   },
   {
-    id: 12,
-    name: "Jim Happer",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    id: 13,
-    name: "Tom  Dur",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
-    id: 1,
-    name: "P1",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-
-  {
-    id: 14,
-    name: "Rock Player",
-    preflopRaiseType: PlayType.M,
-    preflopCallType: PlayType.L,
-    raiseType: PlayType.M,
-    callType: PlayType.M,
-    isMe: false
-  },
-  {
     id: 8,
     name: "P8",
     preflopRaiseType: PlayType.M,
@@ -142,6 +106,43 @@ export const AllPlayers: IPlayer[] = [
   {
     id: 10,
     name: "P10",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+  {
+    id: 11,
+    name: "Me",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: true
+  },
+  {
+    id: 12,
+    name: "Jim Happer",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+  {
+    id: 13,
+    name: "Tom  Dur",
+    preflopRaiseType: PlayType.M,
+    preflopCallType: PlayType.L,
+    raiseType: PlayType.M,
+    callType: PlayType.M,
+    isMe: false
+  },
+
+  {
+    id: 14,
+    name: "Rock Player",
     preflopRaiseType: PlayType.M,
     preflopCallType: PlayType.L,
     raiseType: PlayType.M,

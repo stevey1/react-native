@@ -27,7 +27,7 @@ export default function Card(props) {
     setCardVisible(false);
     setCardNumber(cardNumber);
     setCardSelected(getNumberText(cardNumber));
-    if (cardNumber >= 0 && Suit >= 0) {
+    if (cardNumber > 0 && Suit >= 0) {
       props.handleCard({ cardNumber: cardNumber, suit: Suit });
     }
   };

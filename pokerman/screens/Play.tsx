@@ -20,7 +20,7 @@ import {
   getActionTip
 } from "../constants/master";
 import MyDropDownButton from "../components/MyDropDownButton";
-import styles from "./styles";
+import styles, { sectionListStyles } from "./styles";
 
 import {
   ISeat,
@@ -221,8 +221,12 @@ export default function Play(props: IProps) {
     );
   };
   const showTips = () => {
-    const myHand = [...MyHand].sort((c1, c2) => c1.cardNumber - c2.cardNumber);
-    const board = [...Board].sort((c1, c2) => c1.cardNumber - c2.cardNumber);
+    const myHand = [...MyHand]
+      .filter(x => x)
+      .sort((c1, c2) => c1.cardNumber - c2.cardNumber);
+    const board = [...Board]
+      .filter(x => x)
+      .sort((c1, c2) => c1.cardNumber - c2.cardNumber);
     let tips = [];
     let result = "";
     if (board.length < 3) {
@@ -314,16 +318,26 @@ export default function Play(props: IProps) {
       <Overlay
         overlayBackgroundColor="#F5F5F5"
         width="90%"
-        height="70%"
+        height="60%"
         isVisible={ShowTipOverlay}
+        onBackdropPress={() => setShowTipOverlay(false)}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={[styles.container, { justifyContent: "space-between" }]}>
+          <View
+            style={[
+              sectionListStyles.container,
+              { justifyContent: "space-between" }
+            ]}
+          >
             <SectionList
               sections={actions}
-              renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
+              renderItem={({ item }) => (
+                <Text style={sectionListStyles.item}>{item}</Text>
+              )}
               renderSectionHeader={({ section }) => (
-                <Text style={styles.sectionHeader}>{section.title}</Text>
+                <Text style={sectionListStyles.sectionHeader}>
+                  {section.title}
+                </Text>
               )}
               keyExtractor={(item, index) => index}
             />
@@ -412,51 +426,42 @@ export default function Play(props: IProps) {
             <Text>{i18n.t("play.board")}:</Text>
             {displayCards([...Board])}
           </View>
-
-          {showTips()}
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <Button
-            buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            style={{ marginRight: 3, flex: 1 }}
-            title={i18n.t("button.new")}
-            titleStyle={{ color: "#000000" }}
-            onPress={() => handleStraddle(true)}
-          />
-          <Button
-            buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            title={i18n.t("button.viewHistory")}
-            titleStyle={{ color: "#000000" }}
-            onPress={() => setShowTipOverlay(true)}
-            style={{ flex: 1 }}
-          />
+        <View>
+          {showTips()}
+          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+            <Button
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              style={{ marginRight: 3, flex: 1 }}
+              title={i18n.t("button.new")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => handleStraddle(true)}
+            />
+            <Button
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              title={i18n.t("button.viewHistory")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => setShowTipOverlay(true)}
+              style={{ flex: 1 }}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>
   );
 }
 const displayCards = (cards: ICard[]) => {
-  cards = cards.sort((a, b) => a.cardNumber - b.cardNumber);
-  const suitDisplay = cards.map(card => (
-    <Text
-      key={"s" + card.cardNumber.toString()}
-      style={getCardColor(card.suit)}
-    >
-      {getSuitText(card.suit)}
-    </Text>
-  ));
-  const cardDisplay = cards.map(card => (
-    <Text
-      key={"c" + card.cardNumber.toString()}
-      style={getCardColor(card.suit)}
-    >
-      {getNumberText(card.cardNumber)}
-    </Text>
-  ));
+  cards = cards
+    .filter(card => card)
+    .sort((a, b) => a.cardNumber - b.cardNumber);
+  const suitDisplay = cards.map(card => getSuitText(card.suit)).join("");
+  const cardDisplay = cards
+    .map(card => getNumberText(card.cardNumber))
+    .join("");
   return (
     <View style={{ flexDirection: "row" }}>
-      {suitDisplay}
-      {cardDisplay}
+      <Text>{suitDisplay}</Text>
+      <Text>{cardDisplay}</Text>
     </View>
   );
 };

@@ -33,4 +33,20 @@ const styles = StyleSheet.create({
     fontSize: 16
   }
 });
+export const sectionListStyles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  sectionHeader: {
+    paddingTop: 5,
+    paddingBottom: 2,
+    fontSize: 14,
+    fontWeight: "bold",
+    backgroundColor: "#E1E1E1"
+  },
+  item: {
+    padding: 2,
+    fontSize: 15
+  }
+});
 export default styles;

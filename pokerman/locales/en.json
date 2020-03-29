@@ -1,9 +1,9 @@
 {
   "appName": "Pokerman",
   "navigation": {
-    "game": "Game Setup",
+    "game": "Game",
     "seat": "Seating",
-    "player": "Player Setup",
+    "player": "Player",
     "playNav": "Play",
     "timer": "Timer"
   },

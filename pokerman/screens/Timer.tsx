@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { GET_GAME_FORMAT } from "../constants/apolloQuery";
 import { GameType } from "../constants/DataTypes";
 
-import styles from "./styles";
+import styles, { sectionListStyles } from "./styles";
 import i18n from "../i18n";
 interface IProps {
   targetTime: number;
@@ -27,87 +27,34 @@ export default function Timer(props: IProps) {
   const gameType = getGameFormat();
   const tips =
     gameType === GameType.cash
-      ? [
-          {
-            title: "General",
-            data: [
-              "Control Session Time",
-              "戴上耳机，排除干扰",
-              "Keep Energy level",
-              "Safe Play, think about worse cases",
-              "Don't play Drawing dead: Pair on Boad/Flush on Board",
-              "Preflop Re-raise - Re-raise？re-raise big"
-            ]
-          },
-          {
-            title: "Opponent Hand",
-            data: [
-              "牌型：1 - A*； 2 - K*(any ghost card)；3 - 手中对",
-              "Preflop raise：1 - regular A*/small pair；2 - medium pair；3 - big pair",
-              "Hand blocker",
-              "After flop bet: 1 - top pair；2- big Set/Straight Bet",
-              "3 aces in play: 1 on board, 1 for me; 1 for another players hand"
-            ]
-          }
-        ]
-      : [
-          {
-            title: "General",
-            data: [
-              "戴上耳机，排除干扰",
-              "Preflop raise - don't over raise, avoid getting re-raised"
-            ]
-          },
-          {
-            title: "All",
-            data: [
-              "主动 all in",
-              "don't call all in unless...",
-              "not 50-50 all to big stack; but shorter stack; ",
-              "not with 2nd pair",
-              "AK/JJ/TT are not good all in preflop; only 50%-"
-            ]
-          },
-          {
-            title: "Opponent Hand",
-            data: [
-              "牌型：1 - A*； 2 - K*(any ghost card)；3 - 手中对",
-              "Preflop raise：1 - regular A*/small pair；2 - medium pair；3 - big pair",
-              "Hand blocker",
-              "After flop bet: 1 - top pair；2- big Set/Straight Bet",
-              "3 aces in play: 1 on board, 1 for me; 1 for another players hand"
-            ]
-          }
-        ];
+      ? i18n.locale == "en"
+        ? cashTipInEnglish
+        : cashTipInChinese
+      : i18n.locale == "en"
+      ? tournamentTipInEnglish
+      : tournamentTipInChinese;
   const tipOverlay = () =>
     ShowTip ? (
       <Overlay
         overlayBackgroundColor="#F5F5F5"
-        width="90%"
+        width="100%"
         height="70%"
         isVisible={ShowTip}
+        onBackdropPress={() => setShowTip(false)}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={[styles.container, { justifyContent: "space-between" }]}>
-            <View style={myStyles.container}>
-              <SectionList
-                sections={tips}
-                renderItem={({ item }) => (
-                  <Text style={styles.item}>{item}</Text>
-                )}
-                renderSectionHeader={({ section }) => (
-                  <Text style={styles.sectionHeader}>{section.title}</Text>
-                )}
-                keyExtractor={(item, index) => index}
-              />
-            </View>
-            <Button
-              buttonStyle={{
-                backgroundColor: "#D1D1D1"
-              }}
-              title={i18n.t("button.return")}
-              titleStyle={{ color: "#000000" }}
-              onPress={() => setShowTip(false)}
+          <View style={sectionListStyles.container}>
+            <SectionList
+              sections={tips}
+              renderItem={({ item }) => (
+                <Text style={sectionListStyles.item}>{item}</Text>
+              )}
+              renderSectionHeader={({ section }) => (
+                <Text style={sectionListStyles.sectionHeader}>
+                  {section.title}
+                </Text>
+              )}
+              keyExtractor={(item, index) => index}
             />
           </View>
         </ScrollView>
@@ -171,24 +118,128 @@ const getGameFormat = () => {
   const { data } = useQuery(GET_GAME_FORMAT);
   return data.gameFormat.gameType;
 };
-
-const myStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 22
+const cashTipInEnglish = [
+  {
+    title: "General",
+    data: [
+      "Control Session Time, keep energy level",
+      "Put on headphone, focus on game",
+      "Play Safe, think about worse cases",
+      "No Drawing: Pair on Boad/Flush on Board",
+      "Preflop Re-raise, re-raise big",
+      "Loop for All in opportunity"
+    ]
   },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 2,
-    fontSize: 14,
-    fontWeight: "bold",
-    backgroundColor: "rgba(247,247,247,1.0)"
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44
+  {
+    title: "Opponent Hand",
+    data: [
+      "Preflop raise：A*?, K*?, Pocket middle pair?",
+      "Preflop big raise：Pocket Big Pair? A*? K*?",
+      "Preflop Check Raise -> AA/KK",
+      "Hand blocker: block flush",
+      "Opponent's range; Raiser's flop or Callers's flop",
+      "3 aces in play: board/me/opponent",
+      "After flop bet: top pair/C-bet? ",
+      "After flop big bet: 2 pair ",
+      "Afterflop Check Raise: Set/Straight"
+    ]
   }
-});
+];
+const cashTipInChinese = [
+  {
+    title: "遵守牌道",
+    data: [
+      "控制时间 - 保证精力和清醒的头脑",
+      "戴上耳机，专心牌局 排除干扰",
+      "Play安全, 小心黄雀在后",
+      "能All in就All in, 寻找All in机会",
+      "牌面对/同花/顺，不要侥幸",
+      "不打倔强牌：陷阱叫，超级叫 -> 服输"
+    ]
+  },
+  {
+    title: "分析对手牌",
+    data: [
+      "翻牌前小叫 - 牌型：A*?, K*?, 手中对?",
+      "翻牌前大叫 - 牌型：手中大对? A*? K*?",
+      "翻牌前陷阱叫，超级叫: AA/KK/QQ/JJ",
+      "对手Range：牌面是Raiser Range/Caller Range",
+      "假设局中3个A: 牌面/自己/对手",
+      "Hand blocker: block flush",
+      "翻牌后小叫: 一大对?, C-Bet?, draw?",
+      "翻牌后大叫: 两对",
+      "翻牌后陷阱叫，超级叫: 三张/顺子"
+    ]
+  }
+];
+const tournamentTipInEnglish = [
+  {
+    title: "General",
+    data: [
+      "Put on headphone, focus on game",
+      "Play tight firt, then loose",
+      "Don't give up",
+      "No preflop over bet in tight play",
+      "Loop for All in opportunity"
+    ]
+  },
+  {
+    title: "All in - Safe Play",
+    data: [
+      "Prefer I go all in rather to calling all in",
+      "All in to componet with small stack",
+      "Confirm this is all in hand",
+      "AK/JJ/TT is not preflop all in hand in tight period",
+      "After flop, Try to all in if I can"
+    ]
+  },
+  {
+    title: "Opponent Hand",
+    data: [
+      "Preflop raise：A*?, K*?, Pocket middle pair?",
+      "Preflop big raise：Pocket Big Pair? A*? K*?",
+      "Preflop Check Raise -> AA/KK",
+      "Hand blocker: block flush",
+      "Opponent's range; Raiser's flop or Callers's flop",
+      "3 aces in play: board/me/opponent",
+      "After flop bet: top pair/C-bet? ",
+      "After flop big bet: 2 pair ",
+      "Afterflop Check Raise: Set/Straight"
+    ]
+  }
+];
+const tournamentTipInChinese = [
+  {
+    title: "原则",
+    data: [
+      "戴上耳机，专心牌局 排除干扰",
+      "永不放弃",
+      "先紧后松",
+      "能All in就All in, 寻找All in机会"
+    ]
+  },
+  {
+    title: "All in - Play安全",
+    data: [
+      "要主动All in 不要被动All in, Play安全",
+      "与少筹码的人All in，Play安全",
+      "前期AK/JJ/TT不能翻牌前all in，Play安全",
+      "确定是All in牌, Play安全",
+      "翻牌后能All in就All in, Play安全"
+    ]
+  },
+  {
+    title: "分析对手牌",
+    data: [
+      "翻牌前小叫 - 牌型：A*?, K*?, 手中对?",
+      "翻牌前大叫 - 牌型：手中大对? A*? K*?",
+      "翻牌前陷阱叫, 超级叫: AA/KK/QQ/JJ",
+      "对手Range：牌面是Raiser Range/Caller Range",
+      "假设局中3个A: 牌面/自己/对手",
+      "Hand blocker: block flush",
+      "翻牌后小叫: 一大对?, C-Bet?, draw?",
+      "翻牌后大叫: 两对",
+      "翻牌后陷阱叫，超级叫: 三张/顺子"
+    ]
+  }
+];
