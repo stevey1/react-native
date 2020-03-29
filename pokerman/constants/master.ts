@@ -536,13 +536,16 @@ export const getActionTip = (allActions: IActionHistory[]) => {
   const actionLength = allActions.length - 1;
   const action = allActions[actionLength].action;
   const round = allActions[actionLength].round;
-  const potSize = getPotBeforReraise(allActions.splice(actionLength, 1));
+  const potSize = getPotBeforReraise(allActions.slice(0, actionLength));
 
   if (action.raiser.player.isMe) return "";
   if (round === Round.Preflop) {
-    if (action.checkRaise) return i18n.t("actionTip.preCheckRaise");
     if (action.raises > 1) {
       const lastAction = allActions[actionLength - 2].action;
+      if (action.checkRaise)
+        return i18n.t("actionTip.preCheckReraise", {
+          times: (action.amount / potSize).toFixed(1)
+        });
 
       if (
         action.amount >= potSize * 3 ||
@@ -551,7 +554,7 @@ export const getActionTip = (allActions: IActionHistory[]) => {
         return i18n.t("actionTip.preAAReraise", {
           times: (action.amount / potSize).toFixed(1)
         });
-      if (action.amount >= potSize || action.amount > lastAction.amount * 3)
+      if (action.amount > potSize || action.amount > lastAction.amount * 3)
         return i18n.t("actionTip.preQQReraise", {
           times: (action.amount / potSize).toFixed(1)
         });
@@ -563,12 +566,14 @@ export const getActionTip = (allActions: IActionHistory[]) => {
     }
     return "";
   }
-  if (action.checkRaise) i18n.t("actionTip.checkRaise");
-
   if (action.raises > 1) {
+    if (action.checkRaise)
+      return i18n.t("actionTip.checkReraise", {
+        times: (action.amount / potSize).toFixed(1)
+      });
     const lastAction = allActions[actionLength - 2].action;
 
-    if (action.amount >= potSize || action.amount > lastAction.amount * 2)
+    if (action.amount > potSize || action.amount > lastAction.amount * 2)
       return i18n.t("actionTip.reraise", {
         times: (action.amount / potSize).toFixed(1)
       });

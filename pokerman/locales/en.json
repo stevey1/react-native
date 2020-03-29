@@ -180,12 +180,12 @@
     "straightDraw": "8% straight draw"
   },
   "actionTip": {
-    "preCheckReraise": "Check Raise: must be AA/KK",
+    "preCheckReraise": "Check Raise, {{times}} times check re-raise: must be AA/KK",
     "preAAReraise": "{{times}} times re-raise; must be AA/KK",
     "preQQReraise": "{{times}} times re-raise; may be QQ/JJ",
     "preAKReraise": "{{times}} times re-raise; may be A/K",
     "miniReraise": "minimum re-raise",
-    "checkReraise": "Check Raise: must be Set/Straight",
+    "checkReraise": "Check Raise, {{times}} times check re-raise: must be Set/Straight",
     "reraise": "{{times}} times re-raise; may be Set/Straight"
   }
 }

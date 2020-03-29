@@ -171,7 +171,7 @@ export default function Play(props: IProps) {
           style={{ width: 100 }}
         />
       </View>
-      <Text style={styles.text}>{displayPot(AllActions)}</Text>
+      <Text style={{ fontSize: 18 }}>{displayPot(AllActions)}</Text>
     </View>
   );
   const callersOverlay = () =>
@@ -257,7 +257,7 @@ export default function Play(props: IProps) {
     if (result)
       tips.push(
         <View style={{ flexDirection: "row" }}>
-          <Text style={styles.text}>{i18n.t("play.myHand")}: </Text>
+          <Text style={styles.text}>{i18n.t("play.action")}: </Text>
           <Text key="a" style={styles.text}>
             {result}
           </Text>
@@ -323,12 +323,7 @@ export default function Play(props: IProps) {
         onBackdropPress={() => setShowTipOverlay(false)}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View
-            style={[
-              sectionListStyles.container,
-              { justifyContent: "space-between" }
-            ]}
-          >
+          <View style={[sectionListStyles.container]}>
             <SectionList
               sections={actions}
               renderItem={({ item }) => (
@@ -340,14 +335,6 @@ export default function Play(props: IProps) {
                 </Text>
               )}
               keyExtractor={(item, index) => index}
-            />
-            <Button
-              buttonStyle={{
-                backgroundColor: "#D1D1D1"
-              }}
-              title={i18n.t("button.return")}
-              titleStyle={{ color: "#000000" }}
-              onPress={() => setShowTipOverlay(false)}
             />
           </View>
         </ScrollView>
@@ -418,14 +405,6 @@ export default function Play(props: IProps) {
           {showCallerButton()}
           {callersOverlay()}
           {tipOverlay()}
-          <View style={{ flexDirection: "row" }}>
-            <Text>{i18n.t("play.myHand")}:</Text>
-            {displayCards([...MyHand])}
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <Text>{i18n.t("play.board")}:</Text>
-            {displayCards([...Board])}
-          </View>
         </View>
         <View>
           {showTips()}

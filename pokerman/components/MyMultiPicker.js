@@ -56,19 +56,6 @@ export default function MyMultiPicker(props) {
               backgroundColor: "#F5F5F5"
             }}
           ></CheckBox>
-          // <CheckBox
-          //   key={"c" + i}
-          //   selected={Selected[i] || false}
-          //   onPress={() => onChange(i)}
-          //   text={props.listItems[i].text}
-          //   value={props.listItems[i].value}
-          //   textStyle={
-          //     props.hightlightValue &&
-          //     props.listItems[i].value === props.hightlightValue
-          //       ? { color: "#ff0000" }
-          //       : {}
-          //   }
-          // />
         );
       }
       control.push(
@@ -87,8 +74,8 @@ export default function MyMultiPicker(props) {
       height="80%"
       isVisible={props.modalVisible}
     >
-      <ScrollView>
-        <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={{ flex: 1, justifyContent: "space-between" }}>
           <View>{getCheckBoxes(1)}</View>
           <Button
             buttonStyle={{
