@@ -72,7 +72,6 @@ export default function Play(props: IProps) {
 
   function getSeatsInPlay(round: Round) {
     if (round === Round.Preflop) {
-      //&& (!AllActions || AllActions.length === 1)
       const seats = Seats.map((seat, index) => ({
         ...seat,
         betOrder:
@@ -244,9 +243,11 @@ export default function Play(props: IProps) {
             );
       if (result)
         tips.push(
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.text}>{i18n.t("play.myHand")}: </Text>
-            <Text key="a" style={styles.text}>
+          <View key="m" style={{ flexDirection: "row" }}>
+            <Text key="m1" style={styles.text}>
+              {i18n.t("play.myHand")}:
+            </Text>
+            <Text key="m2" style={styles.text}>
               {result}
             </Text>
           </View>
@@ -256,9 +257,11 @@ export default function Play(props: IProps) {
     result = getActionTip([...AllActions]);
     if (result)
       tips.push(
-        <View style={{ flexDirection: "row" }}>
-          <Text style={styles.text}>{i18n.t("play.action")}: </Text>
-          <Text key="a" style={styles.text}>
+        <View key="a" style={{ flexDirection: "row" }}>
+          <Text key="a1" style={styles.text}>
+            {i18n.t("play.action")}:{" "}
+          </Text>
+          <Text key="a2" style={styles.text}>
             {result}
           </Text>
         </View>
@@ -268,8 +271,8 @@ export default function Play(props: IProps) {
       return <View>{tips}</View>;
     }
     tips.push(
-      <View style={{ flexDirection: "row" }}>
-        <Text key="b" style={styles.text}>
+      <View key="b" style={{ flexDirection: "row" }}>
+        <Text key="b1" style={styles.text}>
           {i18n.t("play.board")}:
         </Text>
         <View>{formatResult(checkBoard(board))}</View>
@@ -277,8 +280,10 @@ export default function Play(props: IProps) {
     );
     if (myHand.length == 2) {
       tips.push(
-        <View style={{ flexDirection: "row" }}>
-          <Text style={styles.text}>{i18n.t("play.iHave")}: </Text>
+        <View key="i" style={{ flexDirection: "row" }}>
+          <Text key="i1" style={styles.text}>
+            {i18n.t("play.iHave")}:{" "}
+          </Text>
           <View>{formatResult(checkMyHand(board, myHand))}</View>
         </View>
       );
@@ -323,20 +328,18 @@ export default function Play(props: IProps) {
         onBackdropPress={() => setShowTipOverlay(false)}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={[sectionListStyles.container]}>
-            <SectionList
-              sections={actions}
-              renderItem={({ item }) => (
-                <Text style={sectionListStyles.item}>{item}</Text>
-              )}
-              renderSectionHeader={({ section }) => (
-                <Text style={sectionListStyles.sectionHeader}>
-                  {section.title}
-                </Text>
-              )}
-              keyExtractor={(item, index) => index}
-            />
-          </View>
+          <SectionList
+            sections={actions}
+            renderItem={({ item }) => (
+              <Text style={sectionListStyles.item}>{item}</Text>
+            )}
+            renderSectionHeader={({ section }) => (
+              <Text style={sectionListStyles.sectionHeader}>
+                {section.title}
+              </Text>
+            )}
+            keyExtractor={(item, index) => index}
+          />
         </ScrollView>
       </Overlay>
     );

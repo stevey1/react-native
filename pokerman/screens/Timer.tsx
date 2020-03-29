@@ -43,20 +43,18 @@ export default function Timer(props: IProps) {
         onBackdropPress={() => setShowTip(false)}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={sectionListStyles.container}>
-            <SectionList
-              sections={tips}
-              renderItem={({ item }) => (
-                <Text style={sectionListStyles.item}>{item}</Text>
-              )}
-              renderSectionHeader={({ section }) => (
-                <Text style={sectionListStyles.sectionHeader}>
-                  {section.title}
-                </Text>
-              )}
-              keyExtractor={(item, index) => index}
-            />
-          </View>
+          <SectionList
+            sections={tips}
+            renderItem={({ item }) => (
+              <Text style={sectionListStyles.item}>{item}</Text>
+            )}
+            renderSectionHeader={({ section }) => (
+              <Text style={sectionListStyles.sectionHeader}>
+                {section.title}
+              </Text>
+            )}
+            keyExtractor={(item, index) => index}
+          />
         </ScrollView>
       </Overlay>
     ) : (

@@ -19,7 +19,7 @@
     "raise": "下注"
   },
   "action": {
-    "amount": "加",
+    "amount": "注",
     "seat": "座位",
     "pot": "锅",
     "raise": "B",
