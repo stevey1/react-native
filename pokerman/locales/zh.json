@@ -15,8 +15,8 @@
     "board": "面牌",
     "callers": "跟注",
     "iHave": "我有",
-    "action": "押注",
-    "raise": "加注"
+    "action": "注情况",
+    "raise": "下注"
   },
   "action": {
     "amount": "加",
