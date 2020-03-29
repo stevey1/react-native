@@ -86,9 +86,9 @@ export default function Seat(props) {
           handlePlayerSelected(index, value, ModalForSeatId)
         }
         listItems={getFilteredPlayerList(AllPlayers, ModalForSeatId)}
-      ></MyPicker>
+      />
     ) : (
-      <View></View>
+      <View />
     );
   const showSeatDropDown = () =>
     SeatModalVisible ? (
@@ -100,9 +100,9 @@ export default function Seat(props) {
           setSeatModalVisible(false);
         }}
         listItems={getPlayerList(Seating)}
-      ></MyPicker>
+      />
     ) : (
-      <View></View>
+      <View />
     );
   const handleFinishSeating = () => {
     const seatSelected = Seating.map((p, index) => ({
@@ -115,11 +115,13 @@ export default function Seat(props) {
         ...s,
         betOrder:
           index -
-          DealerSeatIndex +
-          (index > DealerSeatIndex ? 0 : seats.length - 1),
+          DealerSeatIndex -
+          1 +
+          (index <= DealerSeatIndex ? seats.length : 0),
         __typename: "Seat"
       }))
       .sort((s1, s2) => s1.betOrder - s2.betOrder);
+
     client.writeData({ data: { seats: seatSelected } });
     props.navigation.navigate("playNav");
   };

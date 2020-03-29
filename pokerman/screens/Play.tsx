@@ -48,7 +48,9 @@ export default function Play(props: IProps) {
     props.straddles > 0
       ? GameFormat.straddle * Math.pow(2, props.straddles - 1)
       : GameFormat.bigBlind;
-  const Seats = getSeats();
+  const { data, client } = useQuery(GET_SEATS);
+  const Seats = data.seats;
+
   const PreFlopSeats = getSeatsInPlay(Round.Preflop);
 
   const raiser = PreFlopSeats[Seats.length - 1];
@@ -64,18 +66,30 @@ export default function Play(props: IProps) {
     { action: action, round: Round.Preflop }
   ]);
 
-  const handleStraddle = (newGame: boolean) => {
-    const straddles = newGame ? 0 : (props.straddles + 1) % (Seats.length - 2);
+  const handleStraddle = () => {
+    const straddles = (props.straddles + 1) % (Seats.length - 2);
     props.handleStraddlesChange(straddles);
     props.navigation.navigate("playNav");
   };
+  const handleNewGame = () => {
+    props.handleStraddlesChange(0);
 
+    const seats = [...Seats].map((seat, index) => ({
+      ...seat,
+      betOrder: seat.betOrder - 1 + (index > 0 ? 0 : Seats.length)
+    }));
+    seats.sort((s1, s2) => s1.betOrder - s2.betOrder);
+
+    client.writeData({ data: { seats: seats } });
+
+    props.navigation.navigate("playNav");
+  };
   function getSeatsInPlay(round: Round) {
     if (round === Round.Preflop) {
-      const seats = Seats.map((seat, index) => ({
+      const seats = [...Seats].map((seat, index) => ({
         ...seat,
         betOrder:
-          index -
+          seat.betOrder -
           2 -
           props.straddles +
           (index > 1 + props.straddles ? 0 : Seats.length)
@@ -372,7 +386,7 @@ export default function Play(props: IProps) {
               buttonStyle={{ backgroundColor: "#D1D1D1" }}
               title={i18n.t("button.straddle")}
               titleStyle={{ color: "#000000" }}
-              onPress={() => handleStraddle(false)}
+              onPress={handleStraddle}
             />
           </View>
           <View style={styles.control}>
@@ -417,7 +431,7 @@ export default function Play(props: IProps) {
               style={{ marginRight: 3, flex: 1 }}
               title={i18n.t("button.new")}
               titleStyle={{ color: "#000000" }}
-              onPress={() => handleStraddle(true)}
+              onPress={handleNewGame}
             />
             <Button
               buttonStyle={{ backgroundColor: "#D1D1D1" }}
@@ -446,10 +460,6 @@ const displayCards = (cards: ICard[]) => {
       <Text>{cardDisplay}</Text>
     </View>
   );
-};
-const getSeats = () => {
-  const { data } = useQuery(GET_SEATS);
-  return data.seats;
 };
 const getGameFormat = () => {
   const { data } = useQuery(GET_GAME_FORMAT);
