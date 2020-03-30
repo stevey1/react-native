@@ -402,9 +402,7 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
         return [i18n.t("iMake.set")];
     }
   }
-  return [
-    i18n.t("iMake." + (myPairType[PairType.boardPair] ? "fullHouse" : "set"))
-  ];
+
   if (myPairType[PairType.topTrip]) {
     return [
       i18n.t(
