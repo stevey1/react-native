@@ -181,12 +181,12 @@
     "straightDraw": "8% straight draw"
   },
   "actionTip": {
-    "preCheckRaise": "Check Raise, {{times}} times check raise: must be AA/KK",
+    "preCheckRaise": "Check Raise, {{times}} times raise: must be AA/KK",
     "preAARaise": "{{times}} times raise; must be AA/KK",
     "preQQRaise": "{{times}} times raise; may be QQ/JJ",
     "preAKRaise": "{{times}} times raise; may be A/K",
     "miniRaise": "{{times}} times minimum re-raise",
-    "checkRaise": "Check Raise, {{times}} times check re-raise: must be Set/Straight",
+    "checkRaise": "Check Raise, {{times}} times raise: must be Set/Straight",
     "raise": "{{times}} times raise; may be Set/Straight",
     "bet": "{{times}} times bet"
   }
