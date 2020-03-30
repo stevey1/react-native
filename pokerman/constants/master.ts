@@ -169,9 +169,8 @@ export const checkMyHand = (cards: ICard[], myHand: ICard[]) => {
   const allCards = [...cards, ...myHand].sort(
     (c1, c2) => c1.cardNumber - c2.cardNumber
   );
-  let result = checkMyPair(allCards, myHand);
-  if (result) results.push(result);
-  result = checkMyFlush(allCards, myHand);
+  results = checkMyPair(allCards, myHand);
+  let result = checkMyFlush(allCards, myHand);
   if (result) results.push(result);
   result = checkMyStraight(allCards, myHand);
   if (result) results.push(result);
@@ -379,44 +378,70 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
     i -= count;
     loops++;
   }
-  if (myPairType[PairType.kind4]) return i18n.t("iMake.4Kind"); // PairType.kind4;
-  if (myPairType[PairType.topSet])
-    return i18n.t(
-      "iMake." + (myPairType[PairType.boardPair] ? "topFullHouse" : "topSet")
-    );
+  if (myPairType[PairType.kind4]) return [i18n.t("iMake.4Kind")]; // PairType.kind4;
+  if (myPairType[PairType.topSet]) {
+    if (myPairType[PairType.boardPair]) return [i18n.t("iMake.topFullHouse")];
+    switch (cards.length) {
+      case 5:
+        return [i18n.t("iMake.topSet"), i18n.t("iMake.fullHouseDrawOnFlop")];
+      case 6:
+        return [i18n.t("iMake.topSet"), i18n.t("iMake.fullHouseDrawOnTurn")];
+      default:
+        return [i18n.t("iMake.topSet")];
+    }
+  }
 
-  if (myPairType[PairType.set])
-    return i18n.t(
-      "iMake." + (myPairType[PairType.boardPair] ? "fullHouse" : "set")
-    );
+  if (myPairType[PairType.set]) {
+    if (myPairType[PairType.boardPair]) return [i18n.t("iMake.fullHouse")];
+    switch (cards.length) {
+      case 5:
+        return [i18n.t("iMake.set"), i18n.t("iMake.fullHouseDrawOnFlop")];
+      case 6:
+        return [i18n.t("iMake.set"), i18n.t("iMake.fullHouseDrawOnTurn")];
+      default:
+        return [i18n.t("iMake.set")];
+    }
+  }
+  return [
+    i18n.t("iMake." + (myPairType[PairType.boardPair] ? "fullHouse" : "set"))
+  ];
   if (myPairType[PairType.topTrip]) {
-    return i18n.t(
-      "iMake." +
-        (myPairType[PairType.topPair] ||
-        myPairType[PairType.pair] ||
-        myPairType[PairType.boardPair]
-          ? "topFullHouse"
-          : "trips")
-    ); // PairType.topTrip;
+    return [
+      i18n.t(
+        "iMake." +
+          (myPairType[PairType.topPair] ||
+          myPairType[PairType.pair] ||
+          myPairType[PairType.boardPair]
+            ? "topFullHouse"
+            : "trips")
+      )
+    ]; // PairType.topTrip;
   }
   if (myPairType[PairType.trip])
-    return i18n.t(
-      "iMake." +
-        (myPairType[PairType.topPair] || myPairType[PairType.pair]
-          ? "fullHouse"
-          : "trips")
-    );
+    return [
+      i18n.t(
+        "iMake." +
+          (myPairType[PairType.topPair] || myPairType[PairType.pair]
+            ? "fullHouse"
+            : "trips")
+      )
+    ];
 
-  if (myPairType[PairType.overPair]) return i18n.t("iMake.overPair"); //PairType.overPair;
-  if (myPairType[PairType.topPair] > 1) return i18n.t("iMake.top2");
+  if (myPairType[PairType.overPair]) return [i18n.t("iMake.overPair")]; //PairType.overPair;
+  if (myPairType[PairType.topPair] > 1)
+    return [i18n.t("iMake.top2"), i18n.t("iMake.fullHouseDraw")];
   //PairType.top2Pairs;
   else if (myPairType[PairType.topPair] == 1)
-    return i18n.t(
-      "iMake." + ((myPairType[PairType.pair] > 0 && "2Pairs") || "topPair")
-    );
-  if (myPairType[PairType.pair] > 1) return i18n.t("iMake.2Pairs"); //PairType.pairs2;
-  if (myPairType[PairType.pair] === 1) return i18n.t("iMake.pair"); //PairType.pair;
-  return ""; //PairType.none;
+    return [
+      i18n.t(
+        "iMake." + ((myPairType[PairType.pair] > 0 && "2Pairs") || "topPair")
+      ),
+      i18n.t("iMake.fullHouseDraw")
+    ];
+  if (myPairType[PairType.pair] > 1)
+    return [i18n.t("iMake.2Pairs"), , i18n.t("iMake.fullHouseDraw")]; //PairType.pairs2;
+  if (myPairType[PairType.pair] === 1) return [i18n.t("iMake.pair")]; //PairType.pair;
+  return []; //PairType.none;
 };
 
 export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
