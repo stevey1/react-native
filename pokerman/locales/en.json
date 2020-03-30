@@ -58,7 +58,8 @@
     "add": "Add",
     "viewHistory": "View History",
     "return": "Return",
-    "update": "Update"
+    "update": "Update",
+    "startTimer": "Start Timer"
   },
   "suit": { "0": "♣", "1": "♦", "2": "♥", "3": "♠" },
   "number": {
