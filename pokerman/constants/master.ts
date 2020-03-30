@@ -207,10 +207,12 @@ const checkBoardFlush = (cards: ICard[]) => {
     let suitIndex = suits.findIndex(s => s === 3);
     if (suitIndex >= 0) return i18n.t("board.flush");
     else {
+      if (cards.length === 5) return "";
       suitIndex = suits.findIndex(s => s === 2);
       if (suitIndex >= 0) return i18n.t("board.flushDraw");
     }
   }
+  return "";
 };
 
 const checkBoardStaight = (cards: ICard[]) => {
@@ -222,6 +224,7 @@ const checkBoardStaight = (cards: ICard[]) => {
     const result = checkBoardStraightType(cardNumbers, i, 3);
     if (result) return result;
   }
+  return "";
 };
 
 const checkBoardStraightType = (
@@ -415,6 +418,7 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
       )
     ]; // PairType.topTrip;
   }
+  let results = [];
   if (myPairType[PairType.trip])
     return [
       i18n.t(
@@ -426,20 +430,24 @@ export const checkMyPair = (cards: ICard[], myHand: ICard[]) => {
     ];
 
   if (myPairType[PairType.overPair]) return [i18n.t("iMake.overPair")]; //PairType.overPair;
-  if (myPairType[PairType.topPair] > 1)
-    return [i18n.t("iMake.top2"), i18n.t("iMake.fullHouseDraw")];
-  //PairType.top2Pairs;
-  else if (myPairType[PairType.topPair] == 1)
-    return [
-      i18n.t(
-        "iMake." + ((myPairType[PairType.pair] > 0 && "2Pairs") || "topPair")
-      ),
-      i18n.t("iMake.fullHouseDraw")
-    ];
-  if (myPairType[PairType.pair] > 1)
-    return [i18n.t("iMake.2Pairs"), , i18n.t("iMake.fullHouseDraw")]; //PairType.pairs2;
+  if (myPairType[PairType.topPair] > 1) {
+    results = [i18n.t("iMake.top2")];
+    if (cards.length < 7) results.push(i18n.t("iMake.fullHouseDraw"));
+    return results;
+  } else if (myPairType[PairType.topPair] == 1) {
+    if (myPairType[PairType.pair] > 0) {
+      results = [i18n.t("iMake.2Pairs")];
+      if (cards.length < 7) results.push(i18n.t("iMake.fullHouseDraw"));
+      return results;
+    } else return [i18n.t("iMake.topPair")];
+  }
+  if (myPairType[PairType.pair] > 1) {
+    results = [i18n.t("iMake.2Pairs")];
+    if (cards.length < 7) results.push(i18n.t("iMake.fullHouseDraw"));
+    return results;
+  }
   if (myPairType[PairType.pair] === 1) return [i18n.t("iMake.pair")]; //PairType.pair;
-  return []; //PairType.none;
+  return [];
 };
 
 export const checkMyFlush = (cards: ICard[], myHand: ICard[]) => {
@@ -490,6 +498,7 @@ const checkMyStraight = (cards: ICard[], myHand: ICard[]) => {
     const result = checkMyStraightFrom(cardNumbers, i);
     if (result) return result;
   }
+  if (cards.length === 7) return "";
   for (let i = cardNumbers.length - 4; i >= 0; i--) {
     const result = checkMyStraightDraw(cardNumbers, myHand, i);
     if (result) return result;
