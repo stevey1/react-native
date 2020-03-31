@@ -121,9 +121,9 @@
   },
   "pre": {
     "aa": "All in打法; 翻牌后All in; 可以试CR陷阱；两个以上跟就认输",
-    "kk-early-position": "注意AA/A*; All in打法; 翻牌后All in; 可以试CR陷阱；两个以上跟就认输",
-    "qq-no-raiser": "QQ：注意AA/KK/AK; 注意AA/A*; 可以All in; 大点下注，但要注意翻牌后的A",
-    "jj": "JJ：半All in牌，能不All in就不，安全打，压大/押中/跟小，全凭运气",
+    "kk": "注意AA/A*; All in打法; 翻牌后All in; 可以试CR陷阱；两个以上跟就认输",
+    "qq": "QQ：注意AA/KK/A; 可以All in; 大点下注，但要注意翻牌后的A",
+    "jj": "JJ：半All in牌，能不All in就不，安全打，压大/押中/跟小，运气牌",
     "middle-pair": "中对，跟牌，不是all in牌",
     "small-pair": "小对，跟小",
     "ak": "{{suited}}AK, 可以All in但不All in；押注或跟牌50%->pocket",
