@@ -1,0 +1,201 @@
+{
+  "appName": "扑克",
+  "navigation": {
+    "game": "牌局设置",
+    "seat": "座位",
+    "player": "选手",
+    "playNav": "牌局",
+    "timer": "时间"
+  },
+  "home": {
+    "welcome": "Welcome to %{appName}!"
+  },
+  "play": {
+    "myHand": "手牌",
+    "board": "面牌",
+    "callers": "跟注",
+    "iHave": "我有",
+    "action": "注情况",
+    "raise": "下注"
+  },
+  "action": {
+    "amount": "注",
+    "seat": "座位",
+    "pot": "锅",
+    "raise": "B",
+    "by": "by",
+    "checkRaise": "CR陷阱",
+    "players": "人数"
+  },
+  "seat": {
+    "dealer": "庄"
+  },
+  "game": {
+    "smallBlind": "小盲",
+    "bigBlind": "大盲",
+    "straddle": "盲打",
+    "gameType": "牌局种类",
+    "language": "语言"
+  },
+  "player": {
+    "name": "名字",
+    "selectPlayer": "选择玩家",
+    "playerName": "玩家名字",
+    "preflopBet": "翻前押注",
+    "preflopCall": "翻前跟注",
+    "afterflopBet": "翻后押注",
+    "afterflopCall": "翻后跟注"
+  },
+  "timer": {
+    "sessionTime": "预设时间",
+    "tip": "螳螂扑蝉，黄雀在后"
+  },
+  "button": {
+    "done": "完成",
+    "straddle": "盲打",
+    "new": "新",
+    "add": "新加",
+    "startTimer": "开始计时",
+    "viewHistory": "查看记录",
+    "return": "返回",
+    "update": "保存",
+    "check": "查",
+    "select": "选"
+  },
+  "suit": { "0": "草", "1": "方", "2": "红", "3": "黑" },
+  "number": {
+    "0": "0",
+    "1": "一",
+    "2": "二",
+    "3": "三",
+    "4": "四",
+    "5": "五",
+    "6": "六",
+    "7": "七",
+    "8": "八",
+    "9": "九",
+    "10": "十",
+    "11": "J",
+    "12": "Q",
+    "13": "K",
+    "14": "A"
+  },
+  "card": {
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "10": "T",
+    "11": "J",
+    "12": "Q",
+    "13": "K",
+    "14": "A"
+  },
+  "gameType": { "0": "现金", "1": "比赛" },
+  "playType": {
+    "0": "松松",
+    "1": "松",
+    "2": "正常",
+    "3": "紧",
+    "4": "紧紧"
+  },
+  "round": {
+    "0": "牌前",
+    "1": "翻牌",
+    "2": "转牌",
+    "3": "河牌"
+  },
+  "language": {
+    "0": "English",
+    "1": "汉语"
+  },
+  "suitOrNumber": {
+    "0": "花色",
+    "1": "数字"
+  },
+  "pre": {
+    "aa-early-position": "All in打法: Check Raise 3B/all in;",
+    "aa-late-position": "All in打法; 翻牌后All in; 试押: {{amount}}",
+    "claim-my-pot": "All in打法; 四倍锅底下注{{amount}}，然后all in",
+    "kk-early-position": "注意AA/A*; 试Check Raise 3B/all in; 试押{{amount}}",
+    "kk-late-position": "All in打法，注意AA/A*，涨到{{amount}}",
+    "check-or-fight": "看来有AA，跟着看",
+    "qq-no-raiser": "注意AA/KK/AK - 看来没有AA/KK; 提升到{{amount}}",
+    "big-pair-bet": "大赌注，一定是AA/KK, 认了扔牌",
+    "raise-to": "半All in打法，涨到{{amount}}, 面牌出现AK->准备仍牌",
+    "jj-no-raiser": "JJ, 半All in/押/跟小",
+    "jj-call": "注意A/KK/QQ/AKQ, 不可all in，安全跟",
+    "middle-pair": "中队，1:1, 不可all in， 押注或安全跟",
+    "small-pair": "小对，跟小",
+    "big-a": "{{suited}}大A, 押注或跟50%->pocket",
+    "medium-a-1": "{{suited}}较大, 押注或跟",
+    "medium-a-2": "{{suited}}一般A, 押注或跟",
+    "samll-a": "{{suited}}小A, 小注或跟",
+    "good-kq": "{{suited}}较大K, 押注或跟",
+    "good-k": "{{suited}}较大K, 押注或跟",
+    "ok-k": "{{suited}}不太大K, 小注或跟",
+    "suited-big-card": "大牌同花, 运气跟",
+    "suited-medium-card": "较大牌同花, 运气跟",
+    "suited-small-card": "小牌同花, 运气跟",
+    "good-connector": "{{suited}}大连张, 押注或跟",
+    "ok-connector": "{{suited}}中连张，运气跟",
+    "small-connector": "{{suited}}小连张，运气跟",
+    "suited": "同花"
+  },
+  "board": {
+    "4Kind": "四张 - 观察押注，准备仍牌",
+    "fullHouse": "{{cardNumber}}三挂二 - 观察押注，准备仍牌",
+    "4Flush": "4张同花 - 观察押注，准备仍牌",
+    "flush": "同花 - 观察押注，准备仍牌",
+    "flushDraw": "有人叫同花 若有超对以上可以",
+    "straight": "{{cardNumber}}顺 - 观察押注，准备仍牌",
+    "4straight": "{{cardNumber}} 4张顺 - 观察押注, 准备仍牌",
+    "5straight": "{{cardNumber}}面牌顺 - 观察押注, 准备仍牌"
+  },
+  "iMake": {
+    "4Kind": "四张",
+    "topFullHouse": "大三挂二",
+    "fullHouse": "三挂二",
+    "topSet": "大三张",
+    "set": "三张",
+    "trips": "假三张",
+    "overPair": "超对",
+    "top2": "二大对",
+    "2Pairs": "二对",
+    "topPair": "一大对",
+    "pair": "一对",
+    "5Flush": "面同花, A?",
+    "4Flush": "4涨同花, A?",
+    "flush": "同花",
+    "fullHouseDrawOnTurn": "22%转牌叫三挂二",
+    "fullHouseDrawOnFlop": "15%翻牌叫三挂二",
+    "fullHouseDraw": "13%叫三挂二",
+    "2flushDraw": "19%+12叫同花/顶对(2)",
+    "1flushDraw": "19%+6叫同花/顶对(1)",
+    "flushDraw": "19%叫同花",
+    "4CardsFlushDraw": "19%四张叫同花",
+    "straight": "{{cardNumber}}顺子",
+    "openEnd2Draw": "17%+12两头叫顺/顶对(2)",
+    "openEnd1Draw": "17%+6两头叫顺/顶对(1)",
+    "openEndDraw": "17%两头叫顺",
+    "straight2Draw": "9%+12单头叫顺/顶对(2)",
+    "straight1Draw": "9%+6单头叫顺/顶对(1)",
+    "straightDraw": "9%单头叫顺"
+  },
+  "actionTip": {
+    "preCheckRaise": "CR陷阱, {{times}}倍CR加注; 一定是AA/KK",
+    "preAARaise": "{{times}}倍加注; 一定是AA/KK",
+    "preQQRaise": "{{times}}倍加注; 可能是QQ/JJ",
+    "preAKRaise": "{{times}}倍加注; 可能是A/K",
+    "miniRaise": "{{times}}倍小加注",
+    "checkRaise": "CR陷阱, {{times}}倍CR再加注; 至少是三张/顺子/两对",
+    "raise": "{{times}}倍再加注; 可能是三张/顺子/两对",
+    "bet": "{{times}}倍下注"
+  }
+}
