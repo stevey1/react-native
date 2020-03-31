@@ -11,11 +11,12 @@ import { ICard } from "../constants/DataTypes";
 export default function Play() {
   const [SuitOrNumber, setSuitOrNumber] = useState(1);
   const [CardIndex, setCardIndex] = useState(0);
-  const [Step, setStep] = useState(1);
   const [MyHand, setMyHand] = useState([]);
   const [Board, setBoard] = useState([]);
 
-  const handleCard = () => {
+  const handleCard = back => {
+    if (back < 0) back = 14 + back;
+    console.log(back);
     if (CardIndex < 2) {
       const cardIndex = CardIndex;
       const myHand = [...MyHand];
@@ -28,7 +29,7 @@ export default function Play() {
         myHand[cardIndex].suit = (myHand[cardIndex].suit + 1) % 4;
       } else {
         myHand[cardIndex].cardNumber =
-          ((myHand[cardIndex].cardNumber - 2 + Step) % 13) + 2;
+          ((myHand[cardIndex].cardNumber - 2 + back) % 13) + 2;
       }
       setMyHand(myHand);
     } else {
@@ -43,7 +44,7 @@ export default function Play() {
         board[cardIndex].suit = (board[cardIndex].suit + 1) % 4;
       } else {
         board[cardIndex].cardNumber =
-          ((board[cardIndex].cardNumber - 2 + Step) % 13) + 2;
+          ((board[cardIndex].cardNumber - 2 + back) % 13) + 2;
       }
       setBoard(board);
     }
@@ -92,8 +93,8 @@ export default function Play() {
           </View>
         );
       }
-      return <View>{tips}</View>;
     }
+    return tips.length > 0 ? <View>{tips}</View> : <View></View>;
   };
   const formatResult = (results: string[]) =>
     results.map((x, index) => (
@@ -105,56 +106,64 @@ export default function Play() {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row" }}>
+            <Button
+              key="cardIndex"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              style={{ marginRight: 3 }}
+              title={getNumberText(CardIndex + 1)}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => setCardIndex((CardIndex + 1) % 7)}
+            />
+            <Button
+              key="suitOrNumber"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              style={{ marginRight: 3 }}
+              title={i18n.t("suitOrNumber." + SuitOrNumber.toString())}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => setSuitOrNumber((SuitOrNumber + 1) % 2)}
+            />
+          </View>
           <Text>
             {displayCards(MyHand)} - {displayCards(Board)}
           </Text>
-          <Button
-            key="cardIndex"
-            buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            style={{ marginRight: 3 }}
-            title={getNumberText(CardIndex + 1)}
-            titleStyle={{ color: "#000000" }}
-            onPress={() => setCardIndex((CardIndex + 1) % 7)}
-          />
-          <Button
-            key="increase"
-            buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            title={i18n.t("button.select")}
-            titleStyle={{ color: "#000000" }}
-            onPress={handleCard}
-            style={{ marginRight: 3 }}
-          />
-          <Button
-            key="suitOrNumber"
-            buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            style={{ marginRight: 3 }}
-            title={i18n.t("suitOrNumber." + SuitOrNumber.toString())}
-            titleStyle={{ color: "#000000" }}
-            onPress={() => setSuitOrNumber((SuitOrNumber + 1) % 2)}
-          />
-          <Button
-            key="step"
-            buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            title={getNumberText(Step)}
-            titleStyle={{ color: "#000000" }}
-            onPress={() => setStep((Step % 4) + 1)}
-            style={{ marginRight: 3 }}
-          />
-          <Button
-            key="new"
-            buttonStyle={{ backgroundColor: "#D1D1D1" }}
-            title={i18n.t("button.new")}
-            titleStyle={{ color: "#000000" }}
-            onPress={() => {
-              setMyHand([]);
-              setBoard([]);
-              setSuitOrNumber(1);
-              setCardIndex(0);
-              setStep(1);
-            }}
-            style={{ marginRight: 3 }}
-          />
+          <View style={{ flexDirection: "row" }}>
+            <Button
+              key="forward"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              title={i18n.t("button.forward")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => handleCard(1)}
+              style={{ marginRight: 3 }}
+            />
+            <Button
+              key="backward"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              title={i18n.t("button.backward")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => handleCard(-3)}
+              style={{ marginRight: 3 }}
+            />
+          </View>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          {showTips()}
+          <View style={{ flexDirection: "row" }}>
+            <Button
+              key="new"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              title={i18n.t("button.new")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => {
+                setMyHand([]);
+                setBoard([]);
+                setSuitOrNumber(1);
+                setCardIndex(0);
+              }}
+              style={{ marginRight: 3 }}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>

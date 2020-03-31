@@ -36,9 +36,8 @@ export const getMyHandPreflop = (cards: ICard[]) => {
           return i18n.t("pre.aj", suited);
         case 10:
         case 9:
-          return i18n.t("pre.medium-a-1", suited);
         case 8:
-          return i18n.t("pre.medium-a-2", suited);
+          return i18n.t("pre.medium-a", suited);
         default:
           return i18n.t("pre.small-a", suited);
       }
