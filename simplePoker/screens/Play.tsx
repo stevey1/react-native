@@ -130,9 +130,7 @@ export default function Play() {
               height: windowHeight / 3,
               resizeMode: "stretch"
             }}
-            source={require("../assets/images/images (" +
-              Pictures[0] +
-              ").jfif")}
+            source={require("../assets/images20.png")}
           />
           <Image
             key="3"
@@ -140,9 +138,7 @@ export default function Play() {
               height: windowHeight / 3,
               resizeMode: "stretch"
             }}
-            source={require("../assets/images/images (" +
-              Pictures[1] +
-              ").jfif")}
+            source={require("../assets/images20.png")}
           />
           <Image
             key="5"
@@ -150,9 +146,7 @@ export default function Play() {
               height: windowHeight / 3,
               resizeMode: "stretch"
             }}
-            source={require("../assets/images/images (" +
-              Pictures[2] +
-              ").jfif")}
+            source={require("../assets/images20.png")}
           />
         </View>
         <View>
