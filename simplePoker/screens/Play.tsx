@@ -8,23 +8,45 @@ import { getMyHandPreflop, checkBoard, checkMyHand } from "../constants/master";
 import styles from "./styles";
 import { ICard } from "../constants/DataTypes";
 import { Dimensions } from "react-native";
+import images from "../assets/images";
 export default function Play() {
   const [SuitOrNumber, setSuitOrNumber] = useState(1);
-  const [Pictures, setPictures] = useState([0, 1, 2]);
+  const [Index, setIndex] = useState([0, 1]);
   const [CardIndex, setCardIndex] = useState(0);
   const [MyHand, setMyHand] = useState([]);
   const [Board, setBoard] = useState([]);
   const windowHeight = Dimensions.get("window").height;
-
+  const Pictures = [
+    images.image0,
+    images.image1,
+    images.image2,
+    images.image3,
+    images.image4,
+    images.image5,
+    images.image6,
+    images.image7,
+    images.image8,
+    images.image9,
+    images.image10,
+    images.image11,
+    images.image12,
+    images.image13,
+    images.image14,
+    images.image15,
+    images.image16,
+    images.image17,
+    images.image18,
+    images.image19,
+    images.image20
+  ];
   useEffect(() => {
     setInterval(() => {
-      const pic = [
+      const index = [
         Math.round(Math.random() * 41) % 21,
-        Math.round(Math.random() * 35) % 21,
-        Math.round(Math.random() * 36) % 21
+        Math.round(Math.random() * 35) % 21
       ];
-      setPictures(pic);
-    }, 20000);
+      setIndex(index);
+    }, 300000);
   });
 
   const handleCard = back => {
@@ -127,26 +149,18 @@ export default function Play() {
           <Image
             key="1"
             style={{
-              height: windowHeight / 3,
+              height: windowHeight / 2,
               resizeMode: "stretch"
             }}
-            source={require("../assets/images20.png")}
+            source={Pictures[Index[0]]}
           />
           <Image
             key="3"
             style={{
-              height: windowHeight / 3,
+              height: windowHeight / 2,
               resizeMode: "stretch"
             }}
-            source={require("../assets/images20.png")}
-          />
-          <Image
-            key="5"
-            style={{
-              height: windowHeight / 3,
-              resizeMode: "stretch"
-            }}
-            source={require("../assets/images20.png")}
+            source={Pictures[Index[1]]}
           />
         </View>
         <View>
@@ -191,9 +205,11 @@ export default function Play() {
                 onPress={() => setSuitOrNumber((SuitOrNumber + 1) % 2)}
               />
             </View>
-            <Text>
-              {displayCards(MyHand)} - {displayCards(Board)}
-            </Text>
+            <View style={{ flexDirection: "row" }}>
+              {displayCards(MyHand)}
+              <Text> - </Text>
+              {displayCards(Board)}
+            </View>
             <View style={{ flexDirection: "row" }}>
               <Button
                 key="forward"
@@ -220,6 +236,7 @@ export default function Play() {
 }
 const displayCards = (cards: ICard[]) => {
   cards = cards.filter(card => card);
+  console.log(cards);
   // .sort((a, b) => a.cardNumber - b.cardNumber);
   const suitDisplay = cards.map(card => getSuitText(card.suit)).join("");
   const cardDisplay = cards
