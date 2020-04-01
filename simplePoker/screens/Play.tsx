@@ -49,7 +49,7 @@ export default function Play() {
     setInterval(() => {
       const now = Math.round(new Date().getTime() / 1000);
       if (now > TargetTime) {
-        setTargetTime(now + 120);
+        setTargetTime(now + 180);
         const index = [
           Math.round(Math.random() * 41) % 21,
           Math.round(Math.random() * 35) % 21
@@ -162,11 +162,11 @@ export default function Play() {
   const tipOverlay = () =>
     ShowTip ? (
       <Overlay
-        overlaystepgroundColor="#F5F5F5"
+        overlayBackgroundColor="#F5F5F5"
         width="100%"
         height="80%"
         isVisible={ShowTip}
-        onstepdropPress={() => setShowTip(false)}
+        onBackdropPress={() => setShowTip(false)}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <SectionList
@@ -237,6 +237,53 @@ export default function Play() {
           />
         </View>
         {tipOverlay()}
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row" }}>
+            <Button
+              key="cardIndex"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              style={{ marginRight: 3 }}
+              title={getNumberText(CardIndex + 1)}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => {
+                setSuitOrNumber(1);
+                setCardIndex((CardIndex + 1) % 7);
+              }}
+            />
+            <Button
+              key="suitOrNumber"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              style={{ marginRight: 3 }}
+              title={i18n.t("suitOrNumber." + SuitOrNumber.toString())}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => setSuitOrNumber((SuitOrNumber + 1) % 2)}
+            />
+          </View>
+          <View>
+            {displayCards(MyHand)}
+            {displayCards(Board)}
+          </View>
+
+          <View style={{ flexDirection: "row" }}>
+            <Button
+              key="forward"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              title={i18n.t("button.forward")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => handleCard(1)}
+              style={{ marginRight: 3 }}
+            />
+            <Button
+              key="goForward"
+              buttonStyle={{ backgroundColor: "#D1D1D1" }}
+              title={i18n.t("button.goForward")}
+              titleStyle={{ color: "#000000" }}
+              onPress={() => handleCard(3)}
+              style={{ marginRight: 3 }}
+            />
+          </View>
+        </View>
+
         <View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -245,7 +292,7 @@ export default function Play() {
             <View style={{ flexDirection: "row" }}>
               <Button
                 key="new"
-                buttonStyle={{ stepgroundColor: "#D1D1D1" }}
+                buttonStyle={{ backgroundColor: "#D1D1D1" }}
                 title={i18n.t("button.new")}
                 titleStyle={{ color: "#000000" }}
                 onPress={() => {
@@ -254,51 +301,6 @@ export default function Play() {
                   setSuitOrNumber(1);
                   setCardIndex(0);
                 }}
-                style={{ marginRight: 3 }}
-              />
-            </View>
-          </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <Button
-                key="cardIndex"
-                buttonStyle={{ stepgroundColor: "#D1D1D1" }}
-                style={{ marginRight: 3 }}
-                title={getNumberText(CardIndex + 1)}
-                titleStyle={{ color: "#000000" }}
-                onPress={() => setCardIndex((CardIndex + 1) % 7)}
-              />
-              <Button
-                key="suitOrNumber"
-                buttonStyle={{ stepgroundColor: "#D1D1D1" }}
-                style={{ marginRight: 3 }}
-                title={i18n.t("suitOrNumber." + SuitOrNumber.toString())}
-                titleStyle={{ color: "#000000" }}
-                onPress={() => setSuitOrNumber((SuitOrNumber + 1) % 2)}
-              />
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              {displayCards(MyHand)}
-              <Text> - </Text>
-              {displayCards(Board)}
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              <Button
-                key="forward"
-                buttonStyle={{ stepgroundColor: "#D1D1D1" }}
-                title={i18n.t("button.forward")}
-                titleStyle={{ color: "#000000" }}
-                onPress={() => handleCard(1)}
-                style={{ marginRight: 3 }}
-              />
-              <Button
-                key="goForward"
-                buttonStyle={{ stepgroundColor: "#D1D1D1" }}
-                title={i18n.t("button.goForward")}
-                titleStyle={{ color: "#000000" }}
-                onPress={() => handleCard(3)}
                 style={{ marginRight: 3 }}
               />
             </View>
@@ -341,11 +343,12 @@ const cashTipInChinese = [
     title: "遵守牌道",
     data: [
       "控制时间 - 保证精力和清醒的头脑",
-      "戴上耳机 - 专心牌局, 排除干扰",
+      "戴上耳机 - 专心牌局, 排除干扰, 沉著冷靜",
       "安全打, no slow play, no over bet; 小心黄雀在后",
       "能All in就All in, 寻找All in机会",
       "牌面对/同花/顺，不要侥幸",
-      "不打倔强牌：陷阱注，超级注 -> 服输"
+      "不打倔强牌：陷阱注，超级注 -> 服输",
+      "AK對不跟All in；牌面順子，兩對不跟All in"
     ]
   },
   {
@@ -404,19 +407,19 @@ const tournamentTipInChinese = [
     title: "原则",
     data: [
       "戴上耳机，专心牌局 排除干扰",
-      "永不放弃",
-      "先紧后松",
-      "能All in就All in, 寻找All in机会"
+      "先紧后松, 永不放弃",
+      "能All in就All in, 寻找All in机会",
+      "AK對不跟All in；牌面順子，兩對不跟All in"
     ]
   },
   {
     title: "All in - Play安全",
     data: [
-      "要主动All in 不要被动All in, Play安全",
-      "与少筹码的人All in，Play安全",
-      "前期AK/JJ/TT不能翻牌前all in，Play安全",
-      "确定是All in牌, Play安全",
-      "翻牌后能All in就All in, Play安全"
+      "要主动All in 不要被动All in",
+      "与少筹码的人All in",
+      "前期AK/JJ/TT不能翻牌前all in",
+      "确定是All in牌",
+      "翻牌后能All in就All in"
     ]
   },
   {
