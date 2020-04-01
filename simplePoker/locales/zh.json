@@ -60,7 +60,7 @@
     "return": "返回",
     "update": "保存",
     "forward": "向前",
-    "backward": "向后"
+    "goForward": "進三"
   },
   "suit": { "0": "草", "1": "方", "2": "红", "3": "黑" },
   "number": {
@@ -126,8 +126,8 @@
     "jj": "JJ：半All in牌，能不All in就不，安全打，压大/押中/跟小，运气牌",
     "middle-pair": "中对，跟牌，不是all in牌",
     "small-pair": "小对，跟小",
-    "ak": "{{suited}}AK, 可以All in但不All in；押注或跟牌50%->pocket",
-    "aq": "{{suited}}AQ, 不能All in；押注或跟牌50%->pocket",
+    "ak": "{{suited}}AK, 可以All in但不All in；押注或跟牌50%->对",
+    "aq": "{{suited}}AQ, 不能All in；押注或跟牌50%->对",
     "aj": "{{suited}}较大, 押注或跟但不能跟大",
     "medium-a": "{{suited}}一般A, 押注或跟",
     "small-a": "{{suited}}小A, 小注或跟",
@@ -148,9 +148,9 @@
     "fullHouse": "{{cardNumber}}三挂二 - 观察押注，准备仍牌",
     "4Flush": "4张同花 - 观察押注，准备仍牌",
     "flush": "同花 - 观察押注，准备仍牌",
-    "flushDraw": "有人叫同花 若有超对以上可以",
+    "flushDraw": "有人叫同花 需要超对和Hand Blocker",
     "straight": "{{cardNumber}}顺 - 观察押注，准备仍牌",
-    "4straight": "{{cardNumber}} 4张顺 - 观察押注, 准备仍牌",
+    "4straight": "{{cardNumber}}4张顺 - 观察押注, 准备仍牌",
     "5straight": "{{cardNumber}}面牌顺 - 观察押注, 准备仍牌"
   },
   "iMake": {

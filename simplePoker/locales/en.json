@@ -62,7 +62,7 @@
     "startTimer": "Start Timer",
     "check": "Check",
     "forward": "Forward",
-    "backward": "Backward"
+    "goForward": "Fast"
   },
   "suit": { "0": "♣", "1": "♦", "2": "♥", "3": "♠" },
   "number": {
