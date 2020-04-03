@@ -45,19 +45,6 @@ export default function Play() {
     images.image19,
     images.image20
   ];
-  useEffect(() => {
-    setInterval(() => {
-      const now = Math.round(new Date().getTime() / 1000);
-      if (now > TargetTime) {
-        setTargetTime(now + 180);
-        const index = [
-          Math.round(Math.random() * 41) % 21,
-          Math.round(Math.random() * 35) % 21
-        ];
-        setIndex(index);
-      }
-    }, 120000);
-  });
 
   const handleCard = step => {
     if (step < 0) step = 13 + step;
@@ -296,6 +283,12 @@ export default function Play() {
                 title={i18n.t("button.new")}
                 titleStyle={{ color: "#000000" }}
                 onPress={() => {
+                  const index = [
+                    Math.round(Math.random() * 41) % 21,
+                    Math.round(Math.random() * 35) % 21
+                  ];
+                  setIndex(index);
+
                   setMyHand([]);
                   setBoard([]);
                   setSuitOrNumber(1);

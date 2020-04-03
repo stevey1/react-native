@@ -1,8 +1,10 @@
 import { ICard, Round } from "./DataTypes";
-import { getSuitText, getNumberText } from "./helper";
+import { getNumberText } from "./helper";
 import i18n from "../i18n";
 
 export const getMyHandPreflop = (cards: ICard[]) => {
+  cards = cards.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
+
   //Pocket pair
   if (cards[0].cardNumber === cards[1].cardNumber) {
     switch (cards[0].cardNumber) {
@@ -90,6 +92,8 @@ export const getMyHandPreflop = (cards: ICard[]) => {
   }
 };
 export const checkBoard = (cards: ICard[]) => {
+  cards = cards.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
+
   let results = [];
   let result = checkBoardPair(cards);
   if (result) results.push(result);
@@ -104,6 +108,7 @@ export const checkMyHand = (cards: ICard[], myHand: ICard[]) => {
   const allCards = [...cards, ...myHand].sort(
     (c1, c2) => c1.cardNumber - c2.cardNumber
   );
+  myHand = myHand.sort((c1, c2) => c1.cardNumber - c2.cardNumber);
   results = checkMyPair(allCards, myHand);
   let result = checkMyFlush(allCards, myHand);
   if (result) results.push(result);
@@ -151,11 +156,12 @@ const checkBoardFlush = (cards: ICard[]) => {
 };
 
 const checkBoardStaight = (cards: ICard[]) => {
-  let cardNumbers = [...new Set(cards.map(c => c.cardNumber))];
-
+  let cardNumbers = [...new Set(cards.map(c => c.cardNumber))].sort(
+    (c1, c2) => c1 - c2
+  );
   if (cards[cards.length - 1].cardNumber === 14)
     cardNumbers = [1, ...cardNumbers];
-  for (let i = cards.length - 3; i >= 0; i--) {
+  for (let i = cardNumbers.length - 3; i >= 0; i--) {
     const result = checkBoardStraightType(cardNumbers, i, 3);
     if (result) return result;
   }
@@ -184,6 +190,7 @@ const checkBoardStraightType = (
           })
         );
       }
+
       if (cardGap === 3) {
         result = checkBoardStraightType(cardNumbers, i - 1, 4);
         return (
